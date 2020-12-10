@@ -5,7 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ClickedBoardActivity">
+    tools:context=".ClickedBoard.ClickedBoardActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:id="@+id/toolbar_clicked_board"/>
 
     <!--<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"

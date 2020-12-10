@@ -138,12 +138,14 @@ class TimeTablePresenter(val mView: TimeTableContract.View) : TimeTableContract.
     }
 
     override fun setLogin(info: String) {
-        val mTable = getSharedItem<HashSet<String>>("tableSet")
+
+        TimeTableAsyncTask(mView, info).execute()
+        /*val mTable = getSharedItem<HashSet<String>>("tableSet")
         if (mTable.size <= 0) {
             TimeTableAsyncTask(mView, info).execute()
         } else {
             mView.initTable(mTable)
-        }
+        }*/
 
         // TimeTableAsyncTask(mView, info).execute()
 

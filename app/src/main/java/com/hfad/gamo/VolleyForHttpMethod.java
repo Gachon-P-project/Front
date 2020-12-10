@@ -19,7 +19,7 @@ public class VolleyForHttpMethod {
 
     private RequestQueue queue;
 
-    VolleyForHttpMethod(RequestQueue queue) {
+    public VolleyForHttpMethod(RequestQueue queue) {
         this.queue = queue;
     }
 

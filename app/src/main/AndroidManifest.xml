@@ -12,20 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ClickedBoardActivity"> <!--전에 이거 였음-->
+        <activity android:name=".ClickedBoard.ClickedPostingActivity"></activity>
+        <activity android:name=".ClickedBoard.SearchActivity" />
+        <activity android:name=".ClickedBoard.WritingActivity" />
+        <activity android:name=".ClickedBoard.ClickedBoardActivity">
+
+        </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity">
-
-        </activity>
-
-        <activity android:name=".VolleyActivity">
-        </activity>
+        <activity android:name=".VolleyActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"

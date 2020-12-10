@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fm = getSupportFragmentManager();
     private com.hfad.gamo.timeTable.TimeTableFragment f_TimeTable2 = new com.hfad.gamo.timeTable.TimeTableFragment();
-    private TimeTableFragment f_TimeTable = new TimeTableFragment();
     private NotificationFragment f_Notification = new NotificationFragment();
     private BoardFragment f_Board = new BoardFragment();
     private MyPageFragment f_MyPage = new MyPageFragment();

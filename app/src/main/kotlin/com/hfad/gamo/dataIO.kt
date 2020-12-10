@@ -7,7 +7,7 @@ import java.lang.Exception
 import java.util.HashMap
 
 
-const val appConstantPreferences = "GACHONNOTICE"
+const val appConstantPreferences = "Moga"
 
 inline fun <reified T> setSharedItem(key: String, data: T) = sharedPreferences.edit().apply {
     when (T::class) {

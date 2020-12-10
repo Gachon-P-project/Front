@@ -14,7 +14,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        //val appConstantPreferences = "GACHONNOTICE"
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
 
