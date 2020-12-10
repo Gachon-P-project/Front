@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="시간표"
+        android:id="@+id/bottomNavigationTimeTable"
+        android:icon="@drawable/recommendation"
+        />
+
+    <item
+        android:title="공지"
+        android:id="@+id/bottomNavigationNotification"
+        android:icon="@drawable/mine"/>
+    <item
+        android:title="게시판"
+        android:id="@+id/bottomNavigationBoard"
+        android:icon="@drawable/refrigerator"/>
+    <item
+        android:title="MyPage"
+        android:id="@+id/bottomNavigationMyPage"
+        android:icon="@drawable/board"/>
+</menu>

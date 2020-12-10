@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/white">
+
+
+        <item android:state_pressed="true">
+            <shape android:shape="rectangle">
+                <corners
+                        android:radius="5dip"/>
+                <gradient
+                        android:startColor="@color/main2DeepBlue"
+                        android:endColor="@color/main2DeepBlue"
+                />
+            </shape>
+        </item>
+
+        <item android:state_focused="true">
+            <shape android:shape="rectangle">
+                <corners
+                        android:radius="5dip"/>
+                <gradient
+                        android:startColor="@color/main2DeepBlue"
+                        android:endColor="@color/main2DeepBlue"
+                />
+            </shape>
+        </item>
+
+        <item>
+            <shape android:shape="rectangle">
+                <corners
+                        android:radius="5dip"/>
+                <gradient
+                        android:startColor="@color/main2Blue"
+                        android:endColor="@color/main2Blue"
+                />
+            </shape>
+        </item>
+
+</ripple>
