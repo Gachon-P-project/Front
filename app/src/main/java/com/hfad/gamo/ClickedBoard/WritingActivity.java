@@ -23,6 +23,7 @@ public class WritingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
 
+        // 코드를 수정
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle("글쓰기");
