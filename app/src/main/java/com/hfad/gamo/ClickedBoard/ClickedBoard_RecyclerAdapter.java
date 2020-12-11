@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
 
-    private JSONArray JSONArrayData = null; // branch merge test
+    private JSONArray JSONArrayData = null;
 
     ClickedBoard_RecyclerAdapter(JSONArray list) {
         this.JSONArrayData = list;

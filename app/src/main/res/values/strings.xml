@@ -2,4 +2,6 @@
     <string name="app_name">Gamo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">제목</string>
+    <string name="contents">내용</string>
 </resources>

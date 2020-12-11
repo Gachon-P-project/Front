@@ -4,19 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
     tools:context=".ClickedBoard.WritingActivity">
 
-    <TextView
-        android:textSize="30dp"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:id="@+id/toolbar_clicked_board"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/board_write_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="형님 WritingActivity입니다."
-        android:layout_gravity="center" />
+        android:hint="@string/title"
+        android:layout_marginTop="10dp"
+        app:errorEnabled="true"
+        app:counterEnabled="true"
+        app:counterMaxLength="60"
+        android:maxLines="1">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            />
 
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/board_write_contents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/contents"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
 
+        app:counterEnabled="true"
+        app:counterMaxLength="1000"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="top"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    <com.google.android.material.textfield.TextInputEditText-->
+<!--        android:id="@+id/board_write_contents"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:hint="@string/contents"-->
+<!--        app:counterEnabled="true"-->
+<!--        app:counterMaxLength="1000"-->
+<!--        />-->
 
 </LinearLayout>
+
+
+
+
+
+<!--<android.support.design.widget.TextInputLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content">-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/board_write_title_edit_text"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:hint="@string/title" />-->
+
+<!--</android.support.design.widget.TextInputLayout>-->
+
+<!--<android.support.design.widget.TextInputLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/board_write_content_edit_text"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="336dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:background="@null"-->
+<!--        android:gravity="fill_horizontal"-->
+<!--        android:hint="@string/contents" />-->
+
+<!--</android.support.design.widget.TextInputLayout>-->
+
+
