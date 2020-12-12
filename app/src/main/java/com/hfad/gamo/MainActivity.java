@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 

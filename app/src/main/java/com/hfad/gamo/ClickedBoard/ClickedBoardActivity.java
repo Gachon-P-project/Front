@@ -83,6 +83,9 @@ public class ClickedBoardActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_search :
+                intent = new Intent(getBaseContext(), SearchActivity.class);
+                intent.putExtra("subject", "모바일 웹");
+                startActivity(intent);
                 return true;
             case R.id.action_add :
                 intent = new Intent(getBaseContext(), WritingActivity.class);
