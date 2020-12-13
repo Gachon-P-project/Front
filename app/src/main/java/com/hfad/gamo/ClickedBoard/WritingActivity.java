@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WritingActivity extends AppCompatActivity {
@@ -42,7 +43,17 @@ public class WritingActivity extends AppCompatActivity {
         professor_name: req.body.professor_name,
         user_id: req.body.user_id
          */
-        Intent intent = getIntent(); // major, subject, professor, user
+        Intent intent = getIntent();// major, subject, professor, user
+        try {
+            requestJSONObject.put("major", intent.getExtras().getString("major"));
+            requestJSONObject.put("subject", intent.getExtras().getString("boardName"));
+            requestJSONObject.put("professor", intent.getExtras().getString("professor"));
+            requestJSONObject.put("user", intent.getExtras().getString("user"));
+            requestJSONObject.put("title", );
+            requestJSONObject.put("contents", );
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
         // Toast.makeText(WritingActivity.this, intent.getExtras().getString("major") + intent.getExtras().getString("subject"), Toast.LENGTH_SHORT).show();
 
 
@@ -102,9 +113,13 @@ public class WritingActivity extends AppCompatActivity {
         Toast.makeText(WritingActivity.this, "새 글 등록 버튼을 클릭했습니다.", Toast.LENGTH_SHORT).show();
         String url = "http://192.168.254.2:17394/board/insert";
 
-        volley.postJSONObjectString(requestJSONObject, url, new Response.Listener<>() {
+        volley.postJSONObjectString(requestJSONObject, url, new Response.Listener<String>() {
 
-        })
+            @Override
+            public void onResponse(String response) {
+
+            }
+        });
     }
 
 }
