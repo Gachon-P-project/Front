@@ -10,8 +10,8 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:id="@+id/toolbar_clicked_board"/>
+        android:id="@+id/toolbar_clicked_board"
+        android:background="@color/colorPrimary"/>
 
     <!--<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"

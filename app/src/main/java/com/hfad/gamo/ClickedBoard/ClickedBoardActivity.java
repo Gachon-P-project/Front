@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,7 +36,6 @@ public class ClickedBoardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String title = intent.getExtras().getString("title");
 
-
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle(title);
@@ -46,10 +47,9 @@ public class ClickedBoardActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String url = "http://172.30.1.2:17394/select/피프로젝트/황희정";
+        String url = "http://192.168.254.2:17394/board/select/컴퓨터구조/이상순";
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
-
             @Override
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
@@ -88,8 +88,17 @@ public class ClickedBoardActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_add :
+                /*
+                major_name: req.body.major_name,
+                subject_name: req.body.subject_name,
+                professor_name: req.body.professor_name,
+                user_id: req.body.user_id
+                 */
                 intent = new Intent(getBaseContext(), WritingActivity.class);
-                intent.putExtra("subject", "모바일 웹");
+                intent.putExtra("major", "컴퓨터공학과");
+                intent.putExtra("subject", "컴퓨터구조");
+                intent.putExtra("professor", "이상순");
+                intent.putExtra("user", "jy11290");
                 startActivity(intent);
                 return true;
             default :
