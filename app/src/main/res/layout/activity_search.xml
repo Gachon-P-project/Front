@@ -31,8 +31,8 @@
             android:drawablePadding="10dp"
             android:padding="9dp"
             android:hint="글 제목, 내용을 검색해보세요 "
-            />
+            android:imeOptions="actionSearch"
+            android:inputType="text" />
     </LinearLayout>
-
 
 </LinearLayout>
