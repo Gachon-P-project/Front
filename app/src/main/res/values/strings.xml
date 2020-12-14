@@ -3,5 +3,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">제목</string>
-    <string name="contents">내용</string>
+    <string name="contents">여기를 눌러서 글을 작성할 수 있습니다.\n\n
+
+        [커뮤니티 이용규칙에 어긋나는 행위 금지]\n
+        1. 욕설, 비하, 음란물, 개인정보가 포함된 게시물 게시\n
+        2. 특정인이나 단체/지역을 비방하는 행위\n
+        3. 기타 현행법에 어긋나는 행위\n
+    </string>
 </resources>

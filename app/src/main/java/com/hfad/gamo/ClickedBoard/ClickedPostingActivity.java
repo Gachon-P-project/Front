@@ -13,6 +13,8 @@ import com.hfad.gamo.R;
 
 public class ClickedPostingActivity extends AppCompatActivity {
 
+    private ClickedBoard_RecyclerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
