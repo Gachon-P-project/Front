@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.gamo.R;
@@ -26,6 +28,9 @@ public class WritingActivity extends AppCompatActivity {
 
     private static VolleyForHttpMethod volley;
     private static JSONObject requestJSONObject = new JSONObject();
+    Intent intent;
+    AppCompatEditText title_edit;
+    AppCompatEditText contents_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +48,14 @@ public class WritingActivity extends AppCompatActivity {
         professor_name: req.body.professor_name,
         user_id: req.body.user_id
          */
-        Intent intent = getIntent();// major, subject, professor, user
-        try {
-            requestJSONObject.put("major", intent.getExtras().getString("major"));
-            requestJSONObject.put("subject", intent.getExtras().getString("boardName"));
-            requestJSONObject.put("professor", intent.getExtras().getString("professor"));
-            requestJSONObject.put("user", intent.getExtras().getString("user"));
-        } catch(JSONException e) {
-            e.printStackTrace();
-        }
-        // Toast.makeText(WritingActivity.this, intent.getExtras().getString("major") + intent.getExtras().getString("subject"), Toast.LENGTH_SHORT).show();
+        // 제목
+        title_edit = (AppCompatEditText) findViewById(R.id.board_write_title_edit);
+        contents_edit = (AppCompatEditText)findViewById(R.id.board_write_contents_edit);
 
+        title_edit.addTextChangedListener(titleWatcher);
+
+        intent = getIntent();// major, subject, professor, user
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         // 상단바
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
@@ -62,9 +64,11 @@ public class WritingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
 
-        // 제목
-        final AppCompatEditText title_edit = (AppCompatEditText) findViewById(R.id.board_write_title_edit);
-        title_edit.addTextChangedListener(titleWatcher);
+
+
+        // 내용
+
+        Log.d("test",""+title_edit.getText().toString());
     }
 
     TextWatcher titleWatcher = new TextWatcher() {
@@ -108,14 +112,27 @@ public class WritingActivity extends AppCompatActivity {
     }
 
     private void writingBtnClick() {
-        Toast.makeText(WritingActivity.this, "새 글 등록 버튼을 클릭했습니다.", Toast.LENGTH_SHORT).show();
         String url = "http://192.168.254.2:17394/board/insert";
+
+        try {
+            requestJSONObject.put("major_name", intent.getExtras().getString("major"));
+            requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
+            requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
+            requestJSONObject.put("user_id", intent.getExtras().getString("user"));
+            requestJSONObject.put("post_title", title_edit.getText().toString());
+            requestJSONObject.put("post_contents", contents_edit.getText().toString());
+            requestJSONObject.put("reply_yn", 1);
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+//        Log.d("tag", ""+requestJSONObject);
 
         volley.postJSONObjectString(requestJSONObject, url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-
+                Log.d("POST RESPONSE", response);
+                finish();
             }
         });
     }
