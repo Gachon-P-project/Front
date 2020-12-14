@@ -15,14 +15,14 @@ public class toClickedPosting implements Parcelable {
     private String reply_yn;
 
     public toClickedPosting(String post_no, String post_like, String post_title, String post_contents,
-                            String wrt_date, String view_cnt, String reply_cnt, String reply_yn) {
+                            String wrt_date, String view_cnt, String reply_yn) {
         this.post_no = post_no;
         this.post_like = post_like;
         this.post_title = post_title;
         this.post_contents = post_contents;
         this.wrt_date = wrt_date;
         this.view_cnt = view_cnt;
-        this.reply_cnt = reply_cnt;
+        // this.reply_cnt = reply_cnt;
         this.reply_yn = reply_yn;
     }
 
@@ -58,35 +58,35 @@ public class toClickedPosting implements Parcelable {
         this.reply_yn = reply_yn;
     }
 
-    public String getPost_no(String post_no) {
+    public String getPost_no() {
         return post_no;
     }
 
-    public String getPost_like(String post_like) {
+    public String getPost_like() {
         return post_like;
     }
 
-    public String getPost_title(String post_title) {
+    public String getPost_title() {
         return post_title;
     }
 
-    public String getPost_contents(String post_contents) {
+    public String getPost_contents() {
         return post_contents;
     }
 
-    public String getWrt_date(String wrt_date) {
+    public String getWrt_date() {
         return wrt_date;
     }
 
-    public String getView_cnt(String view_cnt) {
+    public String getView_cnt() {
         return view_cnt;
     }
 
-    public String getReply_cnt(String reply_cnt) {
+    public String getReply_cnt() {
         return reply_cnt;
     }
 
-    public String getReply_yn(String reply_yn) {
+    public String getReply_yn() {
         return reply_yn;
     }
 
@@ -97,7 +97,7 @@ public class toClickedPosting implements Parcelable {
         this.post_contents = in.readString();
         this.wrt_date = in.readString();
         this.view_cnt = in.readString();
-        this.reply_cnt = in.readString();
+        // this.reply_cnt = in.readString();
         this.reply_yn = in.readString();
     }
 
@@ -109,7 +109,7 @@ public class toClickedPosting implements Parcelable {
         dest.writeString(post_contents);
         dest.writeString(wrt_date);
         dest.writeString(view_cnt);
-        dest.writeString(reply_cnt);
+        // dest.writeString(reply_cnt);
         dest.writeString(reply_yn);
     }
 

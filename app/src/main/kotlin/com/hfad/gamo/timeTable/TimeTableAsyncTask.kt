@@ -14,9 +14,9 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
     SuperContract.SuperAsyncTask<Void, Void, Int>() {
 
     val set = HashSet<String>()
-    private val subjectSet = HashSet<String>()
+    private val subjectSet = mutableSetOf<String>()
     private val professorMap = mutableMapOf<String,String>()
-    private val professorSet = HashSet<String>()
+    private val professorSet = mutableSetOf<String>()
 
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
@@ -52,7 +52,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
                         val information = data.text().split("/")
                         val preInformation = information[0].split(" ")
                         val subject = data.html().split("<p>")[1].split("/")[0].trim()
-                        val professor = data.html().split("<p>")[1].split("/")[2].trim()
+                        val professor = data.html().split("<p>")[1].split("/")[2].trim().dropLast(1)
                         val table = TimeTableInformation(
                             day.trim(),
                             subject,
@@ -75,6 +75,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
             for(string in subjectSet) {
                 professorMap[string]?.let { professorSet.add(it) }
             }
+
 
             setSharedItem("tableSet", set)
             setSharedItem("subjectSet", subjectSet)

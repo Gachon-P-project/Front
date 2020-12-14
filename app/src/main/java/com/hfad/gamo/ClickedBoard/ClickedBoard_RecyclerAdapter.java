@@ -83,7 +83,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_view_cnt.setText(data.getString("view_cnt"));
             toClickedPosting = new toClickedPosting(data.getString("post_no"), data.getString("post_like"),
                     data.getString("post_title"), data.getString("post_contents"), data.getString("wrt_date"),
-                    data.getString("view_cnt"), data.getString("reply_cnt"), data.getString("reply_yn"));
+                    data.getString("view_cnt"), data.getString("reply_yn"));
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
