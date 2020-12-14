@@ -50,7 +50,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String url = "http://172.30.1.2:17394/select/피프로젝트/황희정";
+        String url = "http://192.168.254.2:17394/board/select/컴퓨터구조/이상순";
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
@@ -101,7 +101,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
                  */
                 intent = new Intent(getBaseContext(), WritingActivity.class);
                 intent.putExtra("major", "컴퓨터공학과");
-                intent.putExtra("boardName", "컴퓨터구조");
+                intent.putExtra("subject", "컴퓨터구조");
                 intent.putExtra("professor", "이상순");
                 intent.putExtra("user", "jy11290");
                 startActivity(intent);

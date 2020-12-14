@@ -20,7 +20,6 @@ import org.json.JSONObject;
 public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
-    private toClickedPosting toClickedPosting;
 
 
     ClickedBoard_RecyclerAdapter(JSONArray list) {
@@ -35,6 +34,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         TextView board_view_cnt;
         TextView board_reply_cnt = null;
         View view;
+        toClickedPosting toClickedPosting;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -45,14 +45,6 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             board_view_cnt = itemView.findViewById(R.id.board_view_cnt);
             view = itemView;
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ClickedPostingActivity.class);
-                    intent.putExtra("toClickedPosting", toClickedPosting);
-                    v.getContext().startActivity(intent);
-                }
-            });
         }
     }
 
@@ -71,7 +63,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ClickedBoard_RecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ClickedBoard_RecyclerAdapter.ViewHolder holder, int position) {
 
         JSONObject data;
 
@@ -81,13 +73,22 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_contents.setText(data.getString("post_contents"));
             holder.board_date.setText(data.getString("wrt_date"));
             holder.board_view_cnt.setText(data.getString("view_cnt"));
-            toClickedPosting = new toClickedPosting(data.getString("post_no"), data.getString("post_like"),
+            holder.toClickedPosting = new toClickedPosting(data.getString("post_no"), data.getString("post_like"),
                     data.getString("post_title"), data.getString("post_contents"), data.getString("wrt_date"),
                     data.getString("view_cnt"), data.getString("reply_yn"));
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
         }
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ClickedPostingActivity.class);
+                intent.putExtra("toClickedPosting", holder.toClickedPosting);
+                v.getContext().startActivity(intent);
+            }
+        });
 
     }
 

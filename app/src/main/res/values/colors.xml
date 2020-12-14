@@ -45,4 +45,7 @@
     <color name="myDarkLight">#3B3B41</color>
     <color name="myDarkDeep">#18191D</color>
     <color name="superDarkLight">#A2A2A2</color>
+    <color name="line">#E6E6E6</color>
+    <color name="text1">#363636</color>
+    <color name="text2">#727272</color>
 </resources>
