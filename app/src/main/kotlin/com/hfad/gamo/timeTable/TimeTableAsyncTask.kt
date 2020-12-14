@@ -15,6 +15,8 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
 
     val set = HashSet<String>()
     private val subjectSet = HashSet<String>()
+    private val professorMap = mutableMapOf<String,String>()
+    private val professorSet = HashSet<String>()
 
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
@@ -50,6 +52,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
                         val information = data.text().split("/")
                         val preInformation = information[0].split(" ")
                         val subject = data.html().split("<p>")[1].split("/")[0].trim()
+                        val professor = data.html().split("<p>")[1].split("/")[2].trim()
                         val table = TimeTableInformation(
                             day.trim(),
                             subject,
@@ -64,11 +67,18 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
                         )
                         set.add(table.information)
                         subjectSet.add(subject)
+                        professorMap[subject] = professor
                     }
                 }
             }
+
+            for(string in subjectSet) {
+                professorMap[string]?.let { professorSet.add(it) }
+            }
+
             setSharedItem("tableSet", set)
             setSharedItem("subjectSet", subjectSet)
+            setSharedItem("professorSet",professorSet)
             mView.initTable(set)
             ACTION_SUCCESS
         } catch (e: Exception) {

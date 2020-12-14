@@ -49,8 +49,6 @@ public class WritingActivity extends AppCompatActivity {
             requestJSONObject.put("subject", intent.getExtras().getString("boardName"));
             requestJSONObject.put("professor", intent.getExtras().getString("professor"));
             requestJSONObject.put("user", intent.getExtras().getString("user"));
-            requestJSONObject.put("title", );
-            requestJSONObject.put("contents", );
         } catch(JSONException e) {
             e.printStackTrace();
         }

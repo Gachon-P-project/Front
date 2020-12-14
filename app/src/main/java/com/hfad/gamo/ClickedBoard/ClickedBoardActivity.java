@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,10 +25,10 @@ import org.json.JSONObject;
 
 public class ClickedBoardActivity extends AppCompatActivity {
 
-    private static JSONObject requestJSONObject = new JSONObject();
-    private static VolleyForHttpMethod volley;
-    private static JSONArray requestJSONArray = new JSONArray();
-    private static ClickedBoard_RecyclerAdapter adapter;
+    private JSONObject requestJSONObject = new JSONObject();
+    private VolleyForHttpMethod volley;
+    private ClickedBoard_RecyclerAdapter adapter;
+    private JSONArray requestJSONArray = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +44,13 @@ public class ClickedBoardActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
 
+
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String url = "http://192.168.254.2:17394/board/select/컴퓨터구조/이상순";
+        String url = "http://172.30.1.2:17394/select/피프로젝트/황희정";
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
@@ -74,6 +77,8 @@ public class ClickedBoardActivity extends AppCompatActivity {
         return true ;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
@@ -96,7 +101,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
                  */
                 intent = new Intent(getBaseContext(), WritingActivity.class);
                 intent.putExtra("major", "컴퓨터공학과");
-                intent.putExtra("subject", "컴퓨터구조");
+                intent.putExtra("boardName", "컴퓨터구조");
                 intent.putExtra("professor", "이상순");
                 intent.putExtra("user", "jy11290");
                 startActivity(intent);

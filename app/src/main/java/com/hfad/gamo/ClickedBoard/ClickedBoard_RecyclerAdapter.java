@@ -1,6 +1,7 @@
 package com.hfad.gamo.ClickedBoard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import org.json.JSONObject;
 public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
+    private toClickedPosting toClickedPosting;
+
 
     ClickedBoard_RecyclerAdapter(JSONArray list) {
         this.JSONArrayData = list;
@@ -31,7 +34,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         TextView board_date;
         TextView board_view_cnt;
         TextView board_reply_cnt = null;
-        View view = itemView;
+        View view;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -40,6 +43,16 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             board_contents = itemView.findViewById(R.id.board_contents);
             board_date = itemView.findViewById(R.id.board_date);
             board_view_cnt = itemView.findViewById(R.id.board_view_cnt);
+            view = itemView;
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), ClickedPostingActivity.class);
+                    intent.putExtra("toClickedPosting", toClickedPosting);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
     }
 
@@ -68,11 +81,13 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_contents.setText(data.getString("post_contents"));
             holder.board_date.setText(data.getString("wrt_date"));
             holder.board_view_cnt.setText(data.getString("view_cnt"));
+            toClickedPosting = new toClickedPosting(data.getString("post_no"), data.getString("post_like"),
+                    data.getString("post_title"), data.getString("post_contents"), data.getString("wrt_date"),
+                    data.getString("view_cnt"), data.getString("reply_cnt"), data.getString("reply_yn"));
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
         }
-
 
     }
 

@@ -6,12 +6,14 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
         android:title="search"
+        app:iconTint="@color/white"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_pencil"
         android:title="add"
+        app:iconTint="@color/white"
         app:showAsAction="always"/>
 
 </menu>
