@@ -1,6 +1,8 @@
 package com.hfad.gamo.ClickedBoard;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,7 @@ public class SearchActivity extends AppCompatActivity {
     private static JSONObject requestJSONObject = new JSONObject();
     private static VolleyForHttpMethod volley;
     private static JSONArray requestJSONArray = new JSONArray();
+    private static ClickedBoard_RecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,9 @@ public class SearchActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        final RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final EditText search_edit = (EditText) findViewById(R.id.edit);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
@@ -62,9 +68,12 @@ public class SearchActivity extends AppCompatActivity {
                                     }
                                 }
                                 Log.d("GET RESPONSE", ""+requestJSONArray);
+                                adapter.notifyDataSetChanged();
                             }
                         });
 
+                        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray);
+                        recyclerView.setAdapter(adapter);
                         break;
                 }
                 return true;
