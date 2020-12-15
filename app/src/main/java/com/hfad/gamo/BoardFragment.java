@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.hfad.gamo.ClickedBoard.ClickedBoardActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -32,7 +35,18 @@ public class BoardFragment extends Fragment {
 
     private JSONObject subject_professorJSONObject;
     private SharedPreferences prefs;
-
+    private String dept;
+    private Set<String> subjectSet;
+    private RecyclerView dept_recyclerView;
+    private RecyclerView subject_recyclerView;
+    private RecyclerView community_recyclerView;
+    private Board_RecyclerAdapter dept_adapter;
+    private Board_RecyclerAdapter subject_adapter;
+    private Board_RecyclerAdapter community_adapter;
+    private ArrayList<String> dept_data = new ArrayList<>();
+    private ArrayList<String> subject_data;
+    private ArrayList<String> community_data = new ArrayList<>();
+    private Set<String> noneSubject = new HashSet<>();
 
     public BoardFragment() {
         // Required empty public constructor
@@ -46,8 +60,21 @@ public class BoardFragment extends Fragment {
 
         try {
             subject_professorJSONObject = new JSONObject(prefs.getString("subject_professorJSONObject", null));
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        dept = prefs.getString("department", null);
+        subjectSet = prefs.getStringSet("subjectSet", noneSubject);
+
+        if (dept_data.size() == 0) {
+            dept_data.add(dept);
+        }
+        subject_data = new ArrayList<String>(subjectSet);
+
+        if (community_data.size() == 0) {
+            community_data.add("자유 게시판");
+            community_data.add("새내기 게시판");
         }
     }
 
@@ -55,12 +82,44 @@ public class BoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_board, container, false);
-        showYourDeptAndSubject(view);
+
+        //showYourDeptAndSubject(view);
+
+
+        LinearLayout dept_linearLayout = view.findViewById(R.id.dept);
+        LinearLayout subject_linearLayout = view.findViewById(R.id.subject);
+
+        if(dept == null) {
+            dept_linearLayout.setVisibility(View.INVISIBLE);
+        } else {
+            dept_recyclerView = view.findViewById(R.id.dept_recyclerView);
+            dept_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            dept_adapter = new Board_RecyclerAdapter(dept_data, subject_professorJSONObject);
+            dept_recyclerView.setAdapter(dept_adapter);
+        }
+
+        if(subjectSet == noneSubject) {
+            subject_linearLayout.setVisibility(View.INVISIBLE);
+        } else {
+            subject_recyclerView = view.findViewById(R.id.subject_recyclerView);
+            subject_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            subject_adapter = new Board_RecyclerAdapter(subject_data, subject_professorJSONObject);
+            subject_recyclerView.setAdapter(subject_adapter);
+        }
+
+        community_recyclerView = view.findViewById(R.id.community_recyclerView);
+        community_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        community_adapter = new Board_RecyclerAdapter(community_data, subject_professorJSONObject);
+        community_recyclerView.setAdapter(community_adapter);
 
         return view;
     }
 
-    private void showYourDeptAndSubject(View InflatedView) {
+
+
+
+
+    /*private void showYourDeptAndSubject(View InflatedView) {
         showYourDept(InflatedView);
         showYourSubject(InflatedView);
     }
@@ -113,7 +172,7 @@ public class BoardFragment extends Fragment {
                 linearLayout.addView(textView);
             }
         }
-    }
+    }*/
 
     private void postIntent(Context context, String title) {
         final Intent intent = new Intent(context, ClickedBoardActivity.class);

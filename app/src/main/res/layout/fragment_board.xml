@@ -12,12 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="2dp"
-        android:layout_margin="3dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/bg_board_list"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/subject"
         app:layout_constraintVertical_chainStyle="packed"
         android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dept_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -27,11 +35,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="2dp"
-        android:layout_margin="3dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/bg_board_list"
         app:layout_constraintTop_toBottomOf="@id/dept"
         app:layout_constraintBottom_toTopOf="@id/community"
         android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subject_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -41,21 +57,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="2dp"
-        android:layout_margin="3dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/bg_board_list"
         app:layout_constraintTop_toBottomOf="@id/subject"
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="자유게시판"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="새내기게시판"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/community_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
     </LinearLayout>
