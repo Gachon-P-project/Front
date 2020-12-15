@@ -58,13 +58,13 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/btn_back"
+            android:id="@+id/cancel_button_notification"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginEnd="20dp"
             android:layout_gravity= "right|center_vertical"
             android:src="@drawable/btn_cancel"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
     </FrameLayout>
 
