@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hfad.gamo.ClickedBoard.ClickedPostingActivity;
@@ -36,6 +37,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         TextView notification_view_cnt;
         ImageView notification_file;
         View view;
+        CardView notification_card_view;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -44,6 +46,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
             notification_date = itemView.findViewById(R.id.notification_date);
             notification_view_cnt = itemView.findViewById(R.id.notification_view_cnt);
             notification_file = itemView.findViewById(R.id.notification_file);
+            notification_card_view = itemView.findViewById(R.id.notification_card_view);
             view = itemView;
         }
     }
@@ -70,6 +73,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         String date = null;
         String view = null;
         String board_no = null;
+        int num = -1;
+        int file = -1;
 
         try {
             data = JSONArrayData.getJSONObject(position);
@@ -77,6 +82,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
             date = data.getString("date");
             view = data.getString("view");
             board_no = data.getString("board_no");
+            num = data.getInt("num");
+            file = data.getInt("file");
 
             final String board_noForIntent = board_no;
 
@@ -97,6 +104,12 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         holder.notification_view_cnt.setText(view);
         //holder.notification_file;
 
+        if(file == 0)
+        holder.notification_file.setVisibility(View.INVISIBLE);
+
+        if(num == 0) {
+            holder.notification_card_view.setCardBackgroundColor(holder.view.getContext().getResources().getColor(R.color.indigo200, null));
+        }
     }
 
     @Override
