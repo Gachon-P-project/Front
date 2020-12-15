@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.volley.Response;
@@ -35,6 +36,8 @@ public class NotificationFragment extends Fragment {
     private Notification_RecyclerAdapter adapter;
     private JSONArray responseJSONArray = new JSONArray();
     private JSONObject responseJSONObject = new JSONObject();
+    private ImageView cancel_button_notification;
+    private EditText editText;
 
     private RecyclerView recyclerView = null;
     private SwipeRefreshLayout swipeContainer;
@@ -58,12 +61,10 @@ public class NotificationFragment extends Fragment {
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.i("time", "volley" + String.valueOf(System.currentTimeMillis()));
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         responseJSONObject = response.getJSONObject(i);
                         responseJSONArray.put(responseJSONObject);
-                        Log.d("aaa", ""+responseJSONArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -78,6 +79,9 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        cancel_button_notification = view.findViewById(R.id.cancel_button_notification);
+        editText = view.findViewById(R.id.edit);
+
         recyclerView = view.findViewById(R.id.recycler_notification);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
@@ -121,10 +125,72 @@ public class NotificationFragment extends Fragment {
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                url = "http://112.148.161.36:17394/notice/read/0/컴퓨터공학과/" + editText.getText().toString();
+                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        int original_length = responseJSONArray.length();
+                        int current_length = original_length;
+                        for(int i = 0; i < original_length; i++) {
+                            responseJSONArray.remove(--current_length);
+                        }
+
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                responseJSONObject = response.getJSONObject(i);
+                                responseJSONArray.put(responseJSONObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+
+                        cancel_button_notification.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+
+        cancel_button_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int original_length = responseJSONArray.length();
+                int current_length = original_length;
+                for(int i = 0; i < original_length; i++) {
+                    responseJSONArray.remove(--current_length);
+                }
+
+                url = "http://112.148.161.36:17394/notice/read/0/컴퓨터공학과";
+
+                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        int original_length = responseJSONArray.length();
+                        int current_length = original_length;
+                        for(int i = 0; i < original_length; i++) {
+                            responseJSONArray.remove(--current_length);
+                        }
+
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                responseJSONObject = response.getJSONObject(i);
+                                responseJSONArray.put(responseJSONObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+
+                        cancel_button_notification.setVisibility(View.GONE);
+                        editText.getText().clear();
+                    }
+                });
 
             }
         });
-        Log.i("time", "onCreateView" + String.valueOf(System.currentTimeMillis()));
+
         return view;
     }
 
