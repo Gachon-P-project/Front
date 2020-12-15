@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 
 import com.hfad.gamo.ClickedBoard.ClickedBoardActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -26,15 +30,30 @@ import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class BoardFragment extends Fragment {
 
+    private JSONObject subject_professorJSONObject;
+    private SharedPreferences prefs;
+
+
     public BoardFragment() {
         // Required empty public constructor
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+
+        try {
+            subject_professorJSONObject = new JSONObject(prefs.getString("subject_professorJSONObject", null));
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_board, container, false);
         showYourDeptAndSubject(view);
 
@@ -48,9 +67,7 @@ public class BoardFragment extends Fragment {
 
     private void showYourDept(View InflatedView) {
         final String Dept;
-
-        SharedPreferences pref = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-        Dept = pref.getString("department",null);
+        Dept = prefs.getString("department",null);
 
         if(Dept == null)
             return;
@@ -72,11 +89,8 @@ public class BoardFragment extends Fragment {
     }
 
     private void showYourSubject(View InflatedView) {
-
-        SharedPreferences pref = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-
         Set<String> noneSubject = new HashSet<>();
-        final Set<String> subjectSet = pref.getStringSet("subjectSet", noneSubject);
+        final Set<String> subjectSet = prefs.getStringSet("subjectSet", noneSubject);
 
         if(subjectSet == noneSubject)
             return;
@@ -104,6 +118,11 @@ public class BoardFragment extends Fragment {
     private void postIntent(Context context, String title) {
         final Intent intent = new Intent(context, ClickedBoardActivity.class);
         intent.putExtra("title", title);
+        try {
+            intent.putExtra("professor", subject_professorJSONObject.get(title).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         startActivity(intent);
     }
 }

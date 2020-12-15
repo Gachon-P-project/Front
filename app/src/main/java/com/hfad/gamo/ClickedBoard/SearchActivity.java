@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,6 +34,10 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        Intent intent = getIntent();
+        String title = intent.getExtras().getString("title");
+        final String board_title = intent.getExtras().getString("board_title");
 
         ImageView back_btn = (ImageView) findViewById(R.id.btn_back);
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
                             }
                         });
 
-                        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray);
+                        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, board_title);
                         recyclerView.setAdapter(adapter);
                         break;
                 }
