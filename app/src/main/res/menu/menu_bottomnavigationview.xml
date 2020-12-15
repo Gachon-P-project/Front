@@ -3,19 +3,19 @@
     <item
         android:title="시간표"
         android:id="@+id/bottomNavigationTimeTable"
-        android:icon="@drawable/recommendation"
+        android:icon="@drawable/bottom_titmetable"
         />
 
     <item
         android:title="공지"
         android:id="@+id/bottomNavigationNotification"
-        android:icon="@drawable/mine"/>
+        android:icon="@drawable/bottom_notification"/>
     <item
         android:title="게시판"
         android:id="@+id/bottomNavigationBoard"
-        android:icon="@drawable/refrigerator"/>
+        android:icon="@drawable/bottom_board"/>
     <item
-        android:title="MyPage"
+        android:title="내 정보"
         android:id="@+id/bottomNavigationMyPage"
-        android:icon="@drawable/board"/>
+        android:icon="@drawable/bottom_mypage"/>
 </menu>
