@@ -46,7 +46,6 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             board_view_cnt = itemView.findViewById(R.id.board_view_cnt);
             board_reply_cnt = itemView.findViewById(R.id.board_reply_cnt);
             view = itemView;
-
         }
     }
 
@@ -92,7 +91,6 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
                 v.getContext().startActivity(intent);
             }
         });
-
     }
 
     @Override

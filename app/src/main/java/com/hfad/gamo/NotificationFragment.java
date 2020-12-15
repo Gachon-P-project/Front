@@ -1,64 +1,140 @@
 package com.hfad.gamo;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotificationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.android.volley.Response;
+import com.hfad.gamo.ClickedBoard.ClickedBoard_RecyclerAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+
 public class NotificationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private SharedPreferences prefs;
+    private String dept;
+    private Notification_RecyclerAdapter adapter;
+    private JSONArray responseJSONArray = new JSONArray();
+    private JSONObject jsonObject1 = new JSONObject();
+    private JSONObject jsonObject2 = new JSONObject();
+    private RecyclerView recyclerView = null;
+    private SwipeRefreshLayout swipeContainer;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int one = 0;
 
-    public NotificationFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotificationFragment newInstance(String param1, String param2) {
-        NotificationFragment fragment = new NotificationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        dept = prefs.getString("department", null);
+
+        if(one == 0) {
+            try {
+                jsonObject1.put("num", 0);
+                jsonObject1.put("board_no", "1953");
+                jsonObject1.put("title", "title1");
+                jsonObject1.put("file", 1);
+                jsonObject1.put("date", "2020-10-20");
+                jsonObject1.put("view", "46");
+
+                responseJSONArray.put(jsonObject1);
+
+                jsonObject2.put("num", 1);
+                jsonObject2.put("board_no", "1998");
+                jsonObject2.put("title", "title2");
+                jsonObject2.put("file", 0);
+                jsonObject2.put("date", "2020-09-20");
+                jsonObject2.put("view", "16");
+
+                responseJSONArray.put(jsonObject2);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            one++;
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        recyclerView = view.findViewById(R.id.recycler_notification);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
+        recyclerView.setAdapter(adapter);
+
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_notification);
+
+        // Later!!
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                /*int original_length = responseJSONArray.length();
+                int current_length = original_length;
+                for(int i = 0; i < original_length; i++) {
+                    responseJSONArray.remove(--current_length);
+                }
+
+                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                responseJSONObject = response.getJSONObject(i);
+                                responseJSONArray.put(responseJSONObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });*/
+
+                swipeContainer.setRefreshing(false);
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(R.color.indigo500);
+
+        ImageView search_button = view.findViewById(R.id.search_button);
+
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_clicked_board);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(dept);
     }
 }

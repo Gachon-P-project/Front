@@ -7,12 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -29,10 +24,10 @@ import java.util.ArrayList;
 
 public class ClickedBoardActivity extends AppCompatActivity {
 
-    private JSONObject requestJSONObject = new JSONObject();
+    private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
     private ClickedBoard_RecyclerAdapter adapter;
-    private JSONArray requestJSONArray = new JSONArray();
+    private JSONArray responseJSONArray = new JSONArray();
     private SwipeRefreshLayout swipeContainer;
     private ArrayList<String> a = new ArrayList<>();
     private String url;
@@ -52,22 +47,19 @@ public class ClickedBoardActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                long startTime = System.nanoTime();
-                int original_length = requestJSONArray.length();
+                int original_length = responseJSONArray.length();
                 int current_length = original_length;
                 for(int i = 0; i < original_length; i++) {
-                    requestJSONArray.remove(--current_length);
+                    responseJSONArray.remove(--current_length);
                 }
-                long endTime = System.nanoTime();
-                Log.i("testTime", String.valueOf(endTime - startTime));
 
                 volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                requestJSONObject = response.getJSONObject(i);
-                                requestJSONArray.put(requestJSONObject);
+                                responseJSONObject = response.getJSONObject(i);
+                                responseJSONArray.put(responseJSONObject);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -100,8 +92,8 @@ public class ClickedBoardActivity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
                     try {
-                        requestJSONObject = response.getJSONObject(i);
-                        requestJSONArray.put(requestJSONObject);
+                        responseJSONObject = response.getJSONObject(i);
+                        responseJSONArray.put(responseJSONObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -110,7 +102,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, board_title);
+        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title);
         recyclerView.setAdapter(adapter);
     }
 
