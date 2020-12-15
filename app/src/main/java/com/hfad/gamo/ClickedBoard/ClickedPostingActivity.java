@@ -6,11 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -20,19 +24,23 @@ import com.hfad.gamo.VolleyForHttpMethod;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Comment;
 
-import java.util.ArrayList;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class ClickedPostingActivity extends AppCompatActivity {
 
     private LinearLayout like_btn;  // 공감 버튼
-    private JSONObject requestJSONObject = new JSONObject();
+    private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
     private CommentAdapter adapter;
-    private JSONArray requestJSONArray = new JSONArray();
+    private JSONArray responseJSONArray = new JSONArray();
+    private JSONObject commentJSONObject = new JSONObject();
+    private EditText comment;
+    private SharedPreferences prefs;
 
     private String url;
+    private String userId;
+    private String post_no;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +48,12 @@ public class ClickedPostingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clicked_posting);
 
         Intent intent = getIntent();
-        toClickedPosting toClickedPosting = intent.getParcelableExtra("toClickedPosting");
+        final toClickedPosting toClickedPosting = intent.getParcelableExtra("toClickedPosting");
+
+        prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        userId = prefs.getString("id", null);
+
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
         setSupportActionBar(tb);
@@ -52,17 +65,61 @@ public class ClickedPostingActivity extends AppCompatActivity {
         TextView date = (TextView) findViewById(R.id.date_text);
         TextView contents = (TextView) findViewById(R.id.contents_text);
         TextView reply_cnt = (TextView) findViewById(R.id.reply_text);
+        comment = (EditText) findViewById(R.id.comment);
+        ImageView post_comment = (ImageView) findViewById(R.id.post_comment);
 
         title.setText(toClickedPosting.getPost_title());
         date.setText(toClickedPosting.getWrt_date());
         contents.setText(toClickedPosting.getPost_contents());
         reply_cnt.setText(toClickedPosting.getReply_cnt());
 
-        ///
+        post_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://112.148.161.36:17394/reply/insert/" + "jy11290" + "/" + toClickedPosting.getPost_no();
+
+                try {
+                    commentJSONObject.put("reply_contents", comment.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                volley.postJSONObjectString(commentJSONObject, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
+
+                        int original_length = responseJSONArray.length();
+                        int current_length = original_length;
+                        for(int i = 0; i < original_length; i++) {
+                            responseJSONArray.remove(--current_length);
+                        }
+
+                        String url = "http://112.148.161.36:17394/reply/read/20";
+
+                        volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        responseJSONObject = response.getJSONObject(i);
+                                        responseJSONArray.put(responseJSONObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
+                    }
+                });
+            }
+        });
+
 
         like_btn = findViewById(R.id.post_like_btn);    // 공감 버튼
 
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -73,8 +130,8 @@ public class ClickedPostingActivity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
                     try {
-                        requestJSONObject = response.getJSONObject(i);
-                        requestJSONArray.put(requestJSONObject);
+                        responseJSONObject = response.getJSONObject(i);
+                        responseJSONArray.put(responseJSONObject);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -83,7 +140,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new CommentAdapter(requestJSONArray);
+        adapter = new CommentAdapter(responseJSONArray);
         recyclerView.setAdapter(adapter);
     }
 
