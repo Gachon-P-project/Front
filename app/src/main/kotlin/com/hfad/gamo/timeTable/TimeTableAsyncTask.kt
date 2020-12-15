@@ -6,6 +6,7 @@ import io.wiffy.extension.isNetworkConnected
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.util.EntityUtils
+import org.json.JSONObject
 import org.jsoup.Jsoup
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -17,6 +18,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
     private val subjectSet = mutableSetOf<String>()
     private val professorMap = mutableMapOf<String,String>()
     private val professorSet = mutableSetOf<String>()
+    private val jsonObject = JSONObject();
 
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
@@ -77,9 +79,17 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
             }
 
 
+            val subjectSetIterator = subjectSet.iterator()
+            val professorSetIterator = professorSet.iterator()
+
+            for(i in 0 until subjectSet.count()) {
+             jsonObject.put(subjectSetIterator.next(), professorSetIterator.next())
+            }
+
             setSharedItem("tableSet", set)
             setSharedItem("subjectSet", subjectSet)
             setSharedItem("professorSet",professorSet)
+            setSharedItem("subject_professorJSONObject", jsonObject.toString());
             mView.initTable(set)
             ACTION_SUCCESS
         } catch (e: Exception) {
