@@ -93,6 +93,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
                     Intent intent = new Intent(v.getContext(), NotificationWebViewActivity.class);
                     intent.putExtra("dept", dept);
                     intent.putExtra("board_no", board_noForIntent);
+                    v.getContext().startActivity(intent);
                 }
             });
         } catch (JSONException e) {
