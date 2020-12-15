@@ -36,6 +36,8 @@ public class ClickedBoardActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeContainer;
     private ArrayList<String> a = new ArrayList<>();
     private String url;
+    private String board_title;
+    private String professor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,8 @@ public class ClickedBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clicked_board);
 
         Intent intent = getIntent();
-        String board_title = intent.getExtras().getString("title");
+        board_title = intent.getExtras().getString("title");
+        professor = intent.getExtras().getString("professor");
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -130,6 +133,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
             case R.id.action_search :
                 intent = new Intent(getBaseContext(), SearchActivity.class);
                 intent.putExtra("subject", "모바일 웹");
+                intent.putExtra("board_title", board_title);
                 startActivity(intent);
                 return true;
             case R.id.action_add :

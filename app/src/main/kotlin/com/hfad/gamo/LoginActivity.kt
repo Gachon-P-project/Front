@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.hfad.gamo.Component.sharedPreferences
 import io.wiffy.extension.encrypt
@@ -18,10 +19,9 @@ class LoginActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
 
         login_button.setOnClickListener() {
+            //Log.i("id,pwd", id.text.toString() + pwd.text.toString())
             executeLogin(id.text.toString(), pwd.text.toString())
         }
-
-
 
     }
 
