@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "246220091029",
+    "project_id": "moga-594b9",
+    "storage_bucket": "moga-594b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246220091029:android:71c9002f287e7c9f12359c",
+        "android_client_info": {
+          "package_name": "com.hfad.gamo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246220091029-37o06n34ad7o5912n62hu16qpaa7an3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXBMRlynWEDrKARppygBOglG00e266lyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246220091029-37o06n34ad7o5912n62hu16qpaa7an3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
