@@ -58,7 +58,7 @@ public class NotificationFragment extends Fragment {
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-
+                Log.i("time", "volley" + String.valueOf(System.currentTimeMillis()));
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         responseJSONObject = response.getJSONObject(i);
@@ -68,6 +68,7 @@ public class NotificationFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                adapter.notifyDataSetChanged();
             }
         });
         
@@ -123,7 +124,7 @@ public class NotificationFragment extends Fragment {
 
             }
         });
-
+        Log.i("time", "onCreateView" + String.valueOf(System.currentTimeMillis()));
         return view;
     }
 
