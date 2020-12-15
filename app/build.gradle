@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -48,4 +49,7 @@ dependencies {
     implementation 'com.github.EunsilJo:TimeTable:1.0'
     implementation 'com.github.wiffy-io:Extension_kotlin:v1.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.0.0'
+    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
 }

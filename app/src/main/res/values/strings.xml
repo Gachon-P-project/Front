@@ -10,4 +10,5 @@
         2. 특정인이나 단체/지역을 비방하는 행위\n
         3. 기타 현행법에 어긋나는 행위\n
     </string>
+    <string name="msg_token_fmt" translatable="false">토큰 : %s</string>
 </resources>
