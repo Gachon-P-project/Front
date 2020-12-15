@@ -33,7 +33,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         TextView board_contents;
         TextView board_date;
         TextView board_view_cnt;
-        TextView board_reply_cnt = null;
+        TextView board_reply_cnt;
         View view;
         toClickedPosting toClickedPosting;
 
@@ -44,6 +44,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             board_contents = itemView.findViewById(R.id.board_contents);
             board_date = itemView.findViewById(R.id.board_date);
             board_view_cnt = itemView.findViewById(R.id.board_view_cnt);
+            board_reply_cnt = itemView.findViewById(R.id.board_reply_cnt);
             view = itemView;
 
         }
@@ -74,9 +75,10 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_contents.setText(data.getString("post_contents"));
             holder.board_date.setText(data.getString("wrt_date"));
             holder.board_view_cnt.setText(data.getString("view_cnt"));
+            holder.board_reply_cnt.setText(data.getString("reply_cnt"));
             holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"), data.getString("post_like"),
                     data.getString("post_title"), data.getString("post_contents"), data.getString("wrt_date"),
-                    data.getString("view_cnt"), data.getString("reply_yn"));
+                    data.getString("view_cnt"),data.getString("reply_cnt"), data.getString("reply_yn"));
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();

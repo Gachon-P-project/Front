@@ -16,7 +16,7 @@ public class toClickedPosting implements Parcelable {
     private String reply_yn;
 
     public toClickedPosting(String board_title, String post_no, String post_like, String post_title, String post_contents,
-                            String wrt_date, String view_cnt, String reply_yn) {
+                            String wrt_date, String view_cnt, String reply_cnt, String reply_yn) {
         this.board_title = board_title;
         this.post_no = post_no;
         this.post_like = post_like;
@@ -24,7 +24,7 @@ public class toClickedPosting implements Parcelable {
         this.post_contents = post_contents;
         this.wrt_date = wrt_date;
         this.view_cnt = view_cnt;
-        // this.reply_cnt = reply_cnt;
+        this.reply_cnt = reply_cnt;
         this.reply_yn = reply_yn;
     }
 
@@ -109,7 +109,7 @@ public class toClickedPosting implements Parcelable {
         this.post_contents = in.readString();
         this.wrt_date = in.readString();
         this.view_cnt = in.readString();
-        // this.reply_cnt = in.readString();
+        this.reply_cnt = in.readString();
         this.reply_yn = in.readString();
     }
 
@@ -122,7 +122,7 @@ public class toClickedPosting implements Parcelable {
         dest.writeString(post_contents);
         dest.writeString(wrt_date);
         dest.writeString(view_cnt);
-        // dest.writeString(reply_cnt);
+        dest.writeString(reply_cnt);
         dest.writeString(reply_yn);
     }
 

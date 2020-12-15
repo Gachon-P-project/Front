@@ -51,10 +51,12 @@ public class ClickedPostingActivity extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.title_text);
         TextView date = (TextView) findViewById(R.id.date_text);
         TextView contents = (TextView) findViewById(R.id.contents_text);
+        TextView reply_cnt = (TextView) findViewById(R.id.reply_text);
 
         title.setText(toClickedPosting.getPost_title());
         date.setText(toClickedPosting.getWrt_date());
         contents.setText(toClickedPosting.getPost_contents());
+        reply_cnt.setText(toClickedPosting.getReply_cnt());
 
         ///
 
