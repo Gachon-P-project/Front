@@ -11,9 +11,7 @@
         android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingStart="22dp"
         android:paddingTop="10dp"
-        android:paddingEnd="22dp"
         android:paddingBottom="10dp">
 
         <LinearLayout
@@ -99,12 +97,12 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/view_item_comment_underline"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:background="@color/text2" />
+<!--    <View-->
+<!--        android:id="@+id/view_item_comment_underline"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:layout_marginEnd="5dp"-->
+<!--        android:background="@color/text2" />-->
 
 </LinearLayout>
