@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.hfad.gamo.ClickedBoard.ClickedBoard_RecyclerAdapter;
 
 import org.json.JSONArray;
@@ -32,10 +34,12 @@ public class NotificationFragment extends Fragment {
     private String dept;
     private Notification_RecyclerAdapter adapter;
     private JSONArray responseJSONArray = new JSONArray();
-    private JSONObject jsonObject1 = new JSONObject();
-    private JSONObject jsonObject2 = new JSONObject();
+    private JSONObject responseJSONObject = new JSONObject();
+
     private RecyclerView recyclerView = null;
     private SwipeRefreshLayout swipeContainer;
+    private VolleyForHttpMethod volley;
+    private String url;
 
     private int one = 0;
 
@@ -47,32 +51,26 @@ public class NotificationFragment extends Fragment {
         prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
 
-        if(one == 0) {
-            try {
-                jsonObject1.put("num", 0);
-                jsonObject1.put("board_no", "1953");
-                jsonObject1.put("title", "title1");
-                jsonObject1.put("file", 1);
-                jsonObject1.put("date", "2020-10-20");
-                jsonObject1.put("view", "46");
+        //
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
+        url = "http://112.148.161.36:17394/notice/read/0/컴퓨터공학과";
 
-                responseJSONArray.put(jsonObject1);
+        volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
 
-                jsonObject2.put("num", 1);
-                jsonObject2.put("board_no", "1998");
-                jsonObject2.put("title", "title2");
-                jsonObject2.put("file", 0);
-                jsonObject2.put("date", "2020-09-20");
-                jsonObject2.put("view", "16");
-
-                responseJSONArray.put(jsonObject2);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        responseJSONObject = response.getJSONObject(i);
+                        responseJSONArray.put(responseJSONObject);
+                        Log.d("aaa", ""+responseJSONArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-
-            one++;
-        }
+        });
+        
     }
 
     @Override
