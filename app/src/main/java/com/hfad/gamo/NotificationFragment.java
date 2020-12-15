@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -200,6 +201,6 @@ public class NotificationFragment extends Fragment {
 
         Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_clicked_board);
         ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(dept);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
     }
 }

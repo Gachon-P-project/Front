@@ -109,7 +109,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         holder.notification_file.setVisibility(View.INVISIBLE);
 
         if(num == 0) {
-            holder.notification_card_view.setCardBackgroundColor(holder.view.getContext().getResources().getColor(R.color.indigo200, null));
+            holder.notification_card_view.setCardBackgroundColor(holder.view.getContext().getResources().getColor(R.color.jinColor, null));
         }
     }
 
