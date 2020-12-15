@@ -20,10 +20,11 @@ import org.json.JSONObject;
 public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
+    private String board_title;
 
-
-    ClickedBoard_RecyclerAdapter(JSONArray list) {
+    ClickedBoard_RecyclerAdapter(JSONArray list, String board_title) {
         this.JSONArrayData = list;
+        this.board_title = board_title;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,7 +74,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_contents.setText(data.getString("post_contents"));
             holder.board_date.setText(data.getString("wrt_date"));
             holder.board_view_cnt.setText(data.getString("view_cnt"));
-            holder.toClickedPosting = new toClickedPosting(data.getString("post_no"), data.getString("post_like"),
+            holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"), data.getString("post_like"),
                     data.getString("post_title"), data.getString("post_contents"), data.getString("wrt_date"),
                     data.getString("view_cnt"), data.getString("reply_yn"));
         } catch(JSONException e) {

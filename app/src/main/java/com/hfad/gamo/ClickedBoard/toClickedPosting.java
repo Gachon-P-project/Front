@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class toClickedPosting implements Parcelable {
 
+    private String board_title;
     private String post_no;
     private String post_like;
     private String post_title;
@@ -14,8 +15,9 @@ public class toClickedPosting implements Parcelable {
     private String reply_cnt;
     private String reply_yn;
 
-    public toClickedPosting(String post_no, String post_like, String post_title, String post_contents,
+    public toClickedPosting(String board_title, String post_no, String post_like, String post_title, String post_contents,
                             String wrt_date, String view_cnt, String reply_yn) {
+        this.board_title = board_title;
         this.post_no = post_no;
         this.post_like = post_like;
         this.post_title = post_title;
@@ -24,6 +26,10 @@ public class toClickedPosting implements Parcelable {
         this.view_cnt = view_cnt;
         // this.reply_cnt = reply_cnt;
         this.reply_yn = reply_yn;
+    }
+
+    public void setBoard_title(String board_title) {
+        this.board_title = board_title;
     }
 
     public void setPost_no(String post_no) {
@@ -58,6 +64,10 @@ public class toClickedPosting implements Parcelable {
         this.reply_yn = reply_yn;
     }
 
+    public String getBoard_title() {
+        return board_title;
+    }
+
     public String getPost_no() {
         return post_no;
     }
@@ -90,7 +100,9 @@ public class toClickedPosting implements Parcelable {
         return reply_yn;
     }
 
+
     protected toClickedPosting(Parcel in) {
+        this.board_title = in.readString();
         this.post_no = in.readString();
         this.post_like = in.readString();
         this.post_title = in.readString();
@@ -103,6 +115,7 @@ public class toClickedPosting implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(board_title);
         dest.writeString(post_no);
         dest.writeString(post_like);
         dest.writeString(post_title);
