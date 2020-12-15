@@ -11,7 +11,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -29,46 +32,40 @@ public class WritingActivity extends AppCompatActivity {
     private static VolleyForHttpMethod volley;
     private static JSONObject requestJSONObject = new JSONObject();
     Intent intent;
-    AppCompatEditText title_edit;
-    AppCompatEditText contents_edit;
+    EditText title_edit;
+    EditText contents_edit;
+    ImageView btn_cancel;
+    Button btn_complete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
-        /*
-        post_title: req.body.post_title,
-        post_contents: req.body.post_contents,
-        post_like: 0,
-        wrt_date: new Date(),
-        view_cnt: 1,
-        reply_yn: req.body.reply_yn,
-        major_name: req.body.major_name,
-        subject_name: req.body.subject_name,
-        professor_name: req.body.professor_name,
-        user_id: req.body.user_id
-         */
+
         // 제목
-        title_edit = (AppCompatEditText) findViewById(R.id.board_write_title_edit);
-        contents_edit = (AppCompatEditText)findViewById(R.id.board_write_contents_edit);
+        title_edit = findViewById(R.id.board_write_title_edit);
+        contents_edit = findViewById(R.id.board_write_contents_edit);
+        btn_cancel = findViewById(R.id.btn_cancel);
+        btn_complete = findViewById(R.id.btn_complete);
 
         title_edit.addTextChangedListener(titleWatcher);
 
         intent = getIntent();// major, subject, professor, user
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
-        // 상단바
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
-        setSupportActionBar(tb);
-        getSupportActionBar().setTitle("글쓰기");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-
-
-        // 내용
-
-        Log.d("test",""+title_edit.getText().toString());
+        btn_complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writingBtnClick();
+            }
+        });
     }
 
     TextWatcher titleWatcher = new TextWatcher() {
@@ -96,20 +93,6 @@ public class WritingActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_writing:
-                writingBtnClick();
-                return true;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private void writingBtnClick() {
         String url = "http://192.168.254.2:17394/board/insert";
