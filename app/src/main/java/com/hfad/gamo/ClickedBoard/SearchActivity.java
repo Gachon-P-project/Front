@@ -59,7 +59,7 @@ public class SearchActivity extends AppCompatActivity {
                     case EditorInfo.IME_ACTION_SEARCH:
 //                        Toast.makeText(getApplicationContext(), "검색"+search_edit.getText().toString(), Toast.LENGTH_LONG).show();
 
-                        String url = "http://192.168.254.2:17394/board/select/컴퓨터구조/search/"+search_edit.getText().toString();
+                        String url = "http://112.148.161.36:17394/board/select/컴퓨터구조/search/"+search_edit.getText().toString();
 
                         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                             @Override

@@ -95,7 +95,7 @@ public class WritingActivity extends AppCompatActivity {
 
 
     private void writingBtnClick() {
-        String url = "http://192.168.254.2:17394/board/insert";
+        String url = "http://112.148.161.36:17394/board/insert";
 
         try {
             requestJSONObject.put("major_name", intent.getExtras().getString("major"));

@@ -85,7 +85,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        url = "http://192.168.254.2:17394/board/select/컴퓨터구조/이상순";
+        url = "http://112.148.161.36:17394/board/select/컴퓨터구조/이상순";
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override

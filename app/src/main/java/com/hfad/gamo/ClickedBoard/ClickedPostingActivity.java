@@ -66,7 +66,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        url = "http://192.168.254.2:17394/reply/read/20";
+        url = "http://112.148.161.36:17394/reply/read/20";
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override

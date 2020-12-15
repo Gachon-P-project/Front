@@ -19,6 +19,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
     private val professorMap = mutableMapOf<String,String>()
     private val professorSet = mutableSetOf<String>()
     private val jsonObject = JSONObject();
+    private val subjectHashSet = HashSet<String>()
 
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
@@ -69,6 +70,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
                         )
                         set.add(table.information)
                         subjectSet.add(subject)
+                        subjectHashSet.add(subject)
                         professorMap[subject] = professor
                     }
                 }
@@ -87,7 +89,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
             }
 
             setSharedItem("tableSet", set)
-            setSharedItem("subjectSet", subjectSet)
+            setSharedItem("subjectSet", subjectHashSet)
             setSharedItem("professorSet",professorSet)
             setSharedItem("subject_professorJSONObject", jsonObject.toString());
             mView.initTable(set)
