@@ -14,17 +14,20 @@
         android:background="@color/colorPrimary"
         app:theme="@style/AppTheme.Toolbar" />
 
-    <!--<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/swipe_clicked_board">
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler_clicked_board" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recycler_clicked_board" />
+
 
 
 

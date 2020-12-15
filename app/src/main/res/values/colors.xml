@@ -49,4 +49,5 @@
     <color name="text1">#363636</color>
     <color name="text2">#727272</color>
     <color name="light_blue">#03a9f4</color>
+    <color name="indigo500">#3f51b5</color>
 </resources>

@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +25,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class ClickedBoardActivity extends AppCompatActivity {
 
     private JSONObject requestJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
     private ClickedBoard_RecyclerAdapter adapter;
     private JSONArray requestJSONArray = new JSONArray();
+    private SwipeRefreshLayout swipeContainer;
+    private ArrayList<String> a = new ArrayList<>();
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,39 @@ public class ClickedBoardActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String title = intent.getExtras().getString("title");
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                long startTime = System.nanoTime();
+                int original_length = requestJSONArray.length();
+                int current_length = original_length;
+                for(int i = 0; i < original_length; i++) {
+                    requestJSONArray.remove(--current_length);
+                }
+                long endTime = System.nanoTime();
+                Log.i("testTime", String.valueOf(endTime - startTime));
+
+                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                requestJSONObject = response.getJSONObject(i);
+                                requestJSONArray.put(requestJSONObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                swipeContainer.setRefreshing(false);
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(R.color.indigo500);
 
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
         setSupportActionBar(tb);
@@ -50,7 +90,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String url = "http://192.168.254.2:17394/board/select/컴퓨터구조/이상순";
+        url = "http://172.30.1.2:17394/select/피프로젝트/황희정";
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
