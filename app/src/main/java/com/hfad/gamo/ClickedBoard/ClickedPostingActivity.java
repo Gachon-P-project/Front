@@ -22,11 +22,10 @@ public class ClickedPostingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         toClickedPosting toClickedPosting = intent.getParcelableExtra("toClickedPosting");
-        String string = toClickedPosting.getPost_title();
 
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
         setSupportActionBar(tb);
-        getSupportActionBar().setTitle("컴퓨터구조");
+        getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
 
