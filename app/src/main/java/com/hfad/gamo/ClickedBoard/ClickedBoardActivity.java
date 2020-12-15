@@ -43,7 +43,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clicked_board);
 
         Intent intent = getIntent();
-        String title = intent.getExtras().getString("title");
+        String board_title = intent.getExtras().getString("title");
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -80,7 +80,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
 
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
         setSupportActionBar(tb);
-        getSupportActionBar().setTitle(title);
+        getSupportActionBar().setTitle(board_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
 
@@ -107,7 +107,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray);
+        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, board_title);
         recyclerView.setAdapter(adapter);
     }
 
