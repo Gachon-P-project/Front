@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private BoardFragment f_Board = new BoardFragment();
     private MyPageFragment f_MyPage = new MyPageFragment();
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "TOKEN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d(TAG, msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
 
