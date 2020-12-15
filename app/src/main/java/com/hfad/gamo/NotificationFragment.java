@@ -9,11 +9,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.android.volley.Response;
 import com.hfad.gamo.ClickedBoard.ClickedBoard_RecyclerAdapter;
 
 import org.json.JSONArray;
@@ -31,7 +34,11 @@ public class NotificationFragment extends Fragment {
     private JSONArray responseJSONArray = new JSONArray();
     private JSONObject jsonObject1 = new JSONObject();
     private JSONObject jsonObject2 = new JSONObject();
-    RecyclerView recyclerView = null;
+    private RecyclerView recyclerView = null;
+    private SwipeRefreshLayout swipeContainer;
+
+    private int one = 0;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,27 +47,31 @@ public class NotificationFragment extends Fragment {
         prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
 
-        try {
-            jsonObject1.put("num", 0);
-            jsonObject1.put("board_no", "1953");
-            jsonObject1.put("title", "title1");
-            jsonObject1.put("file", 1);
-            jsonObject1.put("date", "2020-10-20");
-            jsonObject1.put("view", "46");
+        if(one == 0) {
+            try {
+                jsonObject1.put("num", 0);
+                jsonObject1.put("board_no", "1953");
+                jsonObject1.put("title", "title1");
+                jsonObject1.put("file", 1);
+                jsonObject1.put("date", "2020-10-20");
+                jsonObject1.put("view", "46");
 
-            responseJSONArray.put(jsonObject1);
+                responseJSONArray.put(jsonObject1);
 
-            jsonObject2.put("num", 0);
-            jsonObject2.put("board_no", "1998");
-            jsonObject2.put("title", "title2");
-            jsonObject2.put("file", 0);
-            jsonObject2.put("date", "2020-09-20");
-            jsonObject2.put("view", "16");
+                jsonObject2.put("num", 1);
+                jsonObject2.put("board_no", "1998");
+                jsonObject2.put("title", "title2");
+                jsonObject2.put("file", 0);
+                jsonObject2.put("date", "2020-09-20");
+                jsonObject2.put("view", "16");
 
-            responseJSONArray.put(jsonObject2);
+                responseJSONArray.put(jsonObject2);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            one++;
         }
     }
 
@@ -72,6 +83,48 @@ public class NotificationFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
         recyclerView.setAdapter(adapter);
+
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_notification);
+
+        // Later!!
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                /*int original_length = responseJSONArray.length();
+                int current_length = original_length;
+                for(int i = 0; i < original_length; i++) {
+                    responseJSONArray.remove(--current_length);
+                }
+
+                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                responseJSONObject = response.getJSONObject(i);
+                                responseJSONArray.put(responseJSONObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });*/
+
+                swipeContainer.setRefreshing(false);
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(R.color.indigo500);
+
+        ImageView search_button = view.findViewById(R.id.search_button);
+
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         return view;
     }
