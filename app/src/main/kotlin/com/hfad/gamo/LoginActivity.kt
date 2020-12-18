@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.hfad.gamo.Component.sharedPreferences
+import io.wiffy.extension.BuildConfig
 import io.wiffy.extension.encrypt
 import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
@@ -20,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
 
         login_button.setOnClickListener() {
             //Log.i("id,pwd", id.text.toString() + pwd.text.toString())
+            LoginDialog(this).show()
             executeLogin(id.text.toString(), pwd.text.toString())
         }
 
@@ -49,13 +52,19 @@ class LoginActivity : AppCompatActivity() {
 
 
     fun loginFailed(str: String) {
-        /*if (BuildConfig.DEBUG) {
-            console(str)
+        if (BuildConfig.DEBUG) {
+//            console(str)
         }
-        toast("로그인에 실패하였습니다.")*/
+//        toast("로그인에 실패하였습니다.")
+        Toast.makeText(applicationContext, "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+
+        this.recreate()
     }
 
     fun networkFailed() {
         //toast("네트워크에 연결할 수 없습니다.")
+        Toast.makeText(applicationContext, "네트워크를 확인해 주세요.", Toast.LENGTH_SHORT).show()
+
+        this.recreate()
     }
 }
