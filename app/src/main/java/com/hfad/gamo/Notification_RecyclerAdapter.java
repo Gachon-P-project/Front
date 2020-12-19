@@ -104,7 +104,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
             Log.d("DATE::::", "inputdate : " + inputDate.getTime());
             Log.d("DATE::::", "now : " + now.getTime());
             Log.d("DATE::::", "sub : " + (now.getTime() - inputDate.getTime()));
-            if(now.getTime() - inputDate.getTime() < (1000 * 60 * 60 * 24 * 7))
+            if(now.getTime() - inputDate.getTime() < (1000 * 60 * 60 * 24 * 3))
                 isNew = true;
 
             holder.view.setOnClickListener(new View.OnClickListener() {
