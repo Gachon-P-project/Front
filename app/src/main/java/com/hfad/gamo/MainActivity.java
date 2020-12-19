@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private BoardFragment f_Board = new BoardFragment();
     private MyPageFragment f_MyPage = new MyPageFragment();
 
-    private static final String TAG = "TOKEN";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

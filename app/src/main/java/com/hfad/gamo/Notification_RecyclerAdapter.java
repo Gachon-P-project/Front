@@ -2,6 +2,7 @@ package com.hfad.gamo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,10 @@ import com.hfad.gamo.ClickedBoard.toClickedPosting;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notification_RecyclerAdapter.ViewHolder> {
 
@@ -38,6 +43,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         ImageView notification_file;
         View view;
         CardView notification_card_view;
+        ImageView notification_new;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -48,6 +54,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
             notification_file = itemView.findViewById(R.id.notification_file);
             notification_card_view = itemView.findViewById(R.id.notification_card_view);
             view = itemView;
+            notification_new = itemView.findViewById(R.id.notification_new);
+
         }
     }
 
@@ -75,6 +83,10 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         String board_no = null;
         int num = -1;
         int file = -1;
+        boolean isNew = false;
+        Date now = new Date();
+        Date inputDate = now;
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
             data = JSONArrayData.getJSONObject(position);
@@ -82,10 +94,18 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
             date = data.getString("date");
             view = data.getString("view");
             board_no = data.getString("board_no");
-            num = data.getInt("num");
-            file = data.getInt("file");
+//            num = data.getInt("num");
+//            file = data.getInt("file");
 
             final String board_noForIntent = board_no;
+
+            inputDate = sf.parse(date);
+            now = new Date();
+            Log.d("DATE::::", "inputdate : " + inputDate.getTime());
+            Log.d("DATE::::", "now : " + now.getTime());
+            Log.d("DATE::::", "sub : " + (now.getTime() - inputDate.getTime()));
+            if(now.getTime() - inputDate.getTime() < (1000 * 60 * 60 * 24 * 3))
+                isNew = true;
 
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,14 +116,19 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
                     v.getContext().startActivity(intent);
                 }
             });
-        } catch (JSONException e) {
+        } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
 
+
         holder.notification_title.setText(title);
-        holder.notification_date.setText(date);
+        holder.notification_date.setText(sf.format(inputDate));
         holder.notification_view_cnt.setText(view);
         //holder.notification_file;
+
+        if(isNew) {
+            holder.notification_new.setVisibility(View.VISIBLE);
+        }
 
         if(file == 0)
         holder.notification_file.setVisibility(View.INVISIBLE);
