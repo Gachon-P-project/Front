@@ -116,10 +116,7 @@ public class BoardFragment extends Fragment {
     }
 
 
-
-
-
-    /*private void showYourDeptAndSubject(View InflatedView) {
+/*private void showYourDeptAndSubject(View InflatedView) {
         showYourDept(InflatedView);
         showYourSubject(InflatedView);
     }
