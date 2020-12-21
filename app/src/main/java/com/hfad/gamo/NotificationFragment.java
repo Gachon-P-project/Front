@@ -27,6 +27,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
@@ -48,6 +55,8 @@ public class NotificationFragment extends Fragment {
     private int one = 0;
 
 
+    private LoadingDialog loadingDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +64,7 @@ public class NotificationFragment extends Fragment {
         prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
 
-        //
+
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
         url = "http://172.30.1.2:17394/notice/read/0/컴퓨터공학과";
 
@@ -73,12 +82,23 @@ public class NotificationFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        
+
+
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        loadingDialog = new LoadingDialog(getContext());
+        loadingDialog.show();
+
+
+
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         cancel_button_notification = view.findViewById(R.id.cancel_button_notification);
         editText = view.findViewById(R.id.edit);
@@ -133,7 +153,7 @@ public class NotificationFragment extends Fragment {
 
                         int original_length = responseJSONArray.length();
                         int current_length = original_length;
-                        for(int i = 0; i < original_length; i++) {
+                        for (int i = 0; i < original_length; i++) {
                             responseJSONArray.remove(--current_length);
                         }
 
@@ -158,7 +178,7 @@ public class NotificationFragment extends Fragment {
             public void onClick(View v) {
                 int original_length = responseJSONArray.length();
                 int current_length = original_length;
-                for(int i = 0; i < original_length; i++) {
+                for (int i = 0; i < original_length; i++) {
                     responseJSONArray.remove(--current_length);
                 }
 
@@ -170,7 +190,7 @@ public class NotificationFragment extends Fragment {
 
                         int original_length = responseJSONArray.length();
                         int current_length = original_length;
-                        for(int i = 0; i < original_length; i++) {
+                        for (int i = 0; i < original_length; i++) {
                             responseJSONArray.remove(--current_length);
                         }
 
@@ -202,5 +222,11 @@ public class NotificationFragment extends Fragment {
         Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_clicked_board);
         ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
+
+        loadingDialog.cancel();
     }
+
+
+
+
 }

@@ -21,14 +21,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class MainActivity extends AppCompatActivity {
-
+    // TEST GIT
     private FragmentManager fm = getSupportFragmentManager();
     private com.hfad.gamo.timeTable.TimeTableFragment f_TimeTable2 = new com.hfad.gamo.timeTable.TimeTableFragment();
     private NotificationFragment f_Notification = new NotificationFragment();
     private BoardFragment f_Board = new BoardFragment();
     private MyPageFragment f_MyPage = new MyPageFragment();
-
-    private static final String TAG = "TOKEN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
