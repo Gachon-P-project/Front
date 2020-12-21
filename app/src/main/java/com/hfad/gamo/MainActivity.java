@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Component.default_url = "http://172.30.1.2:17394";
 
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -51,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, msg);
                     }
                 });*/
-
-
 
 
         setContentView(R.layout.activity_main);

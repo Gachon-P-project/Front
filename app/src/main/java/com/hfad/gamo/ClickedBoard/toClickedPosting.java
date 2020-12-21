@@ -11,19 +11,17 @@ public class toClickedPosting implements Parcelable {
     private String post_title;
     private String post_contents;
     private String wrt_date;
-    private String view_cnt;
     private String reply_cnt;
     private String reply_yn;
 
     public toClickedPosting(String board_title, String post_no, String post_like, String post_title, String post_contents,
-                            String wrt_date, String view_cnt, String reply_cnt, String reply_yn) {
+                            String wrt_date, String reply_cnt, String reply_yn) {
         this.board_title = board_title;
         this.post_no = post_no;
         this.post_like = post_like;
         this.post_title = post_title;
         this.post_contents = post_contents;
         this.wrt_date = wrt_date;
-        this.view_cnt = view_cnt;
         this.reply_cnt = reply_cnt;
         this.reply_yn = reply_yn;
     }
@@ -50,10 +48,6 @@ public class toClickedPosting implements Parcelable {
 
     public void setWrt_date(String wrt_date) {
         this.wrt_date = wrt_date;
-    }
-
-    public void setView_cnt(String view_cnt) {
-        this.view_cnt = view_cnt;
     }
 
     public void setReply_cnt(String reply_cnt) {
@@ -88,10 +82,6 @@ public class toClickedPosting implements Parcelable {
         return wrt_date;
     }
 
-    public String getView_cnt() {
-        return view_cnt;
-    }
-
     public String getReply_cnt() {
         return reply_cnt;
     }
@@ -108,7 +98,6 @@ public class toClickedPosting implements Parcelable {
         this.post_title = in.readString();
         this.post_contents = in.readString();
         this.wrt_date = in.readString();
-        this.view_cnt = in.readString();
         this.reply_cnt = in.readString();
         this.reply_yn = in.readString();
     }
@@ -121,7 +110,6 @@ public class toClickedPosting implements Parcelable {
         dest.writeString(post_title);
         dest.writeString(post_contents);
         dest.writeString(wrt_date);
-        dest.writeString(view_cnt);
         dest.writeString(reply_cnt);
         dest.writeString(reply_yn);
     }

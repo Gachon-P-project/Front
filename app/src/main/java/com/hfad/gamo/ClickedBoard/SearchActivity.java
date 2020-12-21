@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 
@@ -59,7 +60,10 @@ public class SearchActivity extends AppCompatActivity {
                     case EditorInfo.IME_ACTION_SEARCH:
 //                        Toast.makeText(getApplicationContext(), "검색"+search_edit.getText().toString(), Toast.LENGTH_LONG).show();
 
-                        String url = "http://112.148.161.36:17394/board/select/컴퓨터구조/search/"+search_edit.getText().toString();
+                        String subject = "컴퓨터구조";
+                        String professor = "이상순";
+                        String word = search_edit.getText().toString();
+                        String url = Component.default_url.concat(getString(R.string.searchWantedPostingsOfBoard,subject, professor, word));
 
                         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                             @Override
@@ -84,8 +88,5 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
-
     }
 }

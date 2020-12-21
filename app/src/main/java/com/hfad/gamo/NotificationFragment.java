@@ -57,7 +57,7 @@ public class NotificationFragment extends Fragment {
 
         //
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
-        url = "http://112.148.161.36:17394/notice/read/0/컴퓨터공학과";
+        url = "http://172.30.1.2:17394/notice/read/0/컴퓨터공학과";
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
@@ -162,7 +162,7 @@ public class NotificationFragment extends Fragment {
                     responseJSONArray.remove(--current_length);
                 }
 
-                url = "http://112.148.161.36:17394/notice/read/0/컴퓨터공학과";
+                url = "http://172.30.1.2:17394/notice/read/0/컴퓨터공학과";
 
                 volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                     @Override

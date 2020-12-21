@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 
@@ -76,7 +77,12 @@ public class ClickedPostingActivity extends AppCompatActivity {
         post_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://112.148.161.36:17394/reply/insert/" + "jy11290" + "/" + toClickedPosting.getPost_no();
+                //String url = "http://172.30.1.2:17394/reply/insert/" + "jy11290" + "/" + toClickedPosting.getPost_no();
+
+                String user = "jy11290";
+                final String post_no = toClickedPosting.getPost_no();
+
+                String url = Component.default_url.concat(getString(R.string.postReply,user,post_no));
 
                 try {
                     commentJSONObject.put("reply_contents", comment.getText().toString());
@@ -95,7 +101,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
                             responseJSONArray.remove(--current_length);
                         }
 
-                        String url = "http://112.148.161.36:17394/reply/read/20";
+                        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
 
                         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                             @Override
@@ -123,7 +129,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        url = "http://112.148.161.36:17394/reply/read/20";
+        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override

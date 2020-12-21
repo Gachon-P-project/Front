@@ -13,14 +13,15 @@ import android.view.MenuItem;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ClickedBoardActivity extends AppCompatActivity {
 
@@ -38,6 +39,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_board);
+
 
         Intent intent = getIntent();
         board_title = intent.getExtras().getString("title");
@@ -85,7 +87,10 @@ public class ClickedBoardActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        url = "http://112.148.161.36:17394/board/select/컴퓨터구조/이상순";
+        //url = "http://172.30.1.2:17394/board/select/컴퓨터구조/이상순";
+        String subject = "컴퓨터구조";
+        String professor = "이상순";
+        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,subject, professor));
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override

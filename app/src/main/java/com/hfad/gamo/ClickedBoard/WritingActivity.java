@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 
@@ -95,7 +96,7 @@ public class WritingActivity extends AppCompatActivity {
 
 
     private void writingBtnClick() {
-        String url = "http://112.148.161.36:17394/board/insert";
+        String url = Component.default_url.concat(getString(R.string.postWriting));
 
         try {
             requestJSONObject.put("major_name", intent.getExtras().getString("major"));

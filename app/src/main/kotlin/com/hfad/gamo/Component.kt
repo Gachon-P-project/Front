@@ -14,6 +14,8 @@ object Component {
 
     lateinit var sharedPreferences: SharedPreferences
 
+    lateinit var default_url: String
+
     var keyWordData: String? = null
 
     var mHandler: Handler? = null
