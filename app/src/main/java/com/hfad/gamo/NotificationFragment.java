@@ -1,5 +1,6 @@
 package com.hfad.gamo;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -15,11 +16,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -59,7 +64,9 @@ public class NotificationFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     private VolleyForHttpMethod volley;
     private String url;
-
+    private boolean isSearching = false;
+    private String search_word = "";
+    InputMethodManager imm;
 
     private int page = 0;
 
@@ -73,6 +80,8 @@ public class NotificationFragment extends Fragment {
         prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
 
+//        키보드 제어 변수
+        imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
 //        url = "http://172.30.1.2:17394/notice/read/0/컴퓨터공학과";
@@ -114,44 +123,22 @@ public class NotificationFragment extends Fragment {
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_notification);
 
-
-
-
-
-        // Later!!
+//        swipe refresh
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                /*int original_length = responseJSONArray.length();
-                int current_length = original_length;
-                for(int i = 0; i < original_length; i++) {
-                    responseJSONArray.remove(--current_length);
-                }
-
-                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                responseJSONObject = response.getJSONObject(i);
-                                responseJSONArray.put(responseJSONObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                });*/
 
                 page = 0;
                 responseJSONArray = new JSONArray();
-                getAllNoti();
+                if(!isSearching) {
+                    getAllNoti();
+                } else {
+                    search_notification();
+                }
                 adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
                 recyclerView.setAdapter(adapter);
                 loadPost();
-
                 Log.d("FRAGMENT ::", "onRefresh: finish");
-
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -159,75 +146,45 @@ public class NotificationFragment extends Fragment {
         swipeContainer.setColorSchemeResources(R.color.indigo500);
 
         ImageView search_button = view.findViewById(R.id.search_button);
+        search_button.setClickable(true);
 
-//        검색
+
+//        검색 (키보드 돋보기 클릭 시)
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                search_word = editText.getText().toString();
+                search_notification();
+//                키보드 숨김
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return true;
+            }
+        });
+//        검색 (돋보기 이미지버튼 클릭 시)
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = default_url + "/notice/read/" + page + "/" + dept + editText.getText().toString();
-                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-
-                        int original_length = responseJSONArray.length();
-                        int current_length = original_length;
-                        for (int i = 0; i < original_length; i++) {
-                            responseJSONArray.remove(--current_length);
-                        }
-
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                responseJSONObject = response.getJSONObject(i);
-                                responseJSONArray.put(responseJSONObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-
-                        cancel_button_notification.setVisibility(View.VISIBLE);
-                    }
-                });
+                search_word = editText.getText().toString();
+                search_notification();
+//                키보드 숨김
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
+
 
 //        검색 취소
         cancel_button_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int original_length = responseJSONArray.length();
-                int current_length = original_length;
-                for (int i = 0; i < original_length; i++) {
-                    responseJSONArray.remove(--current_length);
-                }
-
-                url = default_url + "/notice/read/" + page + "/" + dept;
-
-                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-
-                        int original_length = responseJSONArray.length();
-                        int current_length = original_length;
-                        for (int i = 0; i < original_length; i++) {
-                            responseJSONArray.remove(--current_length);
-                        }
-
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                responseJSONObject = response.getJSONObject(i);
-                                responseJSONArray.put(responseJSONObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-
-                        cancel_button_notification.setVisibility(View.GONE);
-                        editText.getText().clear();
-                    }
-                });
-
+                    page = 0;
+                    responseJSONArray = new JSONArray();
+                    getAllNoti();
+                    adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
+                    recyclerView.setAdapter(adapter);
+                    loadPost();
+                    isSearching = false;
+                    cancel_button_notification.setVisibility(View.GONE);
+                    editText.getText().clear();
             }
         });
 
@@ -298,18 +255,13 @@ public class NotificationFragment extends Fragment {
         });
     }
 
-
     private void loadPost() {
-        Log.d("LOADPOST", "before onLoadMore");
         adapter.setOnLoadMoreListener(new Notification_RecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                Log.d("FRAGMENT ::", "onLoadMore");
-
                 adapter.setIsLoading(true);
                 page++;
                 if(responseJSONArray.length() <= 1000) {
-
                     responseJSONArray.put(loadingJsonObject);        // loadingJsonObject를 삽입하여 리사이클뷰에서 뷰타입을 로딩타입으로 인식
                     new Handler().post(new Runnable() {
                         @Override
@@ -320,15 +272,82 @@ public class NotificationFragment extends Fragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
                             responseJSONArray.remove(responseJSONArray.length() - 1);
                             adapter.notifyItemRemoved(responseJSONArray.length());
-                            getMoreNoti(page);
+                            if(!isSearching)
+                                getMoreNoti(page);
+                            else
+                                search_notiMore();
                         }
                     }, 2000);
                 } else  {
                     Toast.makeText(getActivity(), "Loading data complete", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+//    검색 기능 (처음)
+    private void search_notification () {
+        url = default_url + "/notice/read/" + page + "/" + dept + "/" + search_word;
+        Log.d("FRAGMENT::", "SEARCH :: URL : " + url);
+
+        page = 0;
+        responseJSONArray = new JSONArray();
+        adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
+        recyclerView.setAdapter(adapter);
+        loadPost();
+        volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                Log.d("FRAGMENT::", "SEARCH :: RESULT : " + response);
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        responseJSONObject = response.getJSONObject(i);
+                        responseJSONArray.put(responseJSONObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                isSearching = true;
+                adapter.notifyDataSetChanged();
+
+                cancel_button_notification.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    //    검색 기능 (추가)
+    private void search_notiMore () {
+        page++;
+        url = default_url + "/notice/read/" + page + "/" + dept + "/" + search_word;
+        Log.d("FRAGMENT::", "SEARCH :: URL : " + url);
+
+        tempJSONArray = new JSONArray();
+        volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d("FRAGMENT::", "SEARCH :: RESULT : " + response);
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        responseJSONObject = response.getJSONObject(i);
+                        tempJSONArray.put(responseJSONObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    for (int i = 0 ; i < tempJSONArray.length() ; i++) {
+                        responseJSONArray.put(tempJSONArray.getJSONObject(i));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                isSearching = true;
+                adapter.notifyDataSetChanged();
+
+                cancel_button_notification.setVisibility(View.VISIBLE);
             }
         });
     }
