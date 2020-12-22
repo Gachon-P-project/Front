@@ -2,6 +2,8 @@ package com.hfad.gamo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +16,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hfad.gamo.ClickedBoard.ClickedPostingActivity;
-import com.hfad.gamo.ClickedBoard.toClickedPosting;
+import com.google.android.gms.common.util.Hex;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,9 +29,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Handler;
 
-//public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notification_RecyclerAdapter.ViewHolder> {
 public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
@@ -42,6 +42,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private boolean isLoading = false;
     private int lastVisibleItem, totalItemCount;
     private int visibleThreshold = 2;
+    private Context context;
 
     Notification_RecyclerAdapter(JSONArray list, String dept) {
         this.JSONArrayData = list;
@@ -53,7 +54,6 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public int getItemViewType(int position) {
         try {
             int result = JSONArrayData.getJSONObject(position).getString("title").equals("loading..") ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
-            Log.d("ADAPTER ::", "ITEMVEW TYPE :: " + position + " : " + JSONArrayData.getJSONObject(position).getString("title") + " --- " + result);
             return result;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -72,7 +72,6 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-//                Log.d("ADAPTER ::", "totalItemCount : " + totalItemCount + ", lastVisibleItem : " + lastVisibleItem + ", visibleThreshold : " + visibleThreshold );
 
                 Log.d("ADAPTER ::", "isLoading : " + isLoading);
                 if(!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
@@ -92,27 +91,23 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        Context context = parent.getContext();
+        context = parent.getContext();
 
 //        뷰타입이 로딩이면 로딩 뷰 보여줌
         if(viewType == VIEW_TYPE_ITEM) {
-
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_recycler_item, parent, false);
             return new NotiViewHolder(view);
         } else {
             View view = LayoutInflater.from(context).inflate(R.layout.item_board_loading, parent, false);
             return new LoadingViewHolder(view);
         }
-//        return null;
 
     }
 
     @Override
-//    public void onBindViewHolder(@NonNull final Notification_RecyclerAdapter.ViewHolder holder, int position) {
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
         if(holder instanceof NotiViewHolder) {
-
 
             JSONObject data;
             String title = null;
@@ -139,6 +134,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
                 inputDate = sf.parse(date);
                 now = new Date();
+//                글 작성일이 3일 이내면 new 표시
                 if (now.getTime() - inputDate.getTime() < (1000 * 60 * 60 * 24 * 3))
                     isNew = true;
                 ((NotiViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
@@ -150,26 +146,33 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                         v.getContext().startActivity(intent);
                     }
                 });
+
             } catch (JSONException | ParseException e) {
                 e.printStackTrace();
             }
-
-            Log.d("INPUT DATA TO CARD ::", "title : " + title + ", num : " + num);
 
             ((NotiViewHolder) holder).tvTitle.setText(title);
             ((NotiViewHolder) holder).tvDate.setText(sf.format(inputDate));
             ((NotiViewHolder) holder).tvCnt.setText(view);
 
-            if (isNew) {
+
+            if (isNew)
                 ((NotiViewHolder) holder).imgIsNew.setVisibility(View.VISIBLE);
-            }
+            else
+                ((NotiViewHolder) holder).imgIsNew.setVisibility(View.INVISIBLE);
+
 
             if (file == 0)
                 ((NotiViewHolder) holder).imgIsFile.setVisibility(View.INVISIBLE);
+            else
+                ((NotiViewHolder) holder).imgIsFile.setVisibility(View.VISIBLE);
 
             if (num == 0) {
-                Log.d("CARD TITLE ::" , title);
-                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(((NotiViewHolder) holder).itemView.getContext().getResources().getColor(R.color.jinColor, null));
+                Log.d("ADAPTER" , "YELLOW BACKGROUND CARD :: " + title);
+//                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(((NotiViewHolder) holder).itemView.getContext().getResources().getColor(R.color.jinColor, null));
+                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
+            } else {
+                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
             }
         } else {
             Log.d("INPUT DATA TO CARD ::", "LOADING");
@@ -190,7 +193,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     private class NotiViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvTitle, tvDate, tvCnt;
+        public TextView tvTitle, tvDate, tvCnt, tvBoardNo;
         public ImageView imgIsNew, imgIsFile;
         public androidx.cardview.widget.CardView cardView;
 
@@ -202,6 +205,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             imgIsNew = view.findViewById(R.id.notification_new);
             imgIsFile = view.findViewById(R.id.notification_file);
             cardView = view.findViewById(R.id.notification_card_view);
+
 
         }
 

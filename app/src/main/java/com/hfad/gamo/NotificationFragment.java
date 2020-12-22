@@ -77,7 +77,7 @@ public class NotificationFragment extends Fragment {
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
 //        url = "http://172.30.1.2:17394/notice/read/0/컴퓨터공학과";
 
-        getAllNoti();
+//        getAllNoti();
         try {
             loadingJsonObject = new JSONObject("{\"title\" : \"loading..\"}");
         } catch (JSONException e) {
@@ -95,7 +95,9 @@ public class NotificationFragment extends Fragment {
         loadingDialog = new LoadingDialog(getContext());
         loadingDialog.show();
 
+        page = 0;
         responseJSONArray = new JSONArray();
+        getAllNoti();
 
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         cancel_button_notification = view.findViewById(R.id.cancel_button_notification);
@@ -141,6 +143,15 @@ public class NotificationFragment extends Fragment {
                     }
                 });*/
 
+                page = 0;
+                responseJSONArray = new JSONArray();
+                getAllNoti();
+                adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
+                recyclerView.setAdapter(adapter);
+                loadPost();
+
+                Log.d("FRAGMENT ::", "onRefresh: finish");
+
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -153,7 +164,7 @@ public class NotificationFragment extends Fragment {
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                url = default_url + "/notice/read/0/컴퓨터공학과/" + editText.getText().toString();
+                url = default_url + "/notice/read/" + page + "/" + dept + editText.getText().toString();
                 volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -190,7 +201,7 @@ public class NotificationFragment extends Fragment {
                     responseJSONArray.remove(--current_length);
                 }
 
-                url = default_url + "/notice/read/0/컴퓨터공학과";
+                url = default_url + "/notice/read/" + page + "/" + dept;
 
                 volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                     @Override
@@ -237,7 +248,6 @@ public class NotificationFragment extends Fragment {
 
 //    첫번째에만 사용됨. 데이터 가져오는 함수.
     private void getAllNoti() {
-//        url = default_url + "/notice/read/" + page + "/컴퓨터공학과";
         url = default_url + "/notice/read/" + page + "/" + dept;
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
@@ -259,8 +269,6 @@ public class NotificationFragment extends Fragment {
 
     //    두번째부터 사용됨. 데이터 추가로 가져올때 사용.
     private void getMoreNoti(int page) {
-        Log.d("GET_MORE_NOTICE ::", "page : " + page);
-//        url = default_url + "/notice/read/" + page + "/컴퓨터공학과";
         url = default_url + "/notice/read/" + page + "/" + dept;
 
         tempJSONArray = new JSONArray();
@@ -276,9 +284,6 @@ public class NotificationFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
-//                adapter.updateMoreItemArray(tempJSONArray);
-                Log.d("GET_MORE_NOTICE ::", tempJSONArray.toString());
-
                 try {
                     for (int i = 0 ; i < tempJSONArray.length() ; i++) {
                         responseJSONArray.put(tempJSONArray.getJSONObject(i));
@@ -286,7 +291,6 @@ public class NotificationFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-//                adapter.notifyItemRangeChanged(responseJSONArray.length() - 15, 15);
                 adapter.notifyDataSetChanged();
                 adapter.setIsLoading(false);
                 Log.d("FRAGMENT", "responseJSONArray: " + responseJSONArray);
@@ -306,25 +310,20 @@ public class NotificationFragment extends Fragment {
                 page++;
                 if(responseJSONArray.length() <= 1000) {
 
-                    responseJSONArray.put(loadingJsonObject);        // null을 삽입하여 리사이클뷰에서 뷰타입을 로딩타입으로 인식
+                    responseJSONArray.put(loadingJsonObject);        // loadingJsonObject를 삽입하여 리사이클뷰에서 뷰타입을 로딩타입으로 인식
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
                             adapter.notifyItemInserted(responseJSONArray.length() - 1);
-                            Log.d("FRAGMENT ::", "onLoadMore - notifyItemInserted");
                         }
                     });
-
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
 
                             responseJSONArray.remove(responseJSONArray.length() - 1);
                             adapter.notifyItemRemoved(responseJSONArray.length());
-
-                            Log.d("ACTIVITY ::", "LOADPOST ::: page : " + page);
                             getMoreNoti(page);
-
                         }
                     }, 2000);
                 } else  {
