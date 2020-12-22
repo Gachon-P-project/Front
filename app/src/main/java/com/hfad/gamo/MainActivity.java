@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Component.default_url = "http://172.30.1.2:17394";
+        Component.default_url = "http://192.168.50.146:17394";
 
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.bottomNavigationNotification: {
+//                Bundle args = new Bundle();
+//                args.putString("noti_page", "0");
+//                f_Notification.setArguments(args);
+
                 fragmentTransaction.replace(R.id.fragment, f_Notification).commitAllowingStateLoss();
                 break;
             }

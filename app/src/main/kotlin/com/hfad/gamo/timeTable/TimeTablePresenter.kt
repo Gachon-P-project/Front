@@ -11,6 +11,7 @@ import kotlin.collections.HashSet
 class TimeTablePresenter(val mView: TimeTableContract.View) : TimeTableContract.Presenter {
     override fun initPresent() = mView.initView()
 
+
     // 과목들을 시간표에 세팅.
     override fun setTableList(set: HashSet<String>): ArrayList<TimeTableData> {
 

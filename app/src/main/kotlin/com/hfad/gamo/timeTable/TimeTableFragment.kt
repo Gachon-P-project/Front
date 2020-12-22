@@ -69,6 +69,7 @@ class TimeTableFragment : TimeTableContract.View() {
 
     fun resetTable() = mPresenter.resetTable()
 
+
     
     // 시간표에 과목들 띄우기
     // 시간표 선택 리스너
@@ -91,6 +92,7 @@ class TimeTableFragment : TimeTableContract.View() {
                 it.setShowHeader(true)
                 it.setTableMode(TimeTableView.TableMode.SHORT)
                 it.setTimeTable(0, list)
+//                it.set
             }
         }
     }

@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="title"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:textColor="@color/text1"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="date" />
+                android:text="date"
+                android:textColor="@color/text1" />
 
             <ImageView
                 android:id="@+id/notification_file"
@@ -44,12 +46,29 @@
                 android:layout_gravity="center"/>
 
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:id="@+id/notification_view_cnt"
-                android:text="view_cnt"/>
+                android:layout_marginStart="20dp"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_view" />
+
+                <TextView
+                    android:id="@+id/notification_view_cnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="view_cnt"
+                    android:textColor="@color/text1"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/notification_new"

@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hfad.gamo.ClickedBoard.ClickedPostingActivity;
@@ -24,117 +27,153 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Handler;
 
-public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notification_RecyclerAdapter.ViewHolder> {
+//public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notification_RecyclerAdapter.ViewHolder> {
+public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
     private String dept;
+    private OnLoadMoreListener onLoadMoreListener;
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
+    private boolean isLoading = false;
+    private int lastVisibleItem, totalItemCount;
+    private int visibleThreshold = 2;
 
     Notification_RecyclerAdapter(JSONArray list, String dept) {
         this.JSONArrayData = list;
         this.dept = dept;
+
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView notification_title;
-        TextView notification_date;
-        TextView notification_view_cnt;
-        ImageView notification_file;
-        View view;
-        CardView notification_card_view;
-        ImageView notification_new;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-
-            notification_title = itemView.findViewById(R.id.notification_title);
-            notification_date = itemView.findViewById(R.id.notification_date);
-            notification_view_cnt = itemView.findViewById(R.id.notification_view_cnt);
-            notification_file = itemView.findViewById(R.id.notification_file);
-            notification_card_view = itemView.findViewById(R.id.notification_card_view);
-            view = itemView;
-            notification_new = itemView.findViewById(R.id.notification_new);
-
+    @Override
+    public int getItemViewType(int position) {
+        try {
+            int result = JSONArrayData.getJSONObject(position).getString("title").equals("loading..") ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+            Log.d("ADAPTER ::", "ITEMVEW TYPE :: " + position + " : " + JSONArrayData.getJSONObject(position).getString("title") + " --- " + result);
+            return result;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return -1;
         }
+    }
+
+    public void setRecyclerView (RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+        linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+
+                totalItemCount = linearLayoutManager.getItemCount();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                Log.d("ADAPTER ::", "totalItemCount : " + totalItemCount + ", lastVisibleItem : " + lastVisibleItem + ", visibleThreshold : " + visibleThreshold );
+
+                Log.d("ADAPTER ::", "isLoading : " + isLoading);
+                if(!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    Log.d("ADAPTER ::", "SCROLLED");
+                    if(onLoadMoreListener != null) {
+                        onLoadMoreListener.onLoadMore();
+                        Log.d("ADAPTER ::", "onLOADMORE has finished");
+                    }
+                    isLoading = true;
+                }
+            }
+        });
     }
 
 
     @NonNull
     @Override
-    public Notification_RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Context context = parent.getContext();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.notification_recycler_item, parent, false);
-        Notification_RecyclerAdapter.ViewHolder vh = new Notification_RecyclerAdapter.ViewHolder(view);
+//        뷰타입이 로딩이면 로딩 뷰 보여줌
+        if(viewType == VIEW_TYPE_ITEM) {
 
-        return vh;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_recycler_item, parent, false);
+            return new NotiViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_board_loading, parent, false);
+            return new LoadingViewHolder(view);
+        }
+//        return null;
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final Notification_RecyclerAdapter.ViewHolder holder, int position) {
+//    public void onBindViewHolder(@NonNull final Notification_RecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
-        JSONObject data;
-        String title = null;
-        String date = null;
-        String view = null;
-        String board_no = null;
-        int num = -1;
-        int file = -1;
-        boolean isNew = false;
-        Date now = new Date();
-        Date inputDate = now;
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-            data = JSONArrayData.getJSONObject(position);
-            title = data.getString("title");
-            date = data.getString("date");
-            view = data.getString("view");
-            board_no = data.getString("board_no");
-//            num = data.getInt("num");
-//            file = data.getInt("file");
-
-            final String board_noForIntent = board_no;
-
-            inputDate = sf.parse(date);
-            now = new Date();
-            Log.d("DATE::::", "inputdate : " + inputDate.getTime());
-            Log.d("DATE::::", "now : " + now.getTime());
-            Log.d("DATE::::", "sub : " + (now.getTime() - inputDate.getTime()));
-            if(now.getTime() - inputDate.getTime() < (1000 * 60 * 60 * 24 * 3))
-                isNew = true;
-
-            holder.view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), NotificationWebViewActivity.class);
-                    intent.putExtra("dept", dept);
-                    intent.putExtra("board_no", board_noForIntent);
-                    v.getContext().startActivity(intent);
-                }
-            });
-        } catch (JSONException | ParseException e) {
-            e.printStackTrace();
-        }
+        if(holder instanceof NotiViewHolder) {
 
 
-        holder.notification_title.setText(title);
-        holder.notification_date.setText(sf.format(inputDate));
-        holder.notification_view_cnt.setText(view);
-        //holder.notification_file;
+            JSONObject data;
+            String title = null;
+            String date = null;
+            String view = null;
+            String board_no = null;
+            int num = -1;
+            int file = -1;
+            boolean isNew = false;
+            Date now = new Date();
+            Date inputDate = now;
+            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 
-        if(isNew) {
-            holder.notification_new.setVisibility(View.VISIBLE);
-        }
+            try {
+                data = JSONArrayData.getJSONObject(position);
+                title = data.getString("title");
+                date = data.getString("date");
+                view = data.getString("view");
+                board_no = data.getString("board_no");
+                num = data.getInt("num");
+                file = data.getInt("file");
 
-        if(file == 0)
-        holder.notification_file.setVisibility(View.INVISIBLE);
+                final String board_noForIntent = board_no;
 
-        if(num == 0) {
-            holder.notification_card_view.setCardBackgroundColor(holder.view.getContext().getResources().getColor(R.color.jinColor, null));
+                inputDate = sf.parse(date);
+                now = new Date();
+                if (now.getTime() - inputDate.getTime() < (1000 * 60 * 60 * 24 * 3))
+                    isNew = true;
+                ((NotiViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), NotificationWebViewActivity.class);
+                        intent.putExtra("dept", dept);
+                        intent.putExtra("board_no", board_noForIntent);
+                        v.getContext().startActivity(intent);
+                    }
+                });
+            } catch (JSONException | ParseException e) {
+                e.printStackTrace();
+            }
+
+            Log.d("INPUT DATA TO CARD ::", "title : " + title + ", num : " + num);
+
+            ((NotiViewHolder) holder).tvTitle.setText(title);
+            ((NotiViewHolder) holder).tvDate.setText(sf.format(inputDate));
+            ((NotiViewHolder) holder).tvCnt.setText(view);
+
+            if (isNew) {
+                ((NotiViewHolder) holder).imgIsNew.setVisibility(View.VISIBLE);
+            }
+
+            if (file == 0)
+                ((NotiViewHolder) holder).imgIsFile.setVisibility(View.INVISIBLE);
+
+            if (num == 0) {
+                Log.d("CARD TITLE ::" , title);
+                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(((NotiViewHolder) holder).itemView.getContext().getResources().getColor(R.color.jinColor, null));
+            }
+        } else {
+            Log.d("INPUT DATA TO CARD ::", "LOADING");
+
         }
     }
 
@@ -142,4 +181,47 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
     public int getItemCount() {
         return JSONArrayData.length();
     }
+
+    public void setIsLoading(boolean bool) {
+        this.isLoading = bool;
+    }
+    public boolean getIsLoading() {
+        return this.isLoading;
+    }
+
+    private class NotiViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvTitle, tvDate, tvCnt;
+        public ImageView imgIsNew, imgIsFile;
+        public androidx.cardview.widget.CardView cardView;
+
+        public NotiViewHolder(View view) {
+            super(view);
+            tvTitle = view.findViewById(R.id.notification_title);
+            tvDate = view.findViewById(R.id.notification_date);
+            tvCnt = view.findViewById(R.id.notification_view_cnt);
+            imgIsNew = view.findViewById(R.id.notification_new);
+            imgIsFile = view.findViewById(R.id.notification_file);
+            cardView = view.findViewById(R.id.notification_card_view);
+
+        }
+
+    }
+
+
+    private class LoadingViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+        public LoadingViewHolder(View view) {
+            super(view);
+            progressBar = (ProgressBar)view.findViewById(R.id.progress_boardList);
+        }
+    }
+
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.onLoadMoreListener = mOnLoadMoreListener;
+    }
+
+
 }
