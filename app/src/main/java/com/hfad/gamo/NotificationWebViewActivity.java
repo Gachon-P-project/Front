@@ -3,6 +3,7 @@ package com.hfad.gamo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ public class NotificationWebViewActivity extends AppCompatActivity {
     private WebView wView;
     private ProgressBar pBar;
     private WebSettings wSettings;
+    private String url;
+    private String board_no;        // 게시판번호
+    private int major_code;         // 학과코드
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,11 @@ public class NotificationWebViewActivity extends AppCompatActivity {
         wView = findViewById(R.id.wView);
         pBar = findViewById(R.id.pBar);
 
+        Intent getIntent = getIntent();
+        board_no = getIntent.getStringExtra("board_no");
+        major_code = 159;               // 컴공
+                //www.gachon.ac.kr/major/bbs.jsp?mode=view&boardType_seq=159&board_no=1958과
+        url = "https://www.gachon.ac.kr/major/bbs.jsp?mode=view&boardType_seq=" + major_code + "&board_no=" + board_no;
         initWebView(wView);
 
         wSettings = wView.getSettings();
@@ -58,7 +67,8 @@ public class NotificationWebViewActivity extends AppCompatActivity {
             }
         });
 
-        wView.loadUrl("https://www.gachon.ac.kr/major/bbs.jsp?mode=view&boardType_seq=159&board_no=1956&approve=&secret=&answer=&branch=&searchopt=&searchword=&pageSize=10&pageNum=0");
+//        wView.loadUrl("https://www.gachon.ac.kr/major/bbs.jsp?mode=view&boardType_seq=159&board_no=1956&approve=&secret=&answer=&branch=&searchopt=&searchword=&pageSize=10&pageNum=0");
+        wView.loadUrl(url);
 
     }
 
