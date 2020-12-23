@@ -14,6 +14,9 @@ import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
+
+    private val loginDialog: LoginDialog? = LoginDialog()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -41,11 +44,20 @@ class LoginActivity : AppCompatActivity() {
 
         login_button.setOnClickListener() {
             //Log.i("id,pwd", id.text.toString() + pwd.text.toString())
-            LoginDialog(this).show()
+            loginDialog?.start(this)
             executeLogin(id.text.toString(), pwd.text.toString())
         }
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        loginDialog?.finish()
+        Log.i("Destroy","destroy");
+    }
+
+
+
 
 
     private fun executeLogin(id: String, password: String) {

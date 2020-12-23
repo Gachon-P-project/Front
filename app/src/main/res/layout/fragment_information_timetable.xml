@@ -1,42 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-    <androidx.cardview.widget.CardView
-            android:layout_alignParentTop="true"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_margin="15dp"
             app:cardCornerRadius="5dp"
             app:cardElevation="10dp">
-        <RelativeLayout
+
+            <com.github.eunsiljo.timetablelib.view.TimeTableView
+                android:id="@+id/mTable"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="-1dp" />
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/swipe"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        </androidx.cardview.widget.CardView>
 
-                <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+    </ScrollView>
 
-                    <com.github.eunsiljo.timetablelib.view.TimeTableView
-                            android:layout_marginTop="-1dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/mTable"/>
-
-                </ScrollView>
-
-
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-</RelativeLayout>
+</LinearLayout>

@@ -112,6 +112,7 @@ class LoginAsyncTask(
                 mView.saveInformation(studentInformation)
                 val nextIntent = Intent(mView, MainActivity::class.java)
                 startActivity(mView,nextIntent,null)
+                mView.finish();
             }
             ACTION_NETWORK_FAILURE -> {
                 mView.networkFailed()

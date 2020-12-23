@@ -12,7 +12,7 @@
     </style>
 
     <style name="AppTheme.Toolbar" parent="AppTheme">
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/WHITE</item>
     </style>
 
 

@@ -46,10 +46,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0-alpha01'
     implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'com.github.EunsilJo:TimeTable:1.0'
     implementation 'com.github.wiffy-io:Extension_kotlin:v1.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.0.0'
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
+
+    implementation project(':library')
 }

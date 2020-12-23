@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
         Intent intent;
-        if(Component.sharedPreferences.getBoolean("login", false)) {
+        /*if(Component.sharedPreferences.getBoolean("login", false)) {
             intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -32,9 +32,11 @@ public class SplashActivity extends AppCompatActivity {
             intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
-        }
+        }*/
 
-
+        intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 }
