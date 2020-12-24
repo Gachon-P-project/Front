@@ -23,11 +23,11 @@ public class VolleyForHttpMethod {
         this.queue = queue;
     }
 
-    public void postJSONObjectString(@NonNull final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener) {
+    public void postJSONObjectString(@NonNull final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener ErrorListener) {
 
         StringRequest request;
 
-        if(listener == null) {
+        if(listener == null && ErrorListener == null) {
             request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -51,15 +51,43 @@ public class VolleyForHttpMethod {
                     return "application/json";
                 }
             };
-        } else {
+        } else if(listener != null && ErrorListener == null) {
             request = new StringRequest(Request.Method.POST, url, listener, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                     Log.i("VolleyError", "Volley Error in receive");
                 }
-            }
-            ) {
+            }) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+        } else if(listener == null && ErrorListener != null) {
+            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("VolleyResponse", "Response is good");
+                }
+            }, ErrorListener) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+        } else {
+            request = new StringRequest(Request.Method.POST, url, listener, ErrorListener) {
                 @Override
                 public byte[] getBody() {
                     return Body.toString().getBytes();

@@ -118,7 +118,7 @@ public class WritingActivity extends AppCompatActivity {
                 Log.d("POST RESPONSE", response);
                 finish();
             }
-        });
+        }, null);
     }
 
 }

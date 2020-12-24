@@ -2,20 +2,24 @@ package com.hfad.gamo
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.Volley
+import com.hfad.gamo.Component.default_url
 import com.hfad.gamo.Component.sharedPreferences
 import io.wiffy.extension.BuildConfig
 import io.wiffy.extension.encrypt
 import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
     private val loginDialog: LoginDialog? = LoginDialog()
+    private var volley: VolleyForHttpMethod? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         Component.default_url = "http://172.30.1.2:17394"
 
+        volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -53,10 +58,24 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         loginDialog?.finish()
-        Log.i("Destroy","destroy");
+        Log.i("Destroy", "destroy");
     }
 
 
+    private fun NewExecuteLogin(id: String, pwd: String) {
+        val url = default_url.plus(getString(R.string.inquireUser))
+        var jsonObject : JSONObject = JSONObject()
+        jsonObject.put("id", id)
+        jsonObject.put("pwd", pwd)
+
+        volley?.postJSONObjectString(jsonObject, url, { response: String ->
+            Log.i("LoginVolley", response)
+        }, { error: VolleyError? ->
+            if (error != null) {
+                Log.i("LoginVolley", error.networkResponse.toString())
+            }
+        });
+    }
 
 
 
