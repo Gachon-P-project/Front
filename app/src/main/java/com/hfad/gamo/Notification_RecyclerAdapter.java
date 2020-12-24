@@ -41,7 +41,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private RecyclerView recyclerView;
     private boolean isLoading = false;
     private int lastVisibleItem, totalItemCount;
-    private int visibleThreshold = 2;
+    private int visibleThreshold = 1;
     private Context context;
 
     private final String TAG = "NOTI_ADAPTER";
@@ -66,8 +66,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public void setRecyclerView (RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//        recyclerView.scrollLis
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);

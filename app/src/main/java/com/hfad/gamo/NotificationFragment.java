@@ -58,6 +58,7 @@ public class NotificationFragment extends Fragment {
     private boolean isSearching = false;
     private String search_word = "";
     InputMethodManager imm;
+    private boolean isResult = true;
 
     private int page = 0;
 
@@ -88,8 +89,6 @@ public class NotificationFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -170,7 +169,6 @@ public class NotificationFragment extends Fragment {
                     @Override
                     public void onSuccess() {
                         initRecyclerView();
-
                         Log.d(TAG, "Search :: onSuccess: finish");
                     }
                 });
@@ -189,7 +187,6 @@ public class NotificationFragment extends Fragment {
                     @Override
                     public void onSuccess() {
                         initRecyclerView();
-
                         Log.d(TAG, "Search :: onSuccess: finish");
                     }
                 });
@@ -240,7 +237,7 @@ public class NotificationFragment extends Fragment {
             public void onLoadMore() {
                 adapter.setIsLoading(true);
                 page++;
-                if(responseJSONArray.length() <= 1000) {
+                if(responseJSONArray.length() <= 1000 && isResult) {
                     responseJSONArray.put(loadingJsonObject);        // loadingJsonObject를 삽입하여 리사이클뷰에서 뷰타입을 로딩타입으로 인식
                     new Handler().post(new Runnable() {
                         @Override
@@ -255,7 +252,7 @@ public class NotificationFragment extends Fragment {
                         getMoreSearchedNoti();
                     }
                 } else  {
-                    Toast.makeText(getActivity(), "Loading data complete", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "검색 완료", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -277,7 +274,7 @@ public class NotificationFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
-                Log.d("GET NOTICE ::", responseJSONArray.toString());
+                Log.d(TAG, "getFirstNotiList: onResponse: " + responseJSONArray.toString());
                 adapter.setIsLoading(false);
 
                 callback.onSuccess();
@@ -298,6 +295,7 @@ public class NotificationFragment extends Fragment {
 //                로딩 아이템 제거
                 responseJSONArray.remove(responseJSONArray.length() - 1);
                 adapter.notifyItemRemoved(responseJSONArray.length());
+                Log.d(TAG, "onResponse: tempItemRemoved!!");
 
                 for (int i = 0; i < response.length(); i++) {
                     try {
@@ -307,6 +305,7 @@ public class NotificationFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+                Log.d(TAG, "getFirstNotiList: onResponse: temp : " + tempJSONArray.toString());
                 try {
                     for (int i = 0 ; i < tempJSONArray.length() ; i++) {
                         responseJSONArray.put(tempJSONArray.getJSONObject(i));
@@ -326,19 +325,23 @@ public class NotificationFragment extends Fragment {
         url = default_url + "/notice/read/" + page + "/" + dept + "/" + search_word;
         Log.d("FRAGMENT::", "SEARCH :: URL : " + url);
 
-//        page = 0;
         responseJSONArray = new JSONArray();
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
-                Log.d("FRAGMENT::", "SEARCH :: RESULT : " + response);
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        responseJSONObject = response.getJSONObject(i);
-                        responseJSONArray.put(responseJSONObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                if(response.length() == 0) {
+                    Toast.makeText(getActivity(), "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
+                    isResult = false;
+                } else {
+                    Log.d("FRAGMENT::", "SEARCH :: RESULT : " + response);
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            responseJSONObject = response.getJSONObject(i);
+                            responseJSONArray.put(responseJSONObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 isSearching = true;
@@ -351,7 +354,6 @@ public class NotificationFragment extends Fragment {
 
     //    검색 기능 (추가)
     private void getMoreSearchedNoti() {
-//        page++;
         url = default_url + "/notice/read/" + page + "/" + dept + "/" + search_word;
         Log.d("FRAGMENT::", "SEARCH More :: URL : " + url);
 
@@ -365,20 +367,26 @@ public class NotificationFragment extends Fragment {
                 responseJSONArray.remove(responseJSONArray.length() - 1);
                 adapter.notifyItemRemoved(responseJSONArray.length());
 
-                for (int i = 0; i < response.length(); i++) {
+                if(response.length() == 0) {
+                    Toast.makeText(getActivity(), "마지막 결과입니다.", Toast.LENGTH_SHORT).show();
+                    isResult = false;
+                } else {
+
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            responseJSONObject = response.getJSONObject(i);
+                            tempJSONArray.put(responseJSONObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     try {
-                        responseJSONObject = response.getJSONObject(i);
-                        tempJSONArray.put(responseJSONObject);
+                        for (int i = 0; i < tempJSONArray.length(); i++) {
+                            responseJSONArray.put(tempJSONArray.getJSONObject(i));
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                try {
-                    for (int i = 0 ; i < tempJSONArray.length() ; i++) {
-                        responseJSONArray.put(tempJSONArray.getJSONObject(i));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
                 isSearching = true;
                 adapter.notifyDataSetChanged();
@@ -397,9 +405,11 @@ public class NotificationFragment extends Fragment {
 
 //    리사이클뷰 내용 전체 변경 시 사용
     private void initRecyclerView() {
+        isResult = true;
         recyclerView.removeAllViews();
         recyclerView.setLayoutManager(new LinearLayoutManager(NotificationFragment.this.getContext()));
         adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
+        recyclerView.clearOnScrollListeners();
         adapter.setRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         loadPost();
