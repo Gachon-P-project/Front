@@ -44,6 +44,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private int visibleThreshold = 2;
     private Context context;
 
+    private final String TAG = "NOTI_ADAPTER";
+
     Notification_RecyclerAdapter(JSONArray list, String dept) {
         this.JSONArrayData = list;
         this.dept = dept;
@@ -64,7 +66,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public void setRecyclerView (RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//        recyclerView.scrollLis
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -73,6 +76,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
 
+                Log.d(TAG, "onScrolled: totalItemCount : " + totalItemCount + ", lastVisibleItem : " + lastVisibleItem);
                 Log.d("ADAPTER ::", "isLoading : " + isLoading);
                 if(!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                     Log.d("ADAPTER ::", "SCROLLED");
@@ -225,6 +229,16 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     }
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
         this.onLoadMoreListener = mOnLoadMoreListener;
+    }
+
+    public void dataUpdate() {
+        try {
+            this.notifyDataSetChanged();
+            Log.d(TAG, "dataUpdate: Success");
+        } catch (Exception e) {
+            Log.d(TAG, "dataUpdate: Exception occured!!");
+            e.printStackTrace();
+        }
     }
 
 
