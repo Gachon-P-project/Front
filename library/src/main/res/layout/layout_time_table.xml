@@ -8,11 +8,14 @@
         android:id="@+id/recyclerTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:overScrollMode="never"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerTimeTable"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"/>
+
 
 </FrameLayout>
