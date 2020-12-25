@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".NotificationFragment"
+    tools:context=".NoticeFragment"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -58,7 +58,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/cancel_button_notification"
+            android:id="@+id/cancel_button_notice"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginEnd="20dp"
@@ -69,12 +69,12 @@
     </FrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_notification"
+        android:id="@+id/swipe_notice"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_notification"
+            android:id="@+id/recycler_notice"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

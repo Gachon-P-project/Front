@@ -2,25 +2,19 @@ package com.hfad.gamo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.common.util.Hex;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
     private String dept;
@@ -43,10 +37,12 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private int lastVisibleItem, totalItemCount;
     private int visibleThreshold = 1;
     private Context context;
+    private NoticeDetailFragment detailFragment = new NoticeDetailFragment();
+    private FragmentTransaction fragmentTransaction;
 
     private final String TAG = "NOTI_ADAPTER";
 
-    Notification_RecyclerAdapter(JSONArray list, String dept) {
+    Notice_RecyclerAdapter(JSONArray list, String dept) {
         this.JSONArrayData = list;
         this.dept = dept;
 
@@ -99,7 +95,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
 //        뷰타입이 로딩이면 로딩 뷰 보여줌
         if(viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_recycler_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notice_recycler_item, parent, false);
             return new NotiViewHolder(view);
         } else {
             View view = LayoutInflater.from(context).inflate(R.layout.item_board_loading, parent, false);
@@ -144,10 +140,18 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 ((NotiViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), NotificationWebViewActivity.class);
+//                        Intent intent = new Intent(v.getContext(), NotificationWebViewActivity.class);
+//                        intent.putExtra("dept", dept);
+//                        intent.putExtra("board_no", board_noForIntent);
+//                        v.getContext().startActivity(intent);
+
+//                        NoticeFragment.showDetail(board_noForIntent);
+
+                        Intent intent = new Intent(v.getContext(), NoticeDetailActivity.class);
                         intent.putExtra("dept", dept);
                         intent.putExtra("board_no", board_noForIntent);
                         v.getContext().startActivity(intent);
+
                     }
                 });
 
@@ -203,12 +207,12 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         public NotiViewHolder(View view) {
             super(view);
-            tvTitle = view.findViewById(R.id.notification_title);
-            tvDate = view.findViewById(R.id.notification_date);
-            tvCnt = view.findViewById(R.id.notification_view_cnt);
-            imgIsNew = view.findViewById(R.id.notification_new);
-            imgIsFile = view.findViewById(R.id.notification_file);
-            cardView = view.findViewById(R.id.notification_card_view);
+            tvTitle = view.findViewById(R.id.notice_title);
+            tvDate = view.findViewById(R.id.notice_date);
+            tvCnt = view.findViewById(R.id.notice_view_cnt);
+            imgIsNew = view.findViewById(R.id.notice_new);
+            imgIsFile = view.findViewById(R.id.notice_file);
+            cardView = view.findViewById(R.id.notice_card_view);
 
 
         }

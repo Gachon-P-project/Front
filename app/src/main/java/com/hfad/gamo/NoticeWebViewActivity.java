@@ -16,7 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class NotificationWebViewActivity extends AppCompatActivity {
+public class NoticeWebViewActivity extends AppCompatActivity {
 
     private WebView wView;
     private ProgressBar pBar;
@@ -28,7 +28,7 @@ public class NotificationWebViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification_web_view);
+        setContentView(R.layout.activity_notice_web_view);
 
         wView = findViewById(R.id.wView);
         pBar = findViewById(R.id.pBar);

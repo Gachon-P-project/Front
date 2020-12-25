@@ -2,14 +2,12 @@ package com.hfad.gamo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -38,17 +36,17 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.Component.default_url;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
-public class NotificationFragment extends Fragment {
+public class NoticeFragment extends Fragment {
 
     private static final String TAG = "NOTI_FRAGMENT";
     private SharedPreferences prefs;
     private String dept;
-    private Notification_RecyclerAdapter adapter;
+    private Notice_RecyclerAdapter adapter;
     private JSONArray responseJSONArray = new JSONArray();
     private JSONArray tempJSONArray = new JSONArray();
     private JSONObject responseJSONObject = new JSONObject();
     private JSONObject loadingJsonObject;
-    private ImageView cancel_button_notification;
+    private ImageView cancel_button_notice;
     private EditText editText;
 
     private RecyclerView recyclerView = null;
@@ -59,15 +57,17 @@ public class NotificationFragment extends Fragment {
     private String search_word = "";
     InputMethodManager imm;
     private boolean isResult = true;
+    private static Context context;
 
     private int page = 0;
 
 
-    private LoadingDialog loadingDialog;
+    private LoginDialog loadingDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getContext();
 
         prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
@@ -96,25 +96,25 @@ public class NotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        loadingDialog = new LoadingDialog(getContext());
-        loadingDialog.show();
+        loadingDialog = new LoginDialog();
+        loadingDialog.start(getContext());
 
         responseJSONArray = new JSONArray();
 
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        cancel_button_notification = view.findViewById(R.id.cancel_button_notification);
+        View view = inflater.inflate(R.layout.fragment_notice, container, false);
+        cancel_button_notice = view.findViewById(R.id.cancel_button_notice);
         editText = view.findViewById(R.id.edit);
 
-        recyclerView = view.findViewById(R.id.recycler_notification);
+        recyclerView = view.findViewById(R.id.recycler_notice);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
+        adapter = new Notice_RecyclerAdapter(responseJSONArray, dept);
         adapter.setRecyclerView(recyclerView);
 
         recyclerView.setAdapter(adapter);
         loadPost();
 
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_notification);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_notice);
 
 //        swipe refresh
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -197,7 +197,7 @@ public class NotificationFragment extends Fragment {
 
 
 //        검색 취소
-        cancel_button_notification.setOnClickListener(new View.OnClickListener() {
+        cancel_button_notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 search_word = "";
@@ -211,7 +211,7 @@ public class NotificationFragment extends Fragment {
                     }
                 });
                 isSearching = false;
-                cancel_button_notification.setVisibility(View.GONE);
+                cancel_button_notice.setVisibility(View.GONE);
                 editText.getText().clear();
             }
         });
@@ -227,12 +227,11 @@ public class NotificationFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
 
-        loadingDialog.cancel();
     }
 
 
     private void loadPost() {
-        adapter.setOnLoadMoreListener(new Notification_RecyclerAdapter.OnLoadMoreListener() {
+        adapter.setOnLoadMoreListener(new Notice_RecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 adapter.setIsLoading(true);
@@ -278,6 +277,8 @@ public class NotificationFragment extends Fragment {
                 adapter.setIsLoading(false);
 
                 callback.onSuccess();
+                loadingDialog.finish();
+
             }
         });
     }
@@ -346,7 +347,7 @@ public class NotificationFragment extends Fragment {
                 }
                 isSearching = true;
                 adapter.setIsLoading(false);
-                cancel_button_notification.setVisibility(View.VISIBLE);
+                cancel_button_notice.setVisibility(View.VISIBLE);
                 callback.onSuccess();
             }
         });
@@ -394,7 +395,7 @@ public class NotificationFragment extends Fragment {
                 page++;
                 Log.d("FRAGMENT::", "SEARCH More :: isLoading : " + adapter.getIsLoading());
 
-                cancel_button_notification.setVisibility(View.VISIBLE);
+                cancel_button_notice.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -407,12 +408,17 @@ public class NotificationFragment extends Fragment {
     private void initRecyclerView() {
         isResult = true;
         recyclerView.removeAllViews();
-        recyclerView.setLayoutManager(new LinearLayoutManager(NotificationFragment.this.getContext()));
-        adapter = new Notification_RecyclerAdapter(responseJSONArray, dept);
+        recyclerView.setLayoutManager(new LinearLayoutManager(NoticeFragment.this.getContext()));
+        adapter = new Notice_RecyclerAdapter(responseJSONArray, dept);
         recyclerView.clearOnScrollListeners();
         adapter.setRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         loadPost();
         adapter.dataUpdate();
+    }
+
+    public static void showDetail(String board_no) {
+        ((MainActivity) context).replaceFragment(new NoticeDetailFragment());
+
     }
 }

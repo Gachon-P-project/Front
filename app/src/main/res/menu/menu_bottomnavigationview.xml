@@ -8,8 +8,8 @@
 
     <item
         android:title="공지"
-        android:id="@+id/bottomNavigationNotification"
-        android:icon="@drawable/bottom_notification"/>
+        android:id="@+id/bottomNavigationNotice"
+        android:icon="@drawable/bottom_notice"/>
     <item
         android:title="게시판"
         android:id="@+id/bottomNavigationBoard"
