@@ -2,6 +2,9 @@ package com.hfad.gamo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,10 +12,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.net.URL;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
@@ -34,7 +39,8 @@ public class MyPageFragment extends Fragment {
 
     private LinearLayout llChangeNickname, llNotificationSettings, llAppInfo, llLogout;
     private TextView tvUsername, tvNickname, tvMajor, tvStudentId;
-    private String username, major, nickname, studnetId;
+    private ImageView imgMyPhoto;
+    private String username, major, nickname, studnetId, myPhotoUrl;
 
     public MyPageFragment() {
 
@@ -71,6 +77,7 @@ public class MyPageFragment extends Fragment {
         major = prefs.getString("department", null);
         nickname = prefs.getString("nickname", "-");
         studnetId = prefs.getString("number", null);
+        myPhotoUrl = prefs.getString("image", null);
 
 
 
@@ -94,14 +101,16 @@ public class MyPageFragment extends Fragment {
         tvMajor = view.findViewById(R.id.user_major);
         tvStudentId = view.findViewById(R.id.user_no);
         tvNickname = view.findViewById(R.id.tv_mypage_nickname);
-
-
+        imgMyPhoto = view.findViewById(R.id.iv_mypage_photo);
 
         tvUsername.setText(username);
         tvMajor.setText(major);
         tvStudentId.setText(studnetId);
         tvNickname.setText(nickname);
 
+
+        getMyPhoto getMyPhoto = new getMyPhoto();
+        getMyPhoto.execute();
 
         llChangeNickname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +146,44 @@ public class MyPageFragment extends Fragment {
 
 
 
-
         return view;
     }
+
+
+    private class getMyPhoto extends AsyncTask<Void, Void, Bitmap> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+
+            Bitmap bitmap = null;
+            try {
+                URL url = new URL(myPhotoUrl);
+                bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            imgMyPhoto.setImageBitmap(bitmap);
+            imgMyPhoto.invalidate();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+    }
+
 }
