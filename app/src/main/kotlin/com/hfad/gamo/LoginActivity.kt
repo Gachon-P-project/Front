@@ -5,7 +5,12 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.hfad.gamo.Component.sharedPreferences
 import io.wiffy.extension.BuildConfig
@@ -17,12 +22,14 @@ class LoginActivity : AppCompatActivity() {
 
     private val loginDialog: LoginDialog? = LoginDialog()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
-        Component.default_url = "http://172.30.1.2:17394"
+        var edtPassword = findViewById<EditText>(R.id.pwd);
+//        Component.default_url = "http://172.30.1.2:17394"
 
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -42,11 +49,23 @@ class LoginActivity : AppCompatActivity() {
                     }
                 });*/
 
+        login_button.focusable = View.NOT_FOCUSABLE
         login_button.setOnClickListener() {
-            //Log.i("id,pwd", id.text.toString() + pwd.text.toString())
             loginDialog?.start(this)
             executeLogin(id.text.toString(), pwd.text.toString())
         }
+
+        edtPassword.imeOptions = EditorInfo.IME_ACTION_DONE;
+        edtPassword.setOnEditorActionListener{v, keyCode, event ->
+            var handled = false
+                if(keyCode == EditorInfo.IME_ACTION_DONE || keyCode == KEYCODE_ENTER) {
+                    login_button.performClick()
+                    handled = true
+                }
+            handled
+        }
+
+
 
     }
 

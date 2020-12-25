@@ -20,11 +20,10 @@ public class SplashActivity extends AppCompatActivity {
 //        sharedPreferences.Editor
 
         Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
-
-
+        Component.default_url = "http://192.168.50.146:17394";
 
         Intent intent;
-        /*if(Component.sharedPreferences.getBoolean("login", false)) {
+        if(Component.sharedPreferences.getBoolean("login", false)) {
             intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -32,11 +31,11 @@ public class SplashActivity extends AppCompatActivity {
             intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
-        }*/
+        }
 
-        intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+//        intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
+//        finish();
 
     }
 }
