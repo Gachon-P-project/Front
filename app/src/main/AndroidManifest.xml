@@ -12,36 +12,35 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NotificationWebViewActivity"></activity>
-        <activity android:name=".ClickedBoard.ClickedPostingActivity"></activity>
+        <activity
+            android:name=".NoticeDetailActivity"
+            >
+        </activity>
+        <activity android:name=".NoticeWebViewActivity" />
+        <activity android:name=".ClickedBoard.ClickedPostingActivity" />
         <activity android:name=".ClickedBoard.SearchActivity" />
         <activity
             android:name=".ClickedBoard.WritingActivity"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
-        <activity android:name=".ClickedBoard.ClickedBoardActivity">
-
-        </activity>
-        <activity android:name=".MainActivity" >
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".ClickedBoard.ClickedBoardActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".VolleyActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" >
-        </activity>
-        <activity android:name=".VolleyActivity" />
-
-        <activity android:name=".SplashActivity">
-
-        </activity>
-
-
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
@@ -50,6 +49,5 @@
             </intent-filter>
         </service>
     </application>
-
 
 </manifest>

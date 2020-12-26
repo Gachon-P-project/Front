@@ -417,8 +417,8 @@ public class NoticeFragment extends Fragment {
         adapter.dataUpdate();
     }
 
-    public static void showDetail(String board_no) {
+   /* public static void showDetail(String board_no) {
         ((MainActivity) context).replaceFragment(new NoticeDetailFragment());
 
-    }
+    }*/
 }

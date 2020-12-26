@@ -37,7 +37,7 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private int lastVisibleItem, totalItemCount;
     private int visibleThreshold = 1;
     private Context context;
-    private NoticeDetailFragment detailFragment = new NoticeDetailFragment();
+    //private NoticeDetailFragment detailFragment = new NoticeDetailFragment();
     private FragmentTransaction fragmentTransaction;
 
     private final String TAG = "NOTI_ADAPTER";

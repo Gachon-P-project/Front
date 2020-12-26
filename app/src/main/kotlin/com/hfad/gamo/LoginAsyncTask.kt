@@ -3,6 +3,7 @@ package com.hfad.gamo
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat.startActivity
 import io.wiffy.extension.appendEnter
