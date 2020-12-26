@@ -20,6 +20,7 @@ import io.wiffy.extension.encrypt
 import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
     private var volley: VolleyForHttpMethod? = null
     private var nickNameDialog: NickNameDialog?= null
+    private lateinit var studentInformation: StudentInformation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,12 +108,24 @@ class LoginActivity : AppCompatActivity() {
                 nickNameDialog!!.start()
             }
 
-//            sharedPreferences에 데이터 넣는 작업 필요
+            var data: JSONObject = responseJSONObject.get("data") as JSONObject
+
+            studentInformation = StudentInformation(
+                    data.get("user_name").toString(),
+                    data.get("user_no").toString(),
+                    data.get("user_id").toString(),
+                    pwd,
+                    data.get("user_major").toString(),
+                    "http://gcis.gachon.ac.kr/common/picture/haksa/shj/" + data.get("user_no") + ".jpg",
+                    ""
+            )
+            saveInformation(studentInformation)
 
             loadingDialog?.finish()
         }, { error: VolleyError? ->
             if (error != null) {
-                Log.i("LoginVolley", "fail")
+//                Log.i("LoginVolley", "fail")
+                Log.i(TAG, "newExecuteLogin: " + error)
             }
         })
     }
