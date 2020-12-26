@@ -10,6 +10,13 @@
         2. 특정인이나 단체/지역을 비방하는 행위\n
         3. 기타 현행법에 어긋나는 행위\n
     </string>
+
+    <string name="button_nickname_register">닉네임 등록</string>
+    <string name="nickname">닉네임</string>
+    <string name="existent_nickname">이미 등록된 닉네임 입니다.</string>
+
+
+
     <string name="msg_token_fmt" translatable="false">토큰 : %s</string>
     <string name="postWriting">/board/insert</string>
     <string name="inquirePostingsOfBoard">/board/select/%1$s/%2$s</string>
@@ -25,4 +32,5 @@
     <string name="registerUser">/user/add</string>
     <string name="inquireUser">/user/info</string>
     <string name="inquireTimeTable">/user/timetable/%1$s/%2$s/%3$s</string>
+    <string name="checkNickName">/user/nickname_chk/%1$s</string>
 </resources>

@@ -2,10 +2,12 @@ package com.hfad.gamo
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.Component.default_url
@@ -19,7 +21,8 @@ import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
 
     private val loginDialog: LoginDialog? = LoginDialog()
-    private var volley: VolleyForHttpMethod? = null;
+    private var volley: VolleyForHttpMethod? = null
+    private var nickNameDialog: NickNameDialog?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,31 +53,43 @@ class LoginActivity : AppCompatActivity() {
         login_button.setOnClickListener() {
             //Log.i("id,pwd", id.text.toString() + pwd.text.toString())
             loginDialog?.start(this)
-            executeLogin(id.text.toString(), pwd.text.toString())
+            newExecuteLogin(id.text.toString(), pwd.text.toString())
         }
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        loginDialog?.finish()
         Log.i("Destroy", "destroy");
     }
 
 
-    private fun NewExecuteLogin(id: String, pwd: String) {
-        val url = default_url.plus(getString(R.string.inquireUser))
-        var jsonObject : JSONObject = JSONObject()
+    private fun newExecuteLogin(id: String, pwd: String) {
+        var jsonObject = JSONObject()
         jsonObject.put("id", id)
         jsonObject.put("pwd", pwd)
 
+        val registeredUser = 200
+        val url = default_url.plus(getString(R.string.inquireUser))
+
         volley?.postJSONObjectString(jsonObject, url, { response: String ->
-            Log.i("LoginVolley", response)
+            val responseJSONObject = JSONObject(response)
+
+            if(responseJSONObject.get("code") == registeredUser) {
+                val intent = Intent(this, MainActivity::class.java)
+                this.startActivity(intent, null)
+                this.finish()
+            } else {
+                nickNameDialog = NickNameDialog(this)
+                nickNameDialog!!.start()
+            }
+
+            loginDialog?.finish()
         }, { error: VolleyError? ->
             if (error != null) {
-                Log.i("LoginVolley", error.networkResponse.toString())
+                Log.i("LoginVolley", "fail")
             }
-        });
+        })
     }
 
 

@@ -12,7 +12,6 @@ class TimeTablePresenter(val mView: TimeTableContract.View) : TimeTableContract.
     override fun initPresent() = mView.initView()
 
 
-    // 과목들을 시간표에 세팅.
     override fun setTableList(set: HashSet<String>): ArrayList<TimeTableData> {
 
         val superList = ArrayList<ArrayList<TimeData<Any?>?>>(6).apply {

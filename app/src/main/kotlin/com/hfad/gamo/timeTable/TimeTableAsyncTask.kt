@@ -1,17 +1,21 @@
 package com.hfad.gamo.timeTable
 
 import android.annotation.SuppressLint
+import android.content.Context
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
 import com.hfad.gamo.*
 import io.wiffy.extension.isNetworkConnected
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.util.EntityUtils
+import org.json.JSONArray
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import java.lang.Exception
 import java.text.SimpleDateFormat
 
-class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) :
+class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val number: String) :
     SuperContract.SuperAsyncTask<Void, Void, Int>() {
 
     val set = HashSet<String>()
@@ -20,6 +24,10 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
     private val professorSet = mutableSetOf<String>()
     private val jsonObject = JSONObject();
     private val subjectHashSet = HashSet<String>()
+    private val volley = VolleyForHttpMethod(Volley.newRequestQueue(mView.context))
+    private val sharedPreferences = mView.context?.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
+    private lateinit var urlInquireTimeTable : String
+    private lateinit var responseJSONArray: JSONArray
 
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
@@ -29,7 +37,7 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
         3 -> "11"
         else -> "21"
     }
-    private val year = 2020;
+    private val year = "2020";
 
     override fun onPreExecute() {
         //Component.getBuilder()?.show()
@@ -47,6 +55,14 @@ class TimeTableAsyncTask(val mView: TimeTableContract.View, val number: String) 
                     ).entity
                 )
             ).select("li")
+
+            if (sharedPreferences != null) {
+                urlInquireTimeTable = Component.default_url.plus(mView.context?.getString(R.string.inquireTimeTable,sharedPreferences.getString("number ", null), year, sem ))
+            }
+
+            volley.getString(urlInquireTimeTable) { response ->
+                responseJSONArray = JSONArray(response)
+            }
 
             for (element in page) {
                 if (element.text().contains("요일")) {
