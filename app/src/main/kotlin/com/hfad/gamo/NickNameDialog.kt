@@ -60,6 +60,7 @@ class NickNameDialog(loginActivity: LoginActivity) {
                     userJsonObject.put("user_major", "컴퓨터공학과")
 
                     volley!!.postJSONObjectString(userJsonObject,urlRegisterUser, null, null)
+//                    volley!!.postJSONObjectString(userJsonObject,urlRegisterUser, null)
                     val nextIntent = Intent(loginActivity, MainActivity::class.java)
                     loginActivity.startActivity(nextIntent, null)
                     dlg.dismiss()

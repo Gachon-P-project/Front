@@ -18,7 +18,7 @@ constructor(context: Context) : Dialog(context){
     }
 }*/
 
-class LoginDialog {
+class LoadingDialog {
     private var dlg : Dialog? = null
 
     fun start(context: Context) {

@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -18,17 +19,17 @@ import org.json.JSONObject;
 
 public class VolleyForHttpMethod {
 
+    private final static String TAG = "VolleyForHttpMethod";
     private RequestQueue queue;
 
     public VolleyForHttpMethod(RequestQueue queue) {
         this.queue = queue;
     }
 
-    public void postJSONObjectString(@NonNull final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener) {
+    public void postJSONObjectString(@NonNull final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener ErrorListener) {
 
         StringRequest request;
-
-        if(listener == null) {
+        if(listener == null && ErrorListener == null) {
             request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -40,8 +41,25 @@ public class VolleyForHttpMethod {
                     // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                     Log.i("VolleyError", "Volley Error in receive");
                 }
-            }
-            ) {
+            }) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+
+        } else if(listener != null && ErrorListener == null) {
+            request = new StringRequest(Request.Method.POST, url, listener, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                    Log.i("VolleyError", "Volley Error in receive");
+                }
+            }) {
                 @Override
                 public byte[] getBody() {
                     return Body.toString().getBytes();
@@ -52,15 +70,28 @@ public class VolleyForHttpMethod {
                     return "application/json";
                 }
             };
-        } else {
-            request = new StringRequest(Request.Method.POST, url, listener, new Response.ErrorListener() {
+
+        } else if(listener == null && ErrorListener != null) {
+            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
-                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
-                    Log.i("VolleyError", "Volley Error in receive");
+                public void onResponse(String response) {
+                    Log.i("VolleyResponse", "Response is good");
                 }
-            }
-            ) {
+            }, ErrorListener) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+
+        } else {
+            Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
+            request = new StringRequest(Request.Method.POST, url, listener, ErrorListener) {
                 @Override
                 public byte[] getBody() {
                     return Body.toString().getBytes();
@@ -77,10 +108,10 @@ public class VolleyForHttpMethod {
         queue.add(request);
     }
 
+
     public void postJSONObjectJSONArray(@NonNull final JSONObject Body, @NonNull String url, @Nullable final Response.Listener<JSONArray> listener, @Nullable Response.ErrorListener ErrorListener) {
 
         StringRequest request;
-
         if(listener == null && ErrorListener == null) {
             request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
@@ -178,6 +209,7 @@ public class VolleyForHttpMethod {
             };
         }
 
+        Log.d(TAG, "postJSONObjectJSONArray: added to queue");
         request.setShouldCache(false);
         queue.add(request);
     }

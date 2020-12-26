@@ -62,7 +62,7 @@ public class NoticeFragment extends Fragment {
     private int page = 0;
 
 
-    private LoginDialog loadingDialog;
+    private LoadingDialog loadingDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class NoticeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        loadingDialog = new LoginDialog();
+        loadingDialog = new LoadingDialog();
         loadingDialog.start(getContext());
 
         responseJSONArray = new JSONArray();
@@ -417,8 +417,4 @@ public class NoticeFragment extends Fragment {
         adapter.dataUpdate();
     }
 
-   /* public static void showDetail(String board_no) {
-        ((MainActivity) context).replaceFragment(new NoticeDetailFragment());
-
-    }*/
 }

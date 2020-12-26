@@ -37,7 +37,6 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private int lastVisibleItem, totalItemCount;
     private int visibleThreshold = 1;
     private Context context;
-    //private NoticeDetailFragment detailFragment = new NoticeDetailFragment();
     private FragmentTransaction fragmentTransaction;
 
     private final String TAG = "NOTI_ADAPTER";
@@ -162,6 +161,7 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((NotiViewHolder) holder).tvTitle.setText(title);
             ((NotiViewHolder) holder).tvDate.setText(sf.format(inputDate));
             ((NotiViewHolder) holder).tvCnt.setText(view);
+            Log.d(TAG, "onBindViewHolder: title : " + title);
 
 
             if (isNew)

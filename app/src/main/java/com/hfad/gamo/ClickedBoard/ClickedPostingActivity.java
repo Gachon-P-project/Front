@@ -119,7 +119,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
                         });
 
                     }
-                });
+                }, null);
             }
         });
 

@@ -2,51 +2,42 @@ package com.hfad.gamo
 
 import android.annotation.SuppressLint
 import android.content.Context
-<<<<<<< HEAD
 import androidx.appcompat.app.AppCompatActivity
-=======
 import android.content.Intent
->>>>>>> dev
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-<<<<<<< HEAD
-=======
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.Component.default_url
->>>>>>> dev
 import com.hfad.gamo.Component.sharedPreferences
 import io.wiffy.extension.BuildConfig
 import io.wiffy.extension.encrypt
 import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
-    private val loginDialog: LoginDialog? = LoginDialog()
-<<<<<<< HEAD
+    private val TAG: String? = "LoginActivity"
 
-=======
+    private val loadingDialog: LoadingDialog? = LoadingDialog()
+
     private var volley: VolleyForHttpMethod? = null
     private var nickNameDialog: NickNameDialog?= null
->>>>>>> dev
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         var edtPassword = findViewById<EditText>(R.id.pwd);
-        Component.default_url = "http://172.30.1.2:17394"
+//        Component.default_url = "http://172.30.1.2:17394"
 
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -68,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
         login_button.focusable = View.NOT_FOCUSABLE
         login_button.setOnClickListener() {
-            loginDialog?.start(this)
+            loadingDialog?.start(this)
             newExecuteLogin(id.text.toString(), pwd.text.toString())
         }
 
@@ -88,15 +79,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-<<<<<<< HEAD
-        loginDialog?.finish()
+        loadingDialog?.finish()
         Log.i("Destroy","destroy");
     }
 
-
-=======
-        Log.i("Destroy", "destroy");
-    }
 
 
     private fun newExecuteLogin(id: String, pwd: String) {
@@ -107,10 +93,11 @@ class LoginActivity : AppCompatActivity() {
         val registeredUser = 200
         val url = default_url.plus(getString(R.string.inquireUser))
 
+
         volley?.postJSONObjectString(jsonObject, url, { response: String ->
             val responseJSONObject = JSONObject(response)
 
-            if(responseJSONObject.get("code") == registeredUser) {
+            if (responseJSONObject.get("code") == registeredUser) {
                 val intent = Intent(this, MainActivity::class.java)
                 this.startActivity(intent, null)
                 this.finish()
@@ -119,14 +106,15 @@ class LoginActivity : AppCompatActivity() {
                 nickNameDialog!!.start()
             }
 
-            loginDialog?.finish()
+//            sharedPreferences에 데이터 넣는 작업 필요
+
+            loadingDialog?.finish()
         }, { error: VolleyError? ->
             if (error != null) {
                 Log.i("LoginVolley", "fail")
             }
         })
     }
->>>>>>> dev
 
 
 
