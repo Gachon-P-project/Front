@@ -16,7 +16,6 @@
             android:name=".NoticeDetailActivity"
             >
         </activity>
-        <activity android:name=".NoticeWebViewActivity" />
         <activity android:name=".ClickedBoard.ClickedPostingActivity" />
         <activity android:name=".ClickedBoard.SearchActivity" />
         <activity

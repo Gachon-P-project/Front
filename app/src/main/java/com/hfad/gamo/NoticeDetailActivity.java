@@ -1,5 +1,6 @@
 package com.hfad.gamo;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -8,7 +9,10 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -16,7 +20,9 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +37,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 //import org.w3c.dom.Document;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +65,7 @@ public class NoticeDetailActivity extends AppCompatActivity {
     private LinearLayout llFiles;
     private androidx.appcompat.widget.Toolbar tb;
     private com.google.android.material.bottomnavigation.BottomNavigationView bottomNavNoticeDetail;
-    private List<String> fileUrls;
+//    private List<String> fileUrls;
     private String tempUrl;
 
 
@@ -72,21 +79,16 @@ public class NoticeDetailActivity extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvNoticeDetailTitle);
         tvTime = findViewById(R.id.tvNoticeDetailTime);
         tvCount = findViewById(R.id.tvNoticeDetailCount);
-        tvContent = findViewById(R.id.tvNoticeDetailContent);
         llFiles = findViewById(R.id.llNoticeFile);
-//        wvContent = view.findViewById(R.id.wvNoticeDetailContent);
+        wvContent = findViewById(R.id.wvNoticeDetailContent);
         tb = findViewById(R.id.toolbarNoticeDetail);
         bottomNavNoticeDetail = findViewById(R.id.bottomNavNoticeDetail);
-
 
         prefs = context.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
 
         setSupportActionBar(tb);
         getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        fileUrls = new ArrayList<>();
 
         bottomNavNoticeDetail.setSelectedItemId(R.id.bottomNavigationNotice);
 
@@ -98,10 +100,9 @@ public class NoticeDetailActivity extends AppCompatActivity {
         url = Component.default_url + "/notice/posting/" + dept + "/" + board_no;
 
         loadingDialog = new LoadingDialog();
-//        loadingDialog.start(context);
+        loadingDialog.start(this);
         getPostData();
 
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
         bottomNavNoticeDetail.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -110,7 +111,6 @@ public class NoticeDetailActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
 
     @Override
@@ -127,47 +127,88 @@ public class NoticeDetailActivity extends AppCompatActivity {
                 htmlData[0] = "<!DOCTYPE html>" + response;
 
                 try {
-                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder builder = factory.newDocumentBuilder();
 
                     response = "<table>" + response.replaceAll("\t", "") + "</table>";
                     response = response.replaceAll("\n\n", "");
-                    response = response.replaceAll("&npsp;", " ");
+                    response = response.replaceAll("&npsp;", "");
 
-
-                    Log.d(TAG, "onResponse: response : " + response);
 
                     Document document = Jsoup.parse(response, "UTF-8");
-                    Log.d(TAG, "onResponse: document : " + document);
 
                     Element body = document.body();
                     Element tbody = body.getElementsByTag("tbody").first();
-                    Log.d(TAG, "onResponse: tbody : " + body.toString());
+                    Elements eContent = tbody.select("tr td").get(6).children();
                     Element title = tbody.select("tr td").get(0);
                     Element count = tbody.select("tr td").get(2);
                     Element time = tbody.select("tr td").get(3);
                     Elements files = tbody.select("tr td").get(5).select("a");
                     int numOfFiles = files.size();
-                    Elements content = tbody.select("p");
 
                     for (int i = 0 ; i < numOfFiles ; i++) {
                         TextView tv = new TextView(context);
                         tv.setText(files.get(i).text());
-                        tv.setTextSize(14);
-                        tv.setTextColor(Color.BLACK);
+                        tv.setTextSize(12);
+                        tv.setTextColor(Color.BLUE);
+
+                        String filename = tv.getText().toString();
+                        String extension = filename.substring(filename.indexOf(".")+1);
+                        while(extension.contains(".")) {
+                            extension = extension.substring(extension.indexOf(".")+1);
+                        }
+                        switch (extension) {
+                            case "hwp" :
+                                Log.d(TAG, "onResponse: asdasadsasaaaaaaaaaaa");
+//                                tv.setCompoundDrawables(getDrawable(R.drawable.icon_hwp), null, null, null);
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_hwp, 0, 0, 0);
+                                break;
+                            case "pdf":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_pdf, 0, 0, 0);
+                                break;
+                            case "doc":
+                            case "docx":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_doc, 0, 0, 0);
+                                break;
+                            case "jpg":
+                            case "jpeg":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_jpg, 0, 0, 0);
+                                break;
+                            case "png":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_png, 0, 0, 0);
+                                break;
+                            case "mp4":
+                            case "mov":
+                            case "wmv":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_mp4, 0, 0, 0);
+                                break;
+                            case "ppt":
+                            case "pptx":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_ppt, 0, 0, 0);
+                                break;
+                            case "txt":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_txt, 0, 0, 0);
+                                break;
+                            case "xls":
+                            case "xlsx":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_xls, 0, 0, 0);
+                                break;
+                            case "zip":
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_zip, 0, 0, 0);
+                                break;
+                            default:
+                                tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_etc, 0, 0, 0);
+                        }
 
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         lp.gravity = Gravity.CENTER;
                         lp.topMargin = 10;
                         tv.setLayoutParams(lp);
-
-                        fileUrls.add(files.get(i).attr("href"));
-                        tempUrl = "https://www.gachon.ac.kr" + files.get(i).attr("href").replaceAll("amp;", "");
-
+                        final String fileUrl = "https://www.gachon.ac.kr" + files.get(i).attr("href").replaceAll("amp;", "");
                         tv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(context, tempUrl, Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(fileUrl));
+                                startActivity(intent);
                             }
                         });
                         llFiles.addView(tv);
@@ -176,8 +217,37 @@ public class NoticeDetailActivity extends AppCompatActivity {
                     tvTitle.setText(title.text());
                     tvCount.setText(count.text());
                     tvTime.setText(time.text());
-                    tvContent.setText(Html.fromHtml(content.toString()));
 
+                    initWebView(wvContent);
+                    wvContent.setWebViewClient(new WebViewClient());
+                    WebSettings webSettings = wvContent.getSettings();
+                    webSettings.setJavaScriptEnabled(true);
+                    webSettings.setSupportZoom(false);
+                    webSettings.setBuiltInZoomControls(false);
+                    webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+
+                    String css = "";
+                    if(!eContent.select("table").isEmpty()) {
+                        css = "\n" +
+                                "        <style>\n" +
+                                "            table {\n" +
+                                "                border-top : gray 1px solid;\n" +
+                                "                border-bottom: gray 1px solid;\n" +
+                                "                text-align: center;\n" +
+                                "            }\n" +
+                                "            tbody tr:nth-of-type(1) td {\n" +
+                                "                background-color:lightsteelblue;\n" +
+                                "            }\n" +
+                                "            tbody tr {\n" +
+                                "\n" +
+                                "                border-top : gray 1px solid;\n" +
+                                "            }\n" +
+                                "        </style>";
+                    }
+
+                    Log.d(TAG, "onResponse: eContent : " + eContent.toString());
+                    String htmlContent = "<html><head>" + css + "</head><body>" + eContent.toString() + "<br/></body></html>";
+                    wvContent.loadDataWithBaseURL(null, htmlContent, "text/html; charset=utf-8", "UTF-8", null);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -216,6 +286,22 @@ public class NoticeDetailActivity extends AppCompatActivity {
 
 
 
+    public void initWebView(WebView wView) {
+        // 1. 웹뷰클라이언트 연결 (로딩 시작/끝 받아오기)
+        wView.setWebViewClient(new WebViewClient() {
+            @Override                                   // 1) 로딩 시작
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+//                pBar.setVisibility(View.VISIBLE);       // 로딩이 시작되면 로딩바 보이기
+            }
+
+            @Override                                   // 2) 로딩 끝
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+//                pBar.setVisibility(View.GONE);          // 로딩이 끝나면 로딩바 없애기
+            }
+        });
+    }
 
 
 }

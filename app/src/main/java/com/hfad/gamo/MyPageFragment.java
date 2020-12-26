@@ -109,8 +109,8 @@ public class MyPageFragment extends Fragment {
         tvNickname.setText(nickname);
 
 
-        getMyPhoto getMyPhoto = new getMyPhoto();
-        getMyPhoto.execute();
+//        getMyPhoto getMyPhoto = new getMyPhoto();
+//        getMyPhoto.execute();
 
         llChangeNickname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,9 +150,9 @@ public class MyPageFragment extends Fragment {
     }
 
 
+
+
     private class getMyPhoto extends AsyncTask<Void, Void, Bitmap> {
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -160,7 +160,6 @@ public class MyPageFragment extends Fragment {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-
             Bitmap bitmap = null;
             try {
                 URL url = new URL(myPhotoUrl);
@@ -168,7 +167,6 @@ public class MyPageFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return bitmap;
         }
 
@@ -183,7 +181,6 @@ public class MyPageFragment extends Fragment {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
-
     }
 
 }

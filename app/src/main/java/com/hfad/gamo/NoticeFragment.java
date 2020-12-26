@@ -229,6 +229,12 @@ public class NoticeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        editText.setText("");
+
+    }
 
     private void loadPost() {
         adapter.setOnLoadMoreListener(new Notice_RecyclerAdapter.OnLoadMoreListener() {
