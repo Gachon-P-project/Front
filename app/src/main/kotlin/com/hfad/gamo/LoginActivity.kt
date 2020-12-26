@@ -2,7 +2,11 @@ package com.hfad.gamo
 
 import android.annotation.SuppressLint
 import android.content.Context
+<<<<<<< HEAD
 import androidx.appcompat.app.AppCompatActivity
+=======
+import android.content.Intent
+>>>>>>> dev
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -12,6 +16,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+<<<<<<< HEAD
+=======
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.Volley
+import com.hfad.gamo.Component.default_url
+>>>>>>> dev
 import com.hfad.gamo.Component.sharedPreferences
 import io.wiffy.extension.BuildConfig
 import io.wiffy.extension.encrypt
@@ -21,7 +33,12 @@ import kotlinx.android.synthetic.main.activity_login.*
 class LoginActivity : AppCompatActivity() {
 
     private val loginDialog: LoginDialog? = LoginDialog()
+<<<<<<< HEAD
 
+=======
+    private var volley: VolleyForHttpMethod? = null
+    private var nickNameDialog: NickNameDialog?= null
+>>>>>>> dev
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
         login_button.focusable = View.NOT_FOCUSABLE
         login_button.setOnClickListener() {
             loginDialog?.start(this)
-            executeLogin(id.text.toString(), pwd.text.toString())
+            newExecuteLogin(id.text.toString(), pwd.text.toString())
         }
 
         edtPassword.imeOptions = EditorInfo.IME_ACTION_DONE;
@@ -71,11 +88,45 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+<<<<<<< HEAD
         loginDialog?.finish()
         Log.i("Destroy","destroy");
     }
 
 
+=======
+        Log.i("Destroy", "destroy");
+    }
+
+
+    private fun newExecuteLogin(id: String, pwd: String) {
+        var jsonObject = JSONObject()
+        jsonObject.put("id", id)
+        jsonObject.put("pwd", pwd)
+
+        val registeredUser = 200
+        val url = default_url.plus(getString(R.string.inquireUser))
+
+        volley?.postJSONObjectString(jsonObject, url, { response: String ->
+            val responseJSONObject = JSONObject(response)
+
+            if(responseJSONObject.get("code") == registeredUser) {
+                val intent = Intent(this, MainActivity::class.java)
+                this.startActivity(intent, null)
+                this.finish()
+            } else {
+                nickNameDialog = NickNameDialog(this)
+                nickNameDialog!!.start()
+            }
+
+            loginDialog?.finish()
+        }, { error: VolleyError? ->
+            if (error != null) {
+                Log.i("LoginVolley", "fail")
+            }
+        })
+    }
+>>>>>>> dev
 
 
 

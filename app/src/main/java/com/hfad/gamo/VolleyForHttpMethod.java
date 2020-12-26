@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VolleyForHttpMethod {
@@ -60,6 +61,111 @@ public class VolleyForHttpMethod {
                 }
             }
             ) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+        }
+
+        request.setShouldCache(false);
+        queue.add(request);
+    }
+
+    public void postJSONObjectJSONArray(@NonNull final JSONObject Body, @NonNull String url, @Nullable final Response.Listener<JSONArray> listener, @Nullable Response.ErrorListener ErrorListener) {
+
+        StringRequest request;
+
+        if(listener == null && ErrorListener == null) {
+            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("VolleyResponse", "Response is good");
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                    Log.i("VolleyError", "Volley Error in receive");
+                }
+            }
+            ) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+        } else if(listener != null && ErrorListener == null) {
+            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        listener.onResponse(jsonArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.i("VolleyResponse", "Response is good");
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                    Log.i("VolleyError", "Volley Error in receive");
+                }
+            }) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+        } else if(listener == null && ErrorListener != null) {
+            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("VolleyResponse", "Response is good");
+                }
+            }, ErrorListener) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+        } else {
+            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        listener.onResponse(jsonArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.i("VolleyResponse", "Response is good");
+                }
+            }, ErrorListener) {
                 @Override
                 public byte[] getBody() {
                     return Body.toString().getBytes();

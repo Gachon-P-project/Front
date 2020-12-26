@@ -59,4 +59,11 @@
     <color name="white_transperent">#B3ffffff</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="red_real">#FF0000</color>
+    <color name="orange_red">#FF4500</color>
+    <color name="red500">#f44336</color>
+    <color name="gray100">#f5f5f5</color>
+    <color name="gray200">#eeeeee</color>
+    <color name="gray300">#e0e0e0</color>
+    <color name="gray400">#bdbdbd</color>
 </resources>
