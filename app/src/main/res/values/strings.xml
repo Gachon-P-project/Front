@@ -22,7 +22,4 @@
     <string name="deleteReply">/reply/delete/%1$s</string>
     <string name="inquireNotification">/notice/read/%1$s/%2$s</string>
     <string name="searchNotification">/notice/read/%1$s/%2$s/%3$s</string>
-    <string name="registerUser">/user/add</string>
-    <string name="inquireUser">/user/info</string>
-    <string name="inquireTimeTable">/user/timetable/%1$s/%2$s/%3$s</string>
 </resources>
