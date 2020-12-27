@@ -1,13 +1,34 @@
 package com.hfad.gamo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
+    @Override
+    public void onNewToken(@NonNull String s) {
+        super.onNewToken(s);
+
+        final SharedPreferences pref = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+
+        String token = s;
+
+        // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
+        if (!(pref.getString("token", null).equals(token))) {
+            pref.edit().putString("token", token).apply();
+        }
+
+    }
 
     public void showDataMessage(String msgTitle, String msgContent) {
         Log.i("### data msgTitle : ", msgTitle);
