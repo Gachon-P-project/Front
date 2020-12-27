@@ -7,13 +7,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.hfad.gamo.DataIOKt;
 
 import java.sql.Time;
 
@@ -39,30 +43,36 @@ public class MainActivity extends AppCompatActivity {
         //Component.default_url = "http://112.148.161.36:17394";
         Component.default_url = "http://172.30.1.2:17394";
 
-        /*FirebaseMessaging.getInstance().getToken()
+        Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+
+        final SharedPreferences pref = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+
+        FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
                             return;
                         }
 
                         // Get new FCM registration token
                         String token = task.getResult();
 
+                        // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
+                        if (!(pref.getString("token", null).equals(token))) {
+                            pref.edit().putString("token", token).apply();
+                        }
+
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, msg);
+                        Log.d("TAG", msg);
                     }
-                });*/
-
+                });
 
         setContentView(R.layout.activity_main);
 
-        Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
-
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
