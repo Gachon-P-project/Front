@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Component.default_url = "http://192.168.50.146:17394";
         //Component.default_url = "http://112.148.161.36:17394";
-        Component.default_url = "http://172.30.1.2:17394";
+        Component.default_url = "http://192.168.254.2:17394";
 
         Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
 
@@ -60,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
                         String token = task.getResult();
 
                         // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
-                        if (!(pref.getString("token", null).equals(token))) {
-                            pref.edit().putString("token", token).apply();
-                        }
+//                        if (!(pref.getString("token", null).equals(token))) {
+//                            pref.edit().putString("token", token).apply();
+//                        }
 
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
