@@ -134,9 +134,9 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    private fun executeLogin(id: String, password: String) {
-        LoginAsyncTask(id, password, this).execute()
-    }
+//    private fun executeLogin(id: String, password: String) {
+//        LoginAsyncTask(id, password, this).execute()
+//    }
 
 
     @SuppressLint("ApplySharedPref", "SetTextI18n")

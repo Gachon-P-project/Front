@@ -5,7 +5,6 @@
         android:id="@+id/bottomNavigationTimeTable"
         android:icon="@drawable/bottom_titmetable"
         />
-
     <item
         android:title="공지"
         android:id="@+id/bottomNavigationNotice"
@@ -14,6 +13,10 @@
         android:title="게시판"
         android:id="@+id/bottomNavigationBoard"
         android:icon="@drawable/bottom_board"/>
+    <item
+        android:title="알림"
+        android:id="@+id/bottomNavigationNotification"
+        android:icon="@drawable/bottom_notification"/>
     <item
         android:title="내 정보"
         android:id="@+id/bottomNavigationMyPage"
