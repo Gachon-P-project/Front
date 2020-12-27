@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat
 @Suppress("DEPRECATION")
 class TimeTableFragment : TimeTableContract.View() {
     var myView: View? = null
-    lateinit var mPresenter: TimeTablePresenter
+    private var mPresenter: TimeTablePresenter = TimeTablePresenter(this)
     private var mInfo: String? = null
     private var jsonObjectForTitle: JSONObject? = null
     val set = HashSet<String>()

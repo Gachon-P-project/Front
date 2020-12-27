@@ -2,11 +2,8 @@ package com.hfad.gamo
 
 import android.annotation.SuppressLint
 import android.content.Context
-<<<<<<< HEAD
 import androidx.appcompat.app.AppCompatActivity
-=======
 import android.content.Intent
->>>>>>> dev
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -16,29 +13,25 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-<<<<<<< HEAD
-=======
-import androidx.appcompat.app.AppCompatActivity
+
 import androidx.core.content.ContextCompat
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.Component.default_url
->>>>>>> dev
 import com.hfad.gamo.Component.sharedPreferences
 import io.wiffy.extension.BuildConfig
 import io.wiffy.extension.encrypt
 import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
     private val loginDialog: LoginDialog? = LoginDialog()
-<<<<<<< HEAD
 
-=======
+
     private var volley: VolleyForHttpMethod? = null
     private var nickNameDialog: NickNameDialog?= null
->>>>>>> dev
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
         var edtPassword = findViewById<EditText>(R.id.pwd);
         Component.default_url = "http://172.30.1.2:17394"
 
+        volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -88,15 +82,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-<<<<<<< HEAD
         loginDialog?.finish()
         Log.i("Destroy","destroy");
     }
 
-
-=======
-        Log.i("Destroy", "destroy");
-    }
 
 
     private fun newExecuteLogin(id: String, pwd: String) {
@@ -107,10 +96,10 @@ class LoginActivity : AppCompatActivity() {
         val registeredUser = 200
         val url = default_url.plus(getString(R.string.inquireUser))
 
-        volley?.postJSONObjectString(jsonObject, url, { response: String ->
+        volley?.postJSONObjectString(jsonObject, url) { response: String ->
             val responseJSONObject = JSONObject(response)
 
-            if(responseJSONObject.get("code") == registeredUser) {
+            if (responseJSONObject.get("code") == registeredUser) {
                 val intent = Intent(this, MainActivity::class.java)
                 this.startActivity(intent, null)
                 this.finish()
@@ -120,14 +109,8 @@ class LoginActivity : AppCompatActivity() {
             }
 
             loginDialog?.finish()
-        }, { error: VolleyError? ->
-            if (error != null) {
-                Log.i("LoginVolley", "fail")
-            }
-        })
+        }
     }
->>>>>>> dev
-
 
 
     private fun executeLogin(id: String, password: String) {
