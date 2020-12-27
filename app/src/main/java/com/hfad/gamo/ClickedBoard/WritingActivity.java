@@ -99,13 +99,13 @@ public class WritingActivity extends AppCompatActivity {
         String url = Component.default_url.concat(getString(R.string.postWriting));
 
         try {
+            requestJSONObject.put("post_title", title_edit.getText().toString());
+            requestJSONObject.put("post_contents", contents_edit.getText().toString());
+            requestJSONObject.put("reply_yn", 1);
             requestJSONObject.put("major_name", intent.getExtras().getString("major"));
             requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
             requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
             requestJSONObject.put("user_id", intent.getExtras().getString("user"));
-            requestJSONObject.put("post_title", title_edit.getText().toString());
-            requestJSONObject.put("post_contents", contents_edit.getText().toString());
-            requestJSONObject.put("reply_yn", 1);
         } catch(JSONException e) {
             e.printStackTrace();
         }

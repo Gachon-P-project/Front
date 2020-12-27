@@ -38,10 +38,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        default_url = "http://172.30.1.2:17394"
+
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         var edtPassword = findViewById<EditText>(R.id.pwd);
-        Component.default_url = "http://172.30.1.2:17394"
+
 
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -101,7 +103,10 @@ class LoginActivity : AppCompatActivity() {
         volley?.postJSONObjectString(jsonObject, url, { response: String ->
             val responseJSONObject = JSONObject(response)
 
+            var data: JSONObject = responseJSONObject.get("data") as JSONObject
+
             if (responseJSONObject.get("code") == registeredUser) {
+                setSharedItem("nickname", data.get("nickname"))
                 val intent = Intent(this, MainActivity::class.java)
                 this.startActivity(intent, null)
                 this.finish()
@@ -110,13 +115,11 @@ class LoginActivity : AppCompatActivity() {
                 nickNameDialog!!.start()
             }
 
-            var data: JSONObject = responseJSONObject.get("data") as JSONObject
-
             studentInformation = StudentInformation(
                     data.get("user_name").toString(),
                     data.get("user_no").toString(),
                     data.get("user_id").toString(),
-                    pwd,
+                    "pwd",
                     data.get("user_major").toString(),
                     "http://gcis.gachon.ac.kr/common/picture/haksa/shj/" + data.get("user_no") + ".jpg",
                     ""

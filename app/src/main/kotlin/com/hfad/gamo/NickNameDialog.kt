@@ -52,19 +52,23 @@ class NickNameDialog(loginActivity: LoginActivity) {
                     nicknameExistentTextView.visibility = View.VISIBLE
                     nicknameRegisterButton.isClickable = true
                 } else {
+                    setSharedItem("nickname", nickname)
                     val userJsonObject = JSONObject()
-                    userJsonObject.put("user_no", "201732214")
-                    userJsonObject.put("user_id", "user_test33")
-                    userJsonObject.put("user_name", "테스트33")
-                    userJsonObject.put("nickname", "dydy")
-                    userJsonObject.put("user_major", "컴퓨터공학과")
+                    userJsonObject.put("user_no", getSharedItem<String>("number"))
+                    userJsonObject.put("user_id", getSharedItem<String>("id"))
+                    userJsonObject.put("user_name", getSharedItem<String>("name"))
+                    userJsonObject.put("nickname", getSharedItem<String>("nickname"))
+                    userJsonObject.put("user_major", getSharedItem<String>("department"))
 
-                    volley!!.postJSONObjectString(userJsonObject,urlRegisterUser, null, null)
+                    volley!!.postJSONObjectString(userJsonObject,urlRegisterUser, { response ->
+                        Log.i("response", response)
+                        val nextIntent = Intent(loginActivity, MainActivity::class.java)
+                        loginActivity.startActivity(nextIntent, null)
+                        dlg.dismiss()
+                        loginActivity.finish()
+                    }, null)
 //                    volley!!.postJSONObjectString(userJsonObject,urlRegisterUser, null)
-                    val nextIntent = Intent(loginActivity, MainActivity::class.java)
-                    loginActivity.startActivity(nextIntent, null)
-                    dlg.dismiss()
-                    loginActivity.finish()
+
                 }
             }
         }
