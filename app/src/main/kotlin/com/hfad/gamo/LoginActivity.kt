@@ -11,6 +11,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+
+import androidx.core.content.ContextCompat
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.Component.default_url
@@ -39,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         var edtPassword = findViewById<EditText>(R.id.pwd);
-//        Component.default_url = "http://172.30.1.2:17394"
+        Component.default_url = "http://172.30.1.2:17394"
 
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {

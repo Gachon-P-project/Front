@@ -93,7 +93,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             //holder.board_date.setText(data.getString("wrt_date"));
             holder.board_reply_cnt.setText(data.getString("reply_cnt"));
             holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"), data.getString("post_like"),
-                    data.getString("post_title"), data.getString("post_contents"), null,
+                    data.getString("post_title"), data.getString("post_contents"), wrt_date,
                     data.getString("reply_cnt"), data.getString("reply_yn"));
         } catch(JSONException e) {
             e.printStackTrace();
@@ -116,16 +116,21 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
                 final_wrt_date = "방금 전";
                 holder.board_date.setText(final_wrt_date);
             } else {
-                final_wrt_date = String.valueOf(time/(1000*60)).concat("분 전");
+                long minutesAgo = (60*60*1000 - time) / (60*1000);
+                final_wrt_date = String.valueOf((minutesAgo)).concat("분 전");
                 holder.board_date.setText(final_wrt_date);
+                Log.i("time", String.valueOf(minutesAgo));
             }
         } else if(date.after(beforeOneDay.getTime())) {
             time =  date.getTime() - beforeOneDay.getTimeInMillis();
-            final_wrt_date = String.valueOf(time/(1000*60*60)).concat("시간 전");
+            long timesAgo = (24*60*60*1000 - time) / (60*60*1000);
+            final_wrt_date = String.valueOf(timesAgo).concat("시간 전");
             holder.board_date.setText(final_wrt_date);
+            Log.i("time", String.valueOf(timesAgo));
         } else {
             final_wrt_date = format.format(date);
             holder.board_date.setText(final_wrt_date);
+            Log.i("time", String.valueOf(final_wrt_date));
         }
 
         holder.toClickedPosting.setWrt_date(final_wrt_date);
