@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
 
         Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
         Component.default_url = "http://192.168.50.146:17394";
-        Component.default_url = "http://172.30.1.2:17394";
+//        Component.default_url = "http://172.30.1.2:17394";
 
 
         Intent intent;

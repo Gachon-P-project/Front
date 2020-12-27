@@ -109,7 +109,7 @@ public class NoticeDetailActivity extends AppCompatActivity {
     private void getPostData() {
         final String[] htmlData = new String[1];
 
-        String url = Component.default_url + "/notice/posting/" + dept + "/" + board_no;
+        String url = Component.default_url + getString(R.string.noticeDetail, dept, board_no);
         volley.getString(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -132,7 +132,7 @@ public class NoticeDetailActivity extends AppCompatActivity {
                     Element time = tbody.select("tr td").get(3);
                     Elements files = tbody.select("tr td").get(5).select("a");
                     int numOfFiles = files.size();
-                    Log.d(TAG, "onResponse: tbody : " + tbody.toString());
+//                    Log.d(TAG, "onResponse: tbody : " + tbody.toString());
 
                     for (int i = 0 ; i < numOfFiles ; i++) {
                         TextView tv = new TextView(context);
@@ -190,7 +190,7 @@ public class NoticeDetailActivity extends AppCompatActivity {
                         lp.gravity = Gravity.CENTER;
                         lp.topMargin = 10;
                         tv.setLayoutParams(lp);
-                        final String fileUrl = "https://www.gachon.ac.kr" + files.get(i).attr("href").replaceAll("amp;", "");
+                        final String fileUrl = getString(R.string.gachonBaseUrl) + files.get(i).attr("href").replaceAll("amp;", "");
                         tv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -313,7 +313,8 @@ public class NoticeDetailActivity extends AppCompatActivity {
     }
 
     private void getNoticeUrl() {
-        String url = Component.default_url + "/notice/url/" + dept + "/" + board_no;
+//        String url = Component.default_url + "/notice/url/" + dept + "/" + board_no;
+        String url = Component.default_url + getString(R.string.noticeUrl, dept, board_no);
         volley.getString(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

@@ -265,7 +265,7 @@ public class NoticeFragment extends Fragment {
 
     //    전체 조회. 첫번째에만 사용됨. 데이터 가져오는 함수.
     private void getFirstNotiList(final VolleyCallback callback) {
-        url = default_url + "/notice/read/" + page + "/" + dept;
+        url = default_url + getString(R.string.noticeList, page, dept);
         Log.d(TAG, "getAllNoti: url : " + url);
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
@@ -291,7 +291,7 @@ public class NoticeFragment extends Fragment {
 
     //    두번째부터 사용됨. 데이터 추가로 가져올때 사용.
     private void getMoreNotiList() {
-        url = default_url + "/notice/read/" + page + "/" + dept;
+        url = default_url + getString(R.string.noticeList, page, dept);
 
         tempJSONArray = new JSONArray();
         Log.d("GET_MORE_NOTICE", "url : " + url);
@@ -329,7 +329,7 @@ public class NoticeFragment extends Fragment {
 
 //    검색 기능 (처음)
     private void getFirstSearchedNoti(final VolleyCallback callback) {
-        url = default_url + "/notice/read/" + page + "/" + dept + "/" + search_word;
+        url = default_url + getString(R.string.noticeSearchedList, page, dept, search_word);
         Log.d("FRAGMENT::", "SEARCH :: URL : " + url);
 
         responseJSONArray = new JSONArray();
@@ -361,7 +361,7 @@ public class NoticeFragment extends Fragment {
 
     //    검색 기능 (추가)
     private void getMoreSearchedNoti() {
-        url = default_url + "/notice/read/" + page + "/" + dept + "/" + search_word;
+        url = default_url + getString(R.string.noticeSearchedList, page, dept, search_word);
         Log.d("FRAGMENT::", "SEARCH More :: URL : " + url);
 
         tempJSONArray = new JSONArray();

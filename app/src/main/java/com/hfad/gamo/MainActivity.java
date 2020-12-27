@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Component.default_url = "http://192.168.50.146:17394";
         //Component.default_url = "http://112.148.161.36:17394";
-        Component.default_url = "http://192.168.254.2:17394";
+//        Component.default_url = "http://192.168.254.2:17394";
 
         Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
 
