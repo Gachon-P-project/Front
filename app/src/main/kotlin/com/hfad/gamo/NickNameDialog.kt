@@ -96,7 +96,7 @@ class NickNameDialog(loginActivity: LoginActivity) {
 
         val params: ViewGroup.LayoutParams? = dlg?.window?.attributes
 //        params?.width = (deviceWidth * 0.9).toInt()
-        params?.width = deviceWidth
+        params?.width = (deviceWidth * 0.95).toInt()
         dlg?.window?.attributes = params as WindowManager.LayoutParams
     }
 }
