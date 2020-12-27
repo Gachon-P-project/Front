@@ -1,15 +1,15 @@
 package com.hfad.gamo
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
@@ -27,13 +27,12 @@ class NickNameDialog(loginActivity: LoginActivity) {
     private val urlRegisterUser = Component.default_url.plus(loginActivity.getString(R.string.registerUser))
 
 
-
     fun start() {
         volley = VolleyForHttpMethod(Volley.newRequestQueue(loginActivity))
-
-        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
-        dlg.setContentView(R.layout.dialog_nickname)     //다이얼로그에 사용할 xml 파일을 불러옴
-        dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
+//
+//        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
+//        dlg.setContentView(R.layout.dialog_nickname2)     //다이얼로그에 사용할 xml 파일을 불러옴
+//        dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
 
         nicknameEditText = dlg.findViewById(R.id.nickname_edit_text)
         nicknameExistentTextView = dlg.findViewById(R.id.nickname_existent)
@@ -88,5 +87,16 @@ class NickNameDialog(loginActivity: LoginActivity) {
 
     interface MyDialogOKClickedListener {
         fun onOKClicked(content : String)
+    }
+    
+    fun initDialog(deviceWidth: Int) {
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
+        dlg.setContentView(R.layout.dialog_nickname)     //다이얼로그에 사용할 xml 파일을 불러옴
+        dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
+
+        val params: ViewGroup.LayoutParams? = dlg?.window?.attributes
+//        params?.width = (deviceWidth * 0.9).toInt()
+        params?.width = deviceWidth
+        dlg?.window?.attributes = params as WindowManager.LayoutParams
     }
 }

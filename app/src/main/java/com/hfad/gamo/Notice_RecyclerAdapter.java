@@ -94,7 +94,7 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 //        뷰타입이 로딩이면 로딩 뷰 보여줌
         if(viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notice_recycler_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notice, parent, false);
             return new NotiViewHolder(view);
         } else {
             View view = LayoutInflater.from(context).inflate(R.layout.item_board_loading, parent, false);

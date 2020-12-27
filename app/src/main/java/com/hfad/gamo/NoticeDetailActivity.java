@@ -43,7 +43,6 @@ public class NoticeDetailActivity extends AppCompatActivity {
     private String dept;
     private LoadingDialog loadingDialog;
     private Context context;
-    private FragmentManager fm = getSupportFragmentManager();
     private String noticeUrl;
 
     private String board_no;

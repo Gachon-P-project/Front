@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Component.default_url = "http://192.168.50.146:17394";
+        Component.default_url = "http://192.168.50.146:17394";
         //Component.default_url = "http://112.148.161.36:17394";
 //        Component.default_url = "http://192.168.254.2:17394";
 

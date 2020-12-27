@@ -4,13 +4,18 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.graphics.Point
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.MainThread
 
 import androidx.core.content.ContextCompat
 import com.android.volley.VolleyError
@@ -38,11 +43,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        default_url = "http://172.30.1.2:17394"
+//        default_url = "http://172.30.1.2:17394"
 
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         var edtPassword = findViewById<EditText>(R.id.pwd);
+        
+//        val displayRectangle = Rect()
+//        val window: Window = getWindow()
+//        window.decorView.getWindowVisibleDisplayFrame(displayRectangle)
+        
+
 
 
         /*FirebaseMessaging.getInstance().getToken()
@@ -81,6 +92,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
+
     }
 
     override fun onDestroy() {
@@ -101,36 +113,51 @@ class LoginActivity : AppCompatActivity() {
 
 
         volley?.postJSONObjectString(jsonObject, url, { response: String ->
-            val responseJSONObject = JSONObject(response)
+            try {
+                val responseJSONObject = JSONObject(response)
 
-            var data: JSONObject = responseJSONObject.get("data") as JSONObject
+                var data: JSONObject = responseJSONObject.get("data") as JSONObject
 
-            if (responseJSONObject.get("code") == registeredUser) {
-                setSharedItem("nickname", data.get("nickname"))
-                val intent = Intent(this, MainActivity::class.java)
-                this.startActivity(intent, null)
-                this.finish()
-            } else {
-                nickNameDialog = NickNameDialog(this)
-                nickNameDialog!!.start()
+                if (responseJSONObject.get("code") == registeredUser) {
+                    setSharedItem("nickname", data.get("nickname"))
+                    val intent = Intent(this, MainActivity::class.java)
+                    this.startActivity(intent, null)
+                    this.finish()
+                } else {
+
+                    val windowManager = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                    val display = windowManager.defaultDisplay
+                    val size = Point()
+                    display.getSize(size)
+
+                    nickNameDialog = NickNameDialog(this)
+                    nickNameDialog?.initDialog(size.x)
+                    nickNameDialog!!.start()
+                }
+
+                studentInformation = StudentInformation(
+                        data.get("user_name").toString(),
+                        data.get("user_no").toString(),
+                        data.get("user_id").toString(),
+                        "pwd",
+                        data.get("user_major").toString(),
+                        "http://gcis.gachon.ac.kr/common/picture/haksa/shj/" + data.get("user_no") + ".jpg",
+                        ""
+                )
+                saveInformation(studentInformation)
+
+            } catch (e: Exception) {
+                e?.stackTrace
+
             }
-
-            studentInformation = StudentInformation(
-                    data.get("user_name").toString(),
-                    data.get("user_no").toString(),
-                    data.get("user_id").toString(),
-                    "pwd",
-                    data.get("user_major").toString(),
-                    "http://gcis.gachon.ac.kr/common/picture/haksa/shj/" + data.get("user_no") + ".jpg",
-                    ""
-            )
-            saveInformation(studentInformation)
 
             loadingDialog?.finish()
         }, { error: VolleyError? ->
             if (error != null) {
 //                Log.i("LoginVolley", "fail")
                 Log.i(TAG, "newExecuteLogin: " + error)
+                loadingDialog?.finish()
+                Toast.makeText(this, "인터넷 연결을 확인해 주세요.", Toast.LENGTH_SHORT).show();
             }
         })
     }
