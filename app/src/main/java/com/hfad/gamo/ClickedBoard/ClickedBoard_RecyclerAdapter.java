@@ -46,6 +46,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         TextView board_title;
         TextView board_contents;
         TextView board_date;
+        TextView board_post_like;
         TextView board_reply_cnt;
         View view;
         toClickedPosting toClickedPosting;
@@ -56,6 +57,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             board_title = itemView.findViewById(R.id.board_title);
             board_contents = itemView.findViewById(R.id.board_contents);
             board_date = itemView.findViewById(R.id.board_date);
+            board_post_like = itemView.findViewById(R.id.board_post_like);
             board_reply_cnt = itemView.findViewById(R.id.board_reply_cnt);
             view = itemView;
         }
@@ -95,6 +97,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             wrt_date = data.getString("wrt_date");
             //holder.board_date.setText(data.getString("wrt_date"));
             holder.board_reply_cnt.setText(data.getString("reply_cnt"));
+            holder.board_post_like.setText(data.getString("post_like"));
             holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"), data.getString("post_like"),
                     data.getString("post_title"), data.getString("post_contents"), wrt_date,
                     data.getString("reply_cnt"), data.getString("reply_yn"));

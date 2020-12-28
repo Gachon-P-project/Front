@@ -89,7 +89,7 @@
                         android:id="@+id/board_reply_cnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="3dp"
                         android:text="0"
                         android:textColor="#B38000"
                         android:textSize="12sp" />
@@ -105,15 +105,15 @@
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:src="@drawable/ic_view" />
+                        android:src="@drawable/thumb_up" />
 
                     <TextView
-                        android:id="@+id/board_view_cnt"
+                        android:id="@+id/board_post_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="0"
-                        android:textColor="@color/text1"
+                        android:layout_marginStart="3dp"
+                        android:text="8"
+                        android:textColor="@color/indigo500"
                         android:textSize="12sp" />
 
                 </LinearLayout>

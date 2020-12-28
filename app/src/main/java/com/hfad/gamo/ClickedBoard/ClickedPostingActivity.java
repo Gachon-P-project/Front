@@ -62,17 +62,19 @@ public class ClickedPostingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
 
-        TextView title = (TextView) findViewById(R.id.title_text);
-        TextView date = (TextView) findViewById(R.id.date_text);
-        TextView contents = (TextView) findViewById(R.id.contents_text);
-        TextView reply_cnt = (TextView) findViewById(R.id.reply_text);
-        comment = (EditText) findViewById(R.id.comment);
-        ImageView post_comment = (ImageView) findViewById(R.id.post_comment);
+        TextView title = findViewById(R.id.title_text);
+        TextView date = findViewById(R.id.date_text);
+        TextView contents = findViewById(R.id.contents_text);
+        TextView reply_cnt = findViewById(R.id.reply_text);
+        TextView post_like = findViewById(R.id.clicked_posting_post_like);
+        comment = findViewById(R.id.comment);
+        ImageView post_comment = findViewById(R.id.post_comment);
 
         title.setText(toClickedPosting.getPost_title());
         date.setText(toClickedPosting.getWrt_date());
         contents.setText(toClickedPosting.getPost_contents());
         reply_cnt.setText(toClickedPosting.getReply_cnt());
+        post_like.setText(toClickedPosting.getPost_like());
 
         post_comment.setOnClickListener(new View.OnClickListener() {
             @Override
