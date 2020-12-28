@@ -8,7 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +25,11 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 import static com.hfad.gamo.DataIOKt.resetSharedPreference;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyPageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+///**
+// * A simple {@link Fragment} subclass.
+// * Use the {@link MyPageFragment#newInstance} factory method to
+// * create an instance of this fragment.
+// */
 public class MyPageFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -37,6 +39,7 @@ public class MyPageFragment extends Fragment {
 
     private SharedPreferences prefs;
 
+    private NickNameDialog nickNameDialog;
     private LinearLayout llChangeNickname, llNotificationSettings, llAppInfo, llLogout;
     private TextView tvUsername, tvNickname, tvMajor, tvStudentId;
     private ImageView imgMyPhoto;
@@ -49,23 +52,14 @@ public class MyPageFragment extends Fragment {
 
 
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyPageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyPageFragment newInstance(String param1, String param2) {
-        MyPageFragment fragment = new MyPageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static MyPageFragment newInstance(String param1, String param2) {
+//        MyPageFragment fragment = new MyPageFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +97,7 @@ public class MyPageFragment extends Fragment {
         tvNickname = view.findViewById(R.id.tv_mypage_nickname);
         imgMyPhoto = view.findViewById(R.id.iv_mypage_photo);
 
+        nickname = prefs.getString("nickname", "-");
         tvUsername.setText(username);
         tvMajor.setText(major);
         tvStudentId.setText(studnetId);
@@ -115,7 +110,14 @@ public class MyPageFragment extends Fragment {
         llChangeNickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "닉네임 변경", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "닉네임 변경", Toast.LENGTH_SHORT).show();
+
+                DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
+                int deviceWidth = dm.widthPixels;
+
+                nickNameDialog = new NickNameDialog(getActivity());
+                nickNameDialog.initDialog(deviceWidth);
+                nickNameDialog.updateNickname();
             }
         });
 
@@ -149,6 +151,10 @@ public class MyPageFragment extends Fragment {
         return view;
     }
 
+
+    public void onRefresh() {
+        ((MainActivity)getActivity()).refreshFragment();
+    }
 
 
 

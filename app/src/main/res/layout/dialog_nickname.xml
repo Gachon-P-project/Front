@@ -29,7 +29,7 @@
         android:layout_marginEnd="20dp"
         android:gravity="center"
         android:maxLines="1"
-        android:maxLength="12"
+        android:maxLength="15"
         />
 
     <TextView

@@ -3,20 +3,13 @@ package com.hfad.gamo
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.view.View
 import androidx.core.content.ContextCompat.startActivity
 import io.wiffy.extension.appendEnter
-import io.wiffy.extension.isNetworkConnected
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.util.EntityUtils
 import org.json.JSONObject
-import org.w3c.dom.Element
-import org.xml.sax.InputSource
-import java.io.StringReader
-import javax.xml.parsers.DocumentBuilderFactory
 
 class LoginAsyncTask(
     private val ids: String,

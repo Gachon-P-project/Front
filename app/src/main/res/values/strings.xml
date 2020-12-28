@@ -12,6 +12,7 @@
     </string>
 
     <string name="button_nickname_register">닉네임 등록</string>
+    <string name="button_nickname_update">닉네임 변경</string>
     <string name="nickname">닉네임</string>
     <string name="existent_nickname">이미 등록된 닉네임 입니다.</string>
 
@@ -33,6 +34,7 @@
     <string name="inquireUser">/user/info</string>
     <string name="inquireTimeTable">/user/timetable/%1$s/%2$s/%3$s</string>
     <string name="checkNickName">/user/nickname_chk/%1$s</string>
+    <string name="nicknameUpdate">/user/nickname/update</string>
     <string name="noticeDetail">/notice/posting/%1$s/%2$s</string>
     <string name="noticeUrl">/notice/url/%1$s/%2$s</string>
     <string name="noticeList">/notice/read/%1$d/%2$s</string>

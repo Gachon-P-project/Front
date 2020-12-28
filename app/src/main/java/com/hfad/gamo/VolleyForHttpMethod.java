@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -277,33 +278,17 @@ public class VolleyForHttpMethod {
         queue.add(request);
     }
 
-    /*public void get(final HashMap<String, Object> Body, String url, Response.Listener<String> listener) {
-        StringRequest request;
-        if (Body == null) {
-            request = new StringRequest(Request.Method.GET, url, listener, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
-                    Log.i("VolleyError", "Volley Error in receive");
-                }
-            }
-            );
+    public void putJSONObject(@NonNull final JSONObject Body, @NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+        StringRequest request = null;
+
+        if(listener == null || errorListener == null) {
+            Log.e(TAG, "putJSONObjectString: Response.Listener is null or Response.ErrorListener is null");
         } else {
-            request = new StringRequest(Request.Method.GET, url, listener, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
-                    Log.i("VolleyError", "Volley Error in receive");
-                }
-            }
-            ) {
+            Log.d(TAG, "putJSONObjectString: volley put start");
+            request = new StringRequest(Request.Method.PUT, url, listener, errorListener) {
                 @Override
                 public byte[] getBody() {
-                    *//*HashMap<String, Object> params = new HashMap<>();
-                    params.put("user_id" , "jy1129000");
-                    params.put("user_major" , "컴퓨터공학과");
-                    params.put("auth_level" , "1");*//*
-                    return new JSONObject(Body).toString().getBytes();
+                    return Body.toString().getBytes();
                 }
 
                 @Override
@@ -315,6 +300,32 @@ public class VolleyForHttpMethod {
 
         request.setShouldCache(false);
         queue.add(request);
-    }*/
+    }
+
+
+
+    public void delete(@NonNull final JSONObject Body, @NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+        StringRequest request = null;
+
+        if(listener == null || errorListener == null) {
+            Log.e(TAG, "deleteJSONObjectString: Response.Listener is null or Response.ErrorListener is null");
+        } else {
+            Log.d(TAG, "deleteJSONObjectString: volley delete start");
+            request = new StringRequest(Request.Method.PUT, url, listener, errorListener) {
+                @Override
+                public byte[] getBody() {
+                    return Body.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+            };
+        }
+
+        request.setShouldCache(false);
+        queue.add(request);
+    }
 
 }
