@@ -28,8 +28,9 @@
         android:background="@drawable/edit_text_nickname"
         android:layout_marginEnd="20dp"
         android:gravity="center"
-        android:maxLines="1"
-        android:maxLength="12"
+        android:lines="1"
+        android:maxLength="15"
+        android:imeOptions="actionDone"
         />
 
     <TextView

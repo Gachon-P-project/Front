@@ -155,7 +155,7 @@ class LoginActivity : AppCompatActivity() {
         }, { error: VolleyError? ->
             if (error != null) {
 //                Log.i("LoginVolley", "fail")
-                Log.i(TAG, "newExecuteLogin: " + error)
+                Log.i(TAG, "newExecuteLogin: $error")
                 loadingDialog?.finish()
                 Toast.makeText(this, "인터넷 연결을 확인해 주세요.", Toast.LENGTH_SHORT).show();
             }

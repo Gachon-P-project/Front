@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        default_url = "http://172.30.1.2:17394";
+        default_url = "http://192.168.50.146:17394";
         //default_url = "http://112.148.161.36:17394";
 //        default_url = "http://192.168.254.2:17394";
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
-        
+
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
-        
+
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            
+
                             volley.postJSONObjectString(jsonObject, tokenUrl, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -190,6 +190,13 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationView.setSelectedItemId(R.id.bottomNavigationMyPage);
                 switchFragment(R.id.bottomNavigationMyPage);
                 break;
-            }
         }
     }
+
+    public void refreshFragment() {
+        FragmentTransaction ft  = fm.beginTransaction();
+        Fragment fragment = fm.findFragmentById(R.id.fragment);
+        ft.detach(fragment).attach(fragment).commit();
+    }
+
+}
