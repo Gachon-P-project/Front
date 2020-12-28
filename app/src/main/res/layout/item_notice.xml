@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:text="date"
-                android:textColor="@color/text1" />
+                android:textColor="@color/text2" />
 
             <ImageView
                 android:id="@+id/notice_file"
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="view_cnt"
-                    android:textColor="@color/text1"
+                    android:textColor="@color/text2"
                     android:textSize="12sp" />
 
             </LinearLayout>

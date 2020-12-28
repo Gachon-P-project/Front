@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,9 +36,8 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private int lastVisibleItem, totalItemCount;
     private int visibleThreshold = 1;
     private Context context;
-    private FragmentTransaction fragmentTransaction;
 
-    private final String TAG = "NOTI_ADAPTER";
+    private final String TAG = "Notice_Adapter";
 
     Notice_RecyclerAdapter(JSONArray list, String dept) {
         this.JSONArrayData = list;
@@ -94,8 +92,8 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 //        뷰타입이 로딩이면 로딩 뷰 보여줌
         if(viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notice, parent, false);
-            return new NotiViewHolder(view);
+            View view = LayoutInflater.from(context).inflate(R.layout.item_notice, parent, false);
+            return new NoticeViewHolder(view);
         } else {
             View view = LayoutInflater.from(context).inflate(R.layout.item_board_loading, parent, false);
             return new LoadingViewHolder(view);
@@ -106,7 +104,7 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
-        if(holder instanceof NotiViewHolder) {
+        if(holder instanceof NoticeViewHolder) {
 
             JSONObject data;
             String title = null;
@@ -136,15 +134,9 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 //                글 작성일이 3일 이내면 new 표시
                 if (now.getTime() - inputDate.getTime() < (1000 * 60 * 60 * 24 * 3))
                     isNew = true;
-                ((NotiViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                ((NoticeViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(v.getContext(), NotificationWebViewActivity.class);
-//                        intent.putExtra("dept", dept);
-//                        intent.putExtra("board_no", board_noForIntent);
-//                        v.getContext().startActivity(intent);
-
-//                        NoticeFragment.showDetail(board_noForIntent);
 
                         Intent intent = new Intent(v.getContext(), NoticeDetailActivity.class);
                         intent.putExtra("dept", dept);
@@ -158,29 +150,29 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 e.printStackTrace();
             }
 
-            ((NotiViewHolder) holder).tvTitle.setText(title);
-            ((NotiViewHolder) holder).tvDate.setText(sf.format(inputDate));
-            ((NotiViewHolder) holder).tvCnt.setText(view);
+            ((NoticeViewHolder) holder).tvTitle.setText(title);
+            ((NoticeViewHolder) holder).tvDate.setText(sf.format(inputDate));
+            ((NoticeViewHolder) holder).tvCnt.setText(view);
             Log.d(TAG, "onBindViewHolder: title : " + title);
 
 
             if (isNew)
-                ((NotiViewHolder) holder).imgIsNew.setVisibility(View.VISIBLE);
+                ((NoticeViewHolder) holder).imgIsNew.setVisibility(View.VISIBLE);
             else
-                ((NotiViewHolder) holder).imgIsNew.setVisibility(View.INVISIBLE);
+                ((NoticeViewHolder) holder).imgIsNew.setVisibility(View.INVISIBLE);
 
 
             if (file == 0)
-                ((NotiViewHolder) holder).imgIsFile.setVisibility(View.INVISIBLE);
+                ((NoticeViewHolder) holder).imgIsFile.setVisibility(View.INVISIBLE);
             else
-                ((NotiViewHolder) holder).imgIsFile.setVisibility(View.VISIBLE);
+                ((NoticeViewHolder) holder).imgIsFile.setVisibility(View.VISIBLE);
 
             if (num == 0) {
                 Log.d("ADAPTER" , "YELLOW BACKGROUND CARD :: " + title);
 //                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(((NotiViewHolder) holder).itemView.getContext().getResources().getColor(R.color.jinColor, null));
-                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
+                ((NoticeViewHolder) holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
             } else {
-                ((NotiViewHolder) holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                ((NoticeViewHolder) holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
             }
         } else {
             Log.d("INPUT DATA TO CARD ::", "LOADING");
@@ -200,12 +192,12 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return this.isLoading;
     }
 
-    private class NotiViewHolder extends RecyclerView.ViewHolder {
+    private class NoticeViewHolder extends RecyclerView.ViewHolder {
         public TextView tvTitle, tvDate, tvCnt, tvBoardNo;
         public ImageView imgIsNew, imgIsFile;
         public androidx.cardview.widget.CardView cardView;
 
-        public NotiViewHolder(View view) {
+        public NoticeViewHolder(View view) {
             super(view);
             tvTitle = view.findViewById(R.id.notice_title);
             tvDate = view.findViewById(R.id.notice_date);

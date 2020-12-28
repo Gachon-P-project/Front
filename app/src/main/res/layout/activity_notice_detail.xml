@@ -11,8 +11,9 @@
         android:id="@+id/toolbarNoticeDetail"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/white_brightless"
         app:theme="@style/AppTheme.Toolbar"
+        app:titleTextColor="@color/BLACK"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -63,7 +64,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="작성일"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text1"
                     android:textSize="14sp" />
                 <TextView
                     android:id="@+id/tvNoticeDetailTime"
@@ -71,7 +72,7 @@
                     android:layout_height="match_parent"
                     android:text="2020-12-12 09:04:00"
                     android:textSize="13sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text1"
                     android:layout_gravity="left"
                     android:gravity="center"
                     />
@@ -81,7 +82,7 @@
                     android:layout_height="match_parent"
                     android:text="조회수"
                     android:textSize="14sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text1"
                     android:gravity="center"
                     android:layout_gravity="center"
                     />
@@ -91,7 +92,7 @@
                     android:layout_height="match_parent"
                     android:text="100"
                     android:textSize="14sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text1"
                     android:layout_gravity="left"
                     />
             </TableRow>

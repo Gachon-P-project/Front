@@ -1,64 +1,119 @@
 package com.hfad.gamo;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotificationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.android.volley.toolbox.Volley;
+
+import org.joda.time.DateTime;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Time;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class NotificationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private Context context;
+    private VolleyForHttpMethod volley;
+    private Notification_RecyclerAdapter adapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private JSONArray dataArray;
+    private int unread = 0;
 
     public NotificationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotificationFragment newInstance(String param1, String param2) {
-        NotificationFragment fragment = new NotificationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        context = getContext();
+
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+
+        swipeRefreshLayout = view.findViewById(R.id.swipeLayoutNotification);
+        recyclerView = view.findViewById(R.id.rViewNotification);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        dataArray = new JSONArray();
+
+//        임시데이터
+        String content = "";
+        for (int i = 0 ; i < 10 ; i++) {
+            String title = "제목 "+i;
+            content += " 내용 내용 내용 " + i;
+            String type = "";
+            switch ((i / 3)) {
+                case 1 :
+                    type = "notice_new";
+                    break;
+                case 2:
+                    type = "board_reply";
+                    break;
+                case 0:
+                    type = "board_like";
+                    break;
+            }
+            String board_no = String.valueOf(1919+3*i);
+            String time = "2020-12-19 15:35:57";
+
+            try {
+                JSONObject object = new JSONObject("{\"title\" : \"" + title + "\", \"content\" : \"" + content + "\", \"type\" : \"" + type + "\", " +
+                        "\"baord_no\" : \"" + board_no + "\", \"time\" : \"" + time + "\" }");
+                dataArray.put(object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        adapter = new Notification_RecyclerAdapter(dataArray);
+        adapter.setRecyclerView(recyclerView);
+
+        recyclerView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+
+
+
+//        swipe refresh
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        ((MainActivity)getActivity()).refreshFragment();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 500);
+            }
+        });
+
+        return view;
     }
 }

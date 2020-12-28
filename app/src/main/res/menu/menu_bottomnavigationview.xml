@@ -3,7 +3,7 @@
     <item
         android:title="시간표"
         android:id="@+id/bottomNavigationTimeTable"
-        android:icon="@drawable/bottom_titmetable"
+        android:icon="@drawable/bottom_timetable"
         />
     <item
         android:title="공지"

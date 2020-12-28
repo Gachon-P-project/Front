@@ -2,9 +2,9 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/notice_card_view"
+    android:id="@+id/cardviewNotification"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:layout_gravity="center"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="0dp"
@@ -13,37 +13,54 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:padding="5dp">
 
-        <TextView
-            android:id="@+id/notification_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="title"
-            android:textSize="18dp"
-            android:textColor="@color/text1"/>
+        <ImageView
+            android:id="@+id/imgNotificationIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_pencil"
+            android:background="@drawable/rectangle_bgwhite_corner_radius_all"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            />
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginStart="5dp"
+            >
 
             <TextView
-                android:id="@+id/notification_date"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvNotificationTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="date"
-                android:textColor="@color/text1" />
+                android:text="title"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:textColor="@color/text1"/>
+            <TextView
+                android:id="@+id/tvNotificationContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="content"
+                android:textSize="13dp"
+                android:textColor="@color/text1"
+                android:lines="2"
+                />
 
-            <ImageView
-                android:id="@+id/notication_file"
+            <TextView
+                android:id="@+id/tvNotificationTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_file"
-                android:layout_gravity="center"/>
+                android:layout_height="match_parent"
+                android:text="date"
+                android:textSize="12dp"
+                android:textColor="@color/text2" />
 
 
 
@@ -55,6 +72,7 @@
                 android:src="@drawable/ic_new"
                 android:visibility="gone"
                 />
+
         </LinearLayout>
 
     </LinearLayout>

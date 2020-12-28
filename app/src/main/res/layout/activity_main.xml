@@ -31,7 +31,8 @@
         android:background="@color/white"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottomnavigationview"
-        app:itemIconSize="30dp"
+        app:itemIconSize="23dp"
+        android:theme="@style/MaterialAlertDialog.MaterialComponents.Title.Icon.CenterStacked"
         />
 
 
