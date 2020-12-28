@@ -13,11 +13,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.hfad.gamo.DataIOKt;
+
+import static com.hfad.gamo.Component.default_url;
+import static com.hfad.gamo.Component.sharedPreferences;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.sql.Time;
 
@@ -32,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private MyPageFragment f_MyPage = new MyPageFragment();
     private BottomNavigationView bottomNavigationView;
     private boolean flag;
+    private VolleyForHttpMethod volley;
 
     private long firstBackPressTime = 0, secondBackPressTime;
 
@@ -39,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Component.default_url = "http://192.168.50.146:17394";
-        //Component.default_url = "http://112.148.161.36:17394";
-//        Component.default_url = "http://192.168.254.2:17394";
+        default_url = "http://172.30.1.2:17394";
+        //default_url = "http://112.148.161.36:17394";
+//        default_url = "http://192.168.254.2:17394";
 
-        Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
-
-        final SharedPreferences pref = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
-
+        sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+        
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+        
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -59,6 +67,28 @@ public class MainActivity extends AppCompatActivity {
                         // Get new FCM registration token
                         String token = task.getResult();
 
+                        // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
+                        // 서버에 number, token 값 전송
+                        if (!(sharedPreferences.getString("token", "null").equals(token))) {
+                            String tokenUrl = "Good";
+                            sharedPreferences.edit().putString("token", token).apply();
+
+                            JSONObject jsonObject = new JSONObject();
+                            try {
+                                jsonObject.put("number", sharedPreferences.getString("number", null));
+                                jsonObject.put("token",token);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            
+                            volley.postJSONObjectString(jsonObject, tokenUrl, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+
+                                }
+                            }, null);
+                        }
+
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d("TAG", msg);
@@ -67,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 

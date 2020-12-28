@@ -5,29 +5,55 @@ import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+import static com.hfad.gamo.Component.sharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    private VolleyForHttpMethod volley;
+
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
 
-        final SharedPreferences pref = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
-
         String token = s;
+        sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
-        if (!(pref.getString("token", null).equals(token))) {
-            pref.edit().putString("token", token).apply();
-        }
+        // 서버에 number, token 값 전송
+        if (!(sharedPreferences.getString("token", "null").equals(token))) {
+            String tokenUrl = "Good";
+            sharedPreferences.edit().putString("token", token).apply();
 
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("number", sharedPreferences.getString("number", null));
+                jsonObject.put("token",token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            volley.postJSONObjectString(jsonObject, tokenUrl, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, null);
+        }
     }
 
     public void showDataMessage(String msgTitle, String msgContent) {
