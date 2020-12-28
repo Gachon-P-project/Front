@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hfad.gamo.Parse;
 import com.hfad.gamo.R;
 
 import org.json.JSONArray;
@@ -24,18 +23,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+import java.util.TimeZone;
 
 public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
-    private String board_title;
+    private final String board_title;
     private Date date;
-    private DateFormat format = new SimpleDateFormat("yy.MM.dd", Locale.KOREA);
+    private final DateFormat dateFormat;
 
     ClickedBoard_RecyclerAdapter(JSONArray list, String board_title) {
         this.JSONArrayData = list;
         this.board_title = board_title;
+
+        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
+        dateFormat.setTimeZone(timeZone);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -100,10 +103,10 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
         }
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.KOREA);
+        DateFormat dataFormatForFinalDate = new SimpleDateFormat("yy.MM.dd", java.util.Locale.getDefault());
         try {
             assert wrt_date != null;
-            date = df.parse(wrt_date);
+            date = dateFormat.parse(wrt_date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -112,7 +115,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         assert date != null;
         if(date.after(beforeOneHour.getTime())) {
             time =  date.getTime() - beforeOneHour.getTimeInMillis();
-            if(time >= 0 && time < 60000) {
+            if(time > (59 * 60000) && time <= (60 * 600000)) {
                 final_wrt_date = "방금 전";
                 holder.board_date.setText(final_wrt_date);
             } else {
@@ -128,14 +131,14 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_date.setText(final_wrt_date);
             Log.i("time", String.valueOf(timesAgo));
         } else {
-            final_wrt_date = format.format(date);
+            final_wrt_date = dataFormatForFinalDate.format(date);
             holder.board_date.setText(final_wrt_date);
             Log.i("time", String.valueOf(final_wrt_date));
         }
 
         holder.toClickedPosting.setWrt_date(final_wrt_date);
 
-        Log.i("date", date.toString());
+        Log.i("date", dateFormat.format(date));
 
 
 
