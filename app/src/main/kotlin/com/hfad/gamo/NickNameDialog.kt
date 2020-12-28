@@ -4,10 +4,8 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -23,7 +21,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
     private lateinit var listener : MyDialogOKClickedListener
     private lateinit var nicknameEditText: EditText
     private lateinit var nicknameExistentTextView: TextView
-    private lateinit var nicknameRegisterButton: Button
+    private lateinit var nicknameActionButton: Button
     private var volley: VolleyForHttpMethod? = null
     private val nicknameExistent = 15
     private lateinit var nickname: String
@@ -45,8 +43,8 @@ class NickNameDialog(baseLoginActivity: Activity) {
 //
 //        nicknameExistentTextView.visibility = View.INVISIBLE
 
-        nicknameRegisterButton.setOnClickListener {
-            nicknameRegisterButton.isClickable = false
+        nicknameActionButton.setOnClickListener {
+            nicknameActionButton.isClickable = false
 
             nickname = nicknameEditText.text.toString()
             nickname = nickname.replace(" ", "")
@@ -55,7 +53,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
             volley!!.getString(urlNickNameCheck) { response ->
                 if(response.length == nicknameExistent) {
                     nicknameExistentTextView.visibility = View.VISIBLE
-                    nicknameRegisterButton.isClickable = true
+                    nicknameActionButton.isClickable = true
                 } else {
                     setSharedItem("nickname", nickname)
                     val userJsonObject = JSONObject()
@@ -105,24 +103,35 @@ class NickNameDialog(baseLoginActivity: Activity) {
 
         nicknameEditText = dlg.findViewById(R.id.nickname_edit_text)
         nicknameExistentTextView = dlg.findViewById(R.id.nickname_existent)
-        nicknameRegisterButton = dlg.findViewById(R.id.nickname_register)
+        nicknameActionButton = dlg.findViewById(R.id.nickname_register)
         nicknameExistentTextView.visibility = View.INVISIBLE
 
+//        다이얼로그 창 크기 조절
         val params: ViewGroup.LayoutParams? = dlg?.window?.attributes
-//        params?.width = (deviceWidth * 0.9).toInt()
         params?.width = (deviceWidth * 0.95).toInt()
         dlg?.window?.attributes = params as WindowManager.LayoutParams
+
+        nicknameEditText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            var handled = false
+            if(keyCode == KeyEvent.KEYCODE_ENTER || keyCode == EditorInfo.IME_ACTION_DONE) {
+                nicknameActionButton.performClick()
+                handled = true
+            }
+            handled
+        })
+
+
     }
 
     fun updateNickname() {
         var previousNickname = getSharedItem<String>("nickname")
         nicknameEditText.setText(previousNickname)
         nicknameEditText.hint = previousNickname
-        nicknameRegisterButton.text = "닉네임 변경"
+        nicknameActionButton.text = "닉네임 변경"
         dlg.setCancelable(true)
 
-        nicknameRegisterButton.setOnClickListener {
-            nicknameRegisterButton.isClickable = false
+        nicknameActionButton.setOnClickListener {
+            nicknameActionButton.isClickable = false
             nickname = nicknameEditText.text.toString()
             nickname = nickname.replace(" ", "")
             if(nickname == "" || nickname == previousNickname)
@@ -133,7 +142,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
                 volley!!.getString(urlNickNameCheck) { response ->
                     if(response.length == nicknameExistent) {
                         nicknameExistentTextView.visibility = View.VISIBLE
-                        nicknameRegisterButton.isClickable = true
+                        nicknameActionButton.isClickable = true
                     } else {
                         val userJsonObject = JSONObject()
                         userJsonObject.put("nickname", nickname)
@@ -146,7 +155,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
                             dlg.dismiss()
                         }, { error: VolleyError? ->
                             if (error != null) {
-                                nicknameRegisterButton.isClickable = true
+                                nicknameActionButton.isClickable = true
                                 Log.i(TAG, "updateNickname: $error")
                                 Toast.makeText(baseActivity, "인터넷 연결을 확인해 주세요.", Toast.LENGTH_SHORT).show()
                             }
