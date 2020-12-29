@@ -50,11 +50,27 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rViewNotification"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="visible"/>
 
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+
+    <TextView
+        android:id="@+id/tvNotificationNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/actionbarNotification"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="알림이 없습니다 :)"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/text2"
+        android:visibility="gone"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

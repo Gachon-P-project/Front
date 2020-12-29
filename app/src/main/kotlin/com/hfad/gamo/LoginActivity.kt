@@ -117,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
                 var data: JSONObject = responseJSONObject.get("data") as JSONObject
 
                 if (responseJSONObject.get("code") == registeredUser) {
-                    setSharedItem("nickname", data.get("nickname"))
+                    setSharedItem("nickname", data.getString("nickname"))
                     val intent = Intent(this, MainActivity::class.java)
                     this.startActivity(intent, null)
                     this.finish()

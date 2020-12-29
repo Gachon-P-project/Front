@@ -68,4 +68,6 @@
     <color name="gray300">#e0e0e0</color>
     <color name="gray400">#bdbdbd</color>
     <color name="white_brightless">#FAFAFA</color>
+    <color name="reply">#0288D1</color>
+    <color name="like">#c62917</color>
 </resources>

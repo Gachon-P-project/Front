@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.Volley;
 
@@ -33,6 +34,7 @@ public class NotificationFragment extends Fragment {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private JSONArray dataArray;
+    private TextView tvNoData;
     private int unread = 0;
 
     public NotificationFragment() {
@@ -53,41 +55,46 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
-
+        tvNoData = view.findViewById(R.id.tvNotificationNoData);
         swipeRefreshLayout = view.findViewById(R.id.swipeLayoutNotification);
         recyclerView = view.findViewById(R.id.rViewNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        dataArray = new JSONArray();
+        try {
+            dataArray = new JSONArray(Component.sharedPreferences.getString("notification_data", ""));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 //        임시데이터
-        String content = "";
-        for (int i = 0 ; i < 10 ; i++) {
-            String title = "제목 "+i;
-            content += " 내용 내용 내용 " + i;
-            String type = "";
-            switch ((i / 3)) {
-                case 1 :
-                    type = "notice_new";
-                    break;
-                case 2:
-                    type = "board_reply";
-                    break;
-                case 0:
-                    type = "board_like";
-                    break;
-            }
-            String board_no = String.valueOf(1919+3*i);
-            String time = "2020-12-19 15:35:57";
+//        String content = "";
+//        for (int i = 0 ; i < 10 ; i++) {
+//            String title = "제목 "+i;
+//            content += " 내용 내용 내용 " + i;
+//            String type = "";
+//            switch ((i / 3)) {
+//                case 1 :
+//                    type = "notice_new";
+//                    break;
+//                case 2:
+//                    type = "board_reply";
+//                    break;
+//                case 0:
+//                    type = "board_like";
+//                    break;
+//            }
+//            String board_no = String.valueOf(1919+3*i);
+//            String time = "2020-12-19 15:35:57";
+//
+//            try {
+//                JSONObject object = new JSONObject("{\"title\" : \"" + title + "\", \"content\" : \"" + content + "\", \"type\" : \"" + type + "\", " +
+//                        "\"baord_no\" : \"" + board_no + "\", \"time\" : \"" + time + "\" }");
+//                dataArray.put(object);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
 
-            try {
-                JSONObject object = new JSONObject("{\"title\" : \"" + title + "\", \"content\" : \"" + content + "\", \"type\" : \"" + type + "\", " +
-                        "\"baord_no\" : \"" + board_no + "\", \"time\" : \"" + time + "\" }");
-                dataArray.put(object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
 
 
         adapter = new Notification_RecyclerAdapter(dataArray);
@@ -116,5 +123,15 @@ public class NotificationFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setBadge() {
+        adapter.setOnReadSetBadge(new Notification_RecyclerAdapter.OnReadSetBadge() {
+            @Override
+            public void setBadge(int count) {
+                ((MainActivity)getActivity()).setBadge(count);
+            }
+
+        });
     }
 }

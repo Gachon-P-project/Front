@@ -49,7 +49,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_message, parent, false);
+        View view = inflater.inflate(R.layout.item_replies, parent, false);
         CommentAdapter.ViewHolder vh = new CommentAdapter.ViewHolder(view);
 
         return vh;
