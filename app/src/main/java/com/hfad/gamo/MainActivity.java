@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private boolean flag;
     private VolleyForHttpMethod volley;
+    private SharedPreferences pref_token;
 
     private long firstBackPressTime = 0, secondBackPressTime;
 
@@ -47,11 +48,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        default_url = "http://192.168.50.146:17394";
+        //default_url = "http://192.168.50.146:17394";
         //default_url = "http://112.148.161.36:17394";
-//        default_url = "http://192.168.254.2:17394";
+          default_url = "http://172.30.1.2:17394";
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+
+        pref_token = getSharedPreferences("token", Context.MODE_PRIVATE);
+
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
@@ -69,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
                         // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
                         // 서버에 number, token 값 전송
-                        if (!(sharedPreferences.getString("token", "null").equals(token))) {
+                        if (!(pref_token.getString("token", "null").equals(token))) {
                             String tokenUrl = "Good";
-                            sharedPreferences.edit().putString("token", token).apply();
+                            pref_token.edit().putString("token", token).apply();
 
                             JSONObject jsonObject = new JSONObject();
                             try {

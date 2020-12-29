@@ -24,6 +24,7 @@ import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private VolleyForHttpMethod volley;
+    private SharedPreferences pref_token;
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -31,13 +32,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String token = s;
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+        pref_token = getSharedPreferences("token", Context.MODE_PRIVATE);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
         // 서버에 number, token 값 전송
-        if (!(sharedPreferences.getString("token", "null").equals(token))) {
+        if (!(pref_token.getString("token", "null").equals(token))) {
             String tokenUrl = "Good";
-            sharedPreferences.edit().putString("token", token).apply();
+            pref_token.edit().putString("token", token).apply();
 
             JSONObject jsonObject = new JSONObject();
             try {
