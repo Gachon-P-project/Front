@@ -5,7 +5,7 @@
         android:id="@+id/action_open_in_browser"
         android:icon="@drawable/ic_open_in_browser"
         android:title="add"
-        app:iconTint="@color/black"
+        app:iconTint="@color/white"
         app:showAsAction="always"/>
 
 </menu>
