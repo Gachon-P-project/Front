@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+//        super.onBackPressed();
 //        secondBackPressTime = System.currentTimeMillis();
 //        Toast.makeText(this, "이전 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
 //        if(secondBackPressTime - firstBackPressTime < 2000) {

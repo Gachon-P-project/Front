@@ -99,6 +99,7 @@ public class NotificationFragment extends Fragment {
 
 
 
+        swipeRefreshLayout.setColorSchemeResources(R.color.indigo500);
 //        swipe refresh
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
