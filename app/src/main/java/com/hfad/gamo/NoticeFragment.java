@@ -57,7 +57,6 @@ public class NoticeFragment extends Fragment {
     private String search_word = "";
     InputMethodManager imm;
     private boolean isResult = true;
-    private static Context context;
 
     private int page = 0;
 
@@ -67,7 +66,6 @@ public class NoticeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getContext();
 
         prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
@@ -77,7 +75,7 @@ public class NoticeFragment extends Fragment {
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
         page = 0;
-        getFirstNotiList(new VolleyCallback() {
+        getFirstNoticeList(new VolleyCallback() {
             @Override
             public void onSuccess() {
 
@@ -127,7 +125,7 @@ public class NoticeFragment extends Fragment {
                 responseJSONArray = new JSONArray();
 
                 if(!isSearching) {
-                    getFirstNotiList(new VolleyCallback() {
+                    getFirstNoticeList(new VolleyCallback() {
                         @Override
                         public void onSuccess() {
                             initRecyclerView();
@@ -137,7 +135,7 @@ public class NoticeFragment extends Fragment {
                         }
                     });
                 } else {
-                    getFirstSearchedNoti(new VolleyCallback() {
+                    getFirstSearchedNotice(new VolleyCallback() {
                         @Override
                         public void onSuccess() {
                             initRecyclerView();
@@ -165,7 +163,7 @@ public class NoticeFragment extends Fragment {
                 page = 0;
                 responseJSONArray = new JSONArray();
                 search_word = editText.getText().toString();
-                getFirstSearchedNoti(new VolleyCallback() {
+                getFirstSearchedNotice(new VolleyCallback() {
                     @Override
                     public void onSuccess() {
                         initRecyclerView();
@@ -183,7 +181,7 @@ public class NoticeFragment extends Fragment {
             public void onClick(View v) {
                 page = 0;
                 search_word = editText.getText().toString();
-                getFirstSearchedNoti(new VolleyCallback() {
+                getFirstSearchedNotice(new VolleyCallback() {
                     @Override
                     public void onSuccess() {
                         initRecyclerView();
@@ -203,7 +201,7 @@ public class NoticeFragment extends Fragment {
                 search_word = "";
                 page = 0;
                 responseJSONArray = new JSONArray();
-                getFirstNotiList(new VolleyCallback() {
+                getFirstNoticeList(new VolleyCallback() {
                     @Override
                     public void onSuccess() {
                         initRecyclerView();
@@ -225,7 +223,7 @@ public class NoticeFragment extends Fragment {
 
         Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_clicked_board);
         ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + " 공지사항</b>", 0));
 
     }
 
@@ -252,9 +250,9 @@ public class NoticeFragment extends Fragment {
                         }
                     });
                     if(!isSearching) {
-                        getMoreNotiList();
+                        getMoreNoticeList();
                     } else {
-                        getMoreSearchedNoti();
+                        getMoreSearchedNotice();
                     }
                 } else  {
                     Toast.makeText(getActivity(), "검색 완료", Toast.LENGTH_SHORT).show();
@@ -264,7 +262,7 @@ public class NoticeFragment extends Fragment {
     }
 
     //    전체 조회. 첫번째에만 사용됨. 데이터 가져오는 함수.
-    private void getFirstNotiList(final VolleyCallback callback) {
+    private void getFirstNoticeList(final VolleyCallback callback) {
         url = default_url + getString(R.string.noticeList, page, dept);
         Log.d(TAG, "getAllNoti: url : " + url);
 
@@ -290,7 +288,7 @@ public class NoticeFragment extends Fragment {
     }
 
     //    두번째부터 사용됨. 데이터 추가로 가져올때 사용.
-    private void getMoreNotiList() {
+    private void getMoreNoticeList() {
         url = default_url + getString(R.string.noticeList, page, dept);
 
         tempJSONArray = new JSONArray();
@@ -328,7 +326,7 @@ public class NoticeFragment extends Fragment {
     }
 
 //    검색 기능 (처음)
-    private void getFirstSearchedNoti(final VolleyCallback callback) {
+    private void getFirstSearchedNotice(final VolleyCallback callback) {
         url = default_url + getString(R.string.noticeSearchedList, page, dept, search_word);
         Log.d("FRAGMENT::", "SEARCH :: URL : " + url);
 
@@ -360,7 +358,7 @@ public class NoticeFragment extends Fragment {
     }
 
     //    검색 기능 (추가)
-    private void getMoreSearchedNoti() {
+    private void getMoreSearchedNotice() {
         url = default_url + getString(R.string.noticeSearchedList, page, dept, search_word);
         Log.d("FRAGMENT::", "SEARCH More :: URL : " + url);
 

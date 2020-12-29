@@ -66,4 +66,5 @@
     <color name="gray200">#eeeeee</color>
     <color name="gray300">#e0e0e0</color>
     <color name="gray400">#bdbdbd</color>
+    <color name="white_brightless">#FAFAFA</color>
 </resources>

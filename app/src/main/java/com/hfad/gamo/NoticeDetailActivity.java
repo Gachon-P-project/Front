@@ -78,7 +78,7 @@ public class NoticeDetailActivity extends AppCompatActivity {
         setSupportActionBar(tb);
         getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_black);
 
         Intent intent = getIntent();
         board_no = intent.getStringExtra("board_no");

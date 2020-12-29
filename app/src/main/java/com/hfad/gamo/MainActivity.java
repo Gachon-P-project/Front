@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -31,15 +32,18 @@ import java.sql.Time;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
     // TEST GIT
     private FragmentManager fm = getSupportFragmentManager();
     private com.hfad.gamo.timeTable.TimeTableFragment f_TimeTable2 = new com.hfad.gamo.timeTable.TimeTableFragment();
     private NoticeFragment f_Notice = new NoticeFragment();
     private BoardFragment f_Board = new BoardFragment();
     private MyPageFragment f_MyPage = new MyPageFragment();
+    private NotificationFragment f_Notification = new NotificationFragment();
     private BottomNavigationView bottomNavigationView;
     private boolean flag;
     private VolleyForHttpMethod volley;
+    private BadgeDrawable notificationBadge = null;
     private SharedPreferences pref_token;
 
     private long firstBackPressTime = 0, secondBackPressTime;
@@ -48,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //default_url = "http://192.168.50.146:17394";
+        default_url = "http://192.168.50.146:17394";
         //default_url = "http://112.148.161.36:17394";
-          default_url = "http://172.30.1.2:17394";
+//        default_url = "http://192.168.254.2:17394";
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
 
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
                         // 서버에 number, token 값 전송
                         if (!(pref_token.getString("token", "null").equals(token))) {
-                            String tokenUrl = "Good";
+                            String tokenUrl = default_url+"/token/add";
                             pref_token.edit().putString("token", token).apply();
 
                             JSONObject jsonObject = new JSONObject();
@@ -124,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+//        읽지 않은 알림 개수 설정 & 알림 뱃지 설정
+        setUnread(getUnread());
     }
 
     @Override
@@ -162,6 +170,10 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment, f_Board).commitAllowingStateLoss();
                 break;
             }
+
+            case R.id.bottomNavigationNotification :
+                fragmentTransaction.replace(R.id.fragment, f_Notification).commitAllowingStateLoss();
+                break;
 
             case R.id.bottomNavigationMyPage: {
                 fragmentTransaction.replace(R.id.fragment, f_MyPage).commitAllowingStateLoss();
@@ -203,4 +215,26 @@ public class MainActivity extends AppCompatActivity {
         ft.detach(fragment).attach(fragment).commit();
     }
 
+//    네비바 알림 뱃지
+    public void setBadge(int count) {
+        if(count != 0 ) {
+            if(notificationBadge == null)
+                notificationBadge = bottomNavigationView.getOrCreateBadge(R.id.bottomNavigationNotification);
+            notificationBadge.setVisible(true);
+            notificationBadge.setNumber(count);
+        } else if(notificationBadge != null) {
+                notificationBadge.setVisible(false);
+                notificationBadge.clearNumber();
+        }
+    }
+
+//    읽지 않은 알림 개수 설정
+    public void setUnread(int unread) {
+        sharedPreferences.edit().putInt("unread", unread).apply();
+        setBadge(unread);
+    }
+//    읽지 않은 알림 개수 가져오기
+    public int getUnread() {
+        return sharedPreferences.getInt("unread", 0);
+    }
 }
