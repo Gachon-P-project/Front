@@ -43,8 +43,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-//        default_url = "http://172.30.1.2:17394"
-
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         var edtPassword = findViewById<EditText>(R.id.pwd);

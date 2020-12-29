@@ -52,14 +52,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        default_url = "http://192.168.50.146:17394";
-        //default_url = "http://112.148.161.36:17394";
-//        default_url = "http://192.168.254.2:17394";
-
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
 
         pref_token = getSharedPreferences("token", Context.MODE_PRIVATE);
-
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
