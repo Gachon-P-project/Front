@@ -156,4 +156,10 @@ public class ClickedBoardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        finish();
+    }
 }
