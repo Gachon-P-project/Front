@@ -1,6 +1,7 @@
 package com.hfad.gamo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +14,12 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.joda.time.LocalDate;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -34,18 +32,15 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private LinearLayoutManager linearLayoutManager;
     private Context context;
     private JSONArray dataArray;
+    private NotificationFragment fragment;
 
-    private TextView tvTitle, tvContent, tvTime;
-    private ImageView imgIcon;
-    private androidx.cardview.widget.CardView cardView;
-
-    private OnReadSetBadge onReadSetBadge;
     private int unread = DataIOKt.getUnread();
 
 
-    public Notification_RecyclerAdapter(JSONArray dataArray) {
+    public Notification_RecyclerAdapter(JSONArray dataArray, NotificationFragment fragment) {
         super();
         this.dataArray = dataArray;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -55,35 +50,23 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification, parent, false);
 
-        tvTitle = view.findViewById(R.id.tvNotificationTitle);
-        tvContent = view.findViewById(R.id.tvNotificationContent);
-        tvTime = view.findViewById(R.id.tvNotificationTime);
-        imgIcon = view.findViewById(R.id.imgNotificationIcon);
-        cardView = view.findViewById(R.id.cardviewNotification);
 
-        RecyclerView.ViewHolder viewHolder = new RecyclerView.ViewHolder(view) {
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        };
-
-        return viewHolder;
+        return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
 
         JSONObject data;
         final String title, content, type, board_no;
         Date date = null;
-        boolean isRead;
+        final boolean isRead;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
         dateFormat.setTimeZone(timeZone);
 
         try {
-            data = dataArray.getJSONObject(position);
+            data = dataArray.getJSONObject((dataArray.length() - position - 1));
             title = data.getString("title");
             content = data.getString("content");
 //            type = data.getString("type");
@@ -91,9 +74,10 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             date = dateFormat.parse(data.getString("time"));
             String sTime = new SimpleDateFormat("MM-dd HH:mm").format(date);
             isRead = data.getBoolean("isRead");
-            tvTitle.setText(title);
-            tvContent.setText(content);
-            tvTime.setText(sTime);
+            ((viewHolder)holder).tvTitle.setText(title);
+            ((viewHolder)holder).tvContent.setText(content);
+            ((viewHolder)holder).tvTime.setText(sTime);
+//            androidx.cardview.widget.CardView cardView;
 //            switch (type) {
 //                case "notice_new" :
 //                    break;
@@ -110,13 +94,15 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 //                    break;
 //            }
             if(!isRead) {
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
+                ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                    ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                    if(!isRead)
+                        setRead(position, true);
 //                    switch (type) {
 //                        case "notice_new" :
 //                            break;
@@ -172,29 +158,22 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     public boolean setRead(int position, boolean isRead ) {
         try {
-            JSONObject obj = dataArray.getJSONObject(position);
+            Log.d(TAG, String.format("setRead: position : %d, isRead : " + isRead, position));
+            JSONObject obj = dataArray.getJSONObject((dataArray.length() - position - 1));
+            Log.d(TAG, "setRead: before : " + dataArray.toString());
             obj.put("isRead", isRead);
-//            obj.a("unread", isRead);
-            dataArray.put(position, obj);
+            dataArray.put((dataArray.length() - position - 1), obj);
             this.notifyDataSetChanged();
+            Log.d(TAG, "setRead: after : " + dataArray.toString());
             unread = isRead ? (unread-1) : (unread+1);
+            fragment.setBadge(unread);
 
-            onReadSetBadge.setBadge(unread);
             return true;
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
         }
     }
-
-    public interface OnReadSetBadge {
-        void setBadge(int count);
-    }
-
-    public void setOnReadSetBadge(OnReadSetBadge mOnReadSetBadge){
-        this.onReadSetBadge = mOnReadSetBadge;
-    }
-
 
 
 
