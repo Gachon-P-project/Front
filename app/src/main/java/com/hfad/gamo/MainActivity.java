@@ -127,10 +127,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mbn = new MainBottomNavigation(bottomNavigationView);
-//        읽지 않은 알림 개수 설정 & 알림 뱃지 설정
-        mbn.setBadge(DataIOKt.getUnread());
-
     }
 
     @Override

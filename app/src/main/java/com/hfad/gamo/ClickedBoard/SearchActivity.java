@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SearchActivity extends AppCompatActivity {
+    private static final String TAG = "SearchActivity";
     private static JSONObject requestJSONObject = new JSONObject();
     private static VolleyForHttpMethod volley;
     private static JSONArray requestJSONArray = new JSONArray();
@@ -37,7 +38,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         Intent intent = getIntent();
-        String title = intent.getExtras().getString("title");
+        String subject = intent.getExtras().getString("subject", "");
         final String board_title = intent.getExtras().getString("board_title");
 
         ImageView back_btn = (ImageView) findViewById(R.id.btn_back);
@@ -51,7 +52,7 @@ public class SearchActivity extends AppCompatActivity {
         final RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final EditText search_edit = (EditText) findViewById(R.id.edit);
+        final EditText search_edit = (EditText) findViewById(R.id.edtSearch);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
         search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
