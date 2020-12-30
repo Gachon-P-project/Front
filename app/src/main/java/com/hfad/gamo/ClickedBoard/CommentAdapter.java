@@ -1,7 +1,6 @@
 package com.hfad.gamo.ClickedBoard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import com.hfad.gamo.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
     private JSONArray JSONArrayData = null;
@@ -49,7 +46,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_message, parent, false);
+        View view = inflater.inflate(R.layout.item_replies, parent, false);
         CommentAdapter.ViewHolder vh = new CommentAdapter.ViewHolder(view);
 
         return vh;

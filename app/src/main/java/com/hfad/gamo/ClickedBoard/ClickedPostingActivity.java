@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+/*import androidx.recyclerview.widget.DividerItemDecoration;*/
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -103,7 +103,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
                             responseJSONArray.remove(--current_length);
                         }
 
-                        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
+                        String url = Component.default_url.concat(getString(R.string.inquireReplies,"8"));
 
                         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                             @Override
@@ -130,8 +130,11 @@ public class ClickedPostingActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                R.drawable.line_divider);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
-        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
+        String url = Component.default_url.concat(getString(R.string.inquireReplies,"8"));
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override

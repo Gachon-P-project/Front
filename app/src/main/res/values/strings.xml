@@ -25,9 +25,12 @@
     <string name="modifyPosting">/board/update/%1$s</string>
     <string name="deletePosting">/board/delete/%1$s</string>
     <string name="postReply">/reply/insert/%1$s/%2$s</string>
+    <string name="postReReply">/reply/insert/rereply/%1$s/%2$s/%3$s</string>
     <string name="inquireReplies">/reply/read/%1$s</string>
     <string name="modifyReply">/reply/update/%1$s</string>
+    <string name="modifyReReply">/reply/update/rereply/$1$s</string>
     <string name="deleteReply">/reply/delete/%1$s</string>
+    <string name="deleteReReply">/reply/delete/rereply/%1$s</string>
     <string name="inquireNotification">/notice/read/%1$s/%2$s</string>
     <string name="searchNotification">/notice/read/%1$s/%2$s/%3$s</string>
     <string name="registerUser">/user/add</string>
