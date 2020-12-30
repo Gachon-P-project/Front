@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private boolean flag;
     private VolleyForHttpMethod volley;
-    private BadgeDrawable notificationBadge = null;
     private SharedPreferences pref_token;
+    private MainBottomNavigation mbn;
 
     private long firstBackPressTime = 0, secondBackPressTime;
 
@@ -125,8 +125,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        mbn = new MainBottomNavigation(bottomNavigationView);
 //        읽지 않은 알림 개수 설정 & 알림 뱃지 설정
-        setUnread(getUnread());
+        mbn.setBadge(DataIOKt.getUnread());
     }
 
     @Override
@@ -211,26 +212,8 @@ public class MainActivity extends AppCompatActivity {
         ft.detach(fragment).attach(fragment).commit();
     }
 
-//    네비바 알림 뱃지
-    public void setBadge(int count) {
-        if(count != 0 ) {
-            if(notificationBadge == null)
-                notificationBadge = bottomNavigationView.getOrCreateBadge(R.id.bottomNavigationNotification);
-            notificationBadge.setVisible(true);
-            notificationBadge.setNumber(count);
-        } else if(notificationBadge != null) {
-                notificationBadge.setVisible(false);
-                notificationBadge.clearNumber();
-        }
+    public void setBadge(int unread) {
+        mbn.setBadge(unread);
     }
 
-//    읽지 않은 알림 개수 설정
-    public void setUnread(int unread) {
-        sharedPreferences.edit().putInt("unread", unread).apply();
-        setBadge(unread);
-    }
-//    읽지 않은 알림 개수 가져오기
-    public int getUnread() {
-        return sharedPreferences.getInt("unread", 0);
-    }
 }

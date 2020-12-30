@@ -9,11 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.joda.time.LocalDate;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -36,6 +38,9 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private TextView tvTitle, tvContent, tvTime;
     private ImageView imgIcon;
     private androidx.cardview.widget.CardView cardView;
+
+    private OnReadSetBadge onReadSetBadge;
+    private int unread = DataIOKt.getUnread();
 
 
     public Notification_RecyclerAdapter(JSONArray dataArray) {
@@ -72,6 +77,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         JSONObject data;
         final String title, content, type, board_no;
         Date date = null;
+        boolean isRead;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
         dateFormat.setTimeZone(timeZone);
@@ -80,44 +86,49 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             data = dataArray.getJSONObject(position);
             title = data.getString("title");
             content = data.getString("content");
-            type = data.getString("type");
-            board_no = data.getString("baord_no");
+//            type = data.getString("type");
+//            board_no = data.getString("baord_no");
             date = dateFormat.parse(data.getString("time"));
             String sTime = new SimpleDateFormat("MM-dd HH:mm").format(date);
+            isRead = data.getBoolean("isRead");
             tvTitle.setText(title);
             tvContent.setText(content);
             tvTime.setText(sTime);
-            switch (type) {
-                case "notice_new" :
-                    break;
-                case "board_imply" :
-                    break;
-                case "board_reply" :
-                    break;
-                case "board_like" :
-                    break;
-                case "board_newPost_bookmark" :
-                    break;
-                default:
-                    imgIcon.setImageResource(R.drawable.ic_pencil);
-                    break;
+//            switch (type) {
+//                case "notice_new" :
+//                    break;
+//                case "board_imply" :
+//                    break;
+//                case "board_reply" :
+//                    break;
+//                case "board_like" :
+//                    break;
+//                case "board_newPost_bookmark" :
+//                    break;
+//                default:
+//                    imgIcon.setImageResource(R.drawable.ic_pencil);
+//                    break;
+//            }
+            if(!isRead) {
+                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switch (type) {
-                        case "notice_new" :
-                            break;
-                        case "board_imply" :
-                            break;
-                        case "board_reply" :
-                            break;
-                        case "board_like" :
-                            break;
-                        case "board_newPost_bookmark" :
-                            break;
-                    }
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+//                    switch (type) {
+//                        case "notice_new" :
+//                            break;
+//                        case "board_imply" :
+//                            break;
+//                        case "board_reply" :
+//                            break;
+//                        case "board_like" :
+//                            break;
+//                        case "board_newPost_bookmark" :
+//                            break;
+//                    }
                 }
             });
 
@@ -131,7 +142,10 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemCount() {
-        return dataArray.length();
+        if(dataArray == null)
+            return 0;
+        else
+            return dataArray.length();
     }
 
     public void setRecyclerView(RecyclerView recyclerView) {
@@ -155,6 +169,34 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             cardView = itemView.findViewById(R.id.cardviewNotification);
         }
     }
+
+    public boolean setRead(int position, boolean isRead ) {
+        try {
+            JSONObject obj = dataArray.getJSONObject(position);
+            obj.put("isRead", isRead);
+//            obj.a("unread", isRead);
+            dataArray.put(position, obj);
+            this.notifyDataSetChanged();
+            unread = isRead ? (unread-1) : (unread+1);
+
+            onReadSetBadge.setBadge(unread);
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public interface OnReadSetBadge {
+        void setBadge(int count);
+    }
+
+    public void setOnReadSetBadge(OnReadSetBadge mOnReadSetBadge){
+        this.onReadSetBadge = mOnReadSetBadge;
+    }
+
+
+
 
 
 }

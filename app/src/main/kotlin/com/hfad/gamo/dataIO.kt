@@ -3,8 +3,8 @@
 package com.hfad.gamo
 
 import com.hfad.gamo.Component.sharedPreferences
-import java.lang.Exception
-import java.util.HashMap
+import java.util.*
+import kotlin.collections.HashSet
 
 
 const val appConstantPreferences = "Moga"
@@ -70,5 +70,13 @@ fun removeSharedItems(vararg keys: String) = sharedPreferences.edit().apply {
         }
     }
 }.commit()
+
+fun setUnread(unread: Int) {
+    sharedPreferences.edit().putInt("unread", unread).apply()
+}
+
+fun getUnread(): Int {
+    return sharedPreferences.getInt("unread", 0)
+}
 
 fun resetSharedPreference() = sharedPreferences.edit().clear().commit()
