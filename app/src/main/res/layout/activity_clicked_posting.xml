@@ -66,32 +66,33 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
-                <LinearLayout
-                    android:id="@+id/post_like_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_round_border_like"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/post_like_btn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:padding="8dp">-->
 
-                    <ImageView
-                        android:id="@+id/post_thumb_up"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:src="@drawable/thumb_up" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/post_thumb_up"-->
+<!--                        android:layout_width="20dp"-->
+<!--                        android:layout_height="20dp"-->
+<!--                        android:src="@drawable/ic_like"-->
 
-                    <TextView
-                        android:id="@+id/tv_in_post_thumb_up"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="공감"
-                        android:textColor="@color/text1"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+<!--                        />-->
 
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_in_post_thumb_up"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="5dp"-->
+<!--                        android:text="공감"-->
+<!--                        android:textColor="@color/text1"-->
+<!--                        android:textSize="12sp"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                </LinearLayout>-->
 
 
             </LinearLayout>
@@ -126,24 +127,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/comment"
-                    android:layout_gravity="bottom"
-                    android:paddingBottom="2dp"
-                    />
-                <TextView
-                    android:id="@+id/reply_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:layout_marginStart="5dp"
-                    android:text="0"
-                    android:textColor="#B38000"/>
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginStart="10dp"
-                    android:src="@drawable/thumb_up"
+                    android:src="@drawable/ic_like_filled"
                     android:layout_gravity="center"
                     />
                 <TextView
@@ -153,7 +137,24 @@
                     android:textSize="16sp"
                     android:layout_marginStart="5dp"
                     android:text="0"
-                    android:textColor="@color/indigo500"/>
+                    android:textColor="@color/like"/>
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/comment"
+                    android:layout_gravity="bottom"
+                    android:paddingBottom="2dp"
+                    android:layout_marginStart="10dp"
+                    />
+                <TextView
+                    android:id="@+id/reply_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginStart="5dp"
+                    android:text="0"
+                    android:textColor="@color/reply"/>
+
 
 
             </LinearLayout>

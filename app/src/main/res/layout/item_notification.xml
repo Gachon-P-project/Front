@@ -4,28 +4,30 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardviewNotification"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="90dp"
     android:layout_gravity="center"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="0dp"
     android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp">
+    android:layout_marginRight="5dp"
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imgNotificationIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_pencil"
-            android:background="@drawable/rectangle_bgwhite_corner_radius_all"
-            android:layout_margin="10dp"
-            android:layout_gravity="center"
+            android:src="@drawable/ic_like"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:paddingTop="0dp"
+            android:layout_gravity="center_horizontal"
             />
 
 

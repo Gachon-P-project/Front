@@ -126,7 +126,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
         });
 
 
-        like_btn = findViewById(R.id.post_like_btn);    // 공감 버튼
+//        like_btn = findViewById(R.id.post_like_btn);    // 공감 버튼
 
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
