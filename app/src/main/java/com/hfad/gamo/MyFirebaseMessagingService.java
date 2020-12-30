@@ -1,19 +1,18 @@
 package com.hfad.gamo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 import static com.hfad.gamo.Component.sharedPreferences;
 
 import androidx.annotation.NonNull;
-
+import androidx.lifecycle.MutableLiveData;
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -32,7 +31,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMessagingService";
     private VolleyForHttpMethod volley;
     private SharedPreferences pref_token;
-
+    private MutableLiveData<Integer> liveData = new MutableLiveData();
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -136,9 +135,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             DataIOKt.setUnread(unread);
 
 
-
+            Intent intent = new Intent();
+            intent.putExtra("unread", unread);
+            intent.setAction("com.hfad.gamo.saveMessage");
+            sendBroadcast(intent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+
 }
