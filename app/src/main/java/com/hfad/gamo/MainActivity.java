@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean flag;
     private VolleyForHttpMethod volley;
     private SharedPreferences pref_token;
-    private MainBottomNavigation mbn;
+    private BadgeDrawable notificationBadge = null;
 
     private long firstBackPressTime = 0, secondBackPressTime;
 
@@ -224,9 +224,19 @@ public class MainActivity extends AppCompatActivity {
         ft.detach(fragment).attach(fragment).commit();
     }
 
-    public void setBadge(int unread) {
-        mbn.setBadge(unread);
+
+    public void setBadge(int count) {
+        if(count > 0 ) {
+            if(notificationBadge == null)
+                notificationBadge = bottomNavigationView.getOrCreateBadge(R.id.bottomNavigationNotification);
+            notificationBadge.setVisible(true);
+            notificationBadge.setNumber(count);
+        } else if(notificationBadge != null) {
+            notificationBadge.setVisible(false);
+            notificationBadge.clearNumber();
+        }
     }
+
 
     private class MyBroadcastReceiver extends BroadcastReceiver {
         @Override
@@ -236,5 +246,6 @@ public class MainActivity extends AppCompatActivity {
             setBadge(newUnread);
         }
     }
+
 
 }

@@ -3,16 +3,18 @@ package com.hfad.gamo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 import static com.hfad.gamo.Component.sharedPreferences;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
+
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -31,7 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMessagingService";
     private VolleyForHttpMethod volley;
     private SharedPreferences pref_token;
-    private MutableLiveData<Integer> liveData = new MutableLiveData();
+
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -113,36 +115,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             JSONObject obj = new JSONObject(msg);
             String oldData = sharedPreferences.getString("notification_data", null);
             JSONArray newData;
-            int unread = 0;
+            int unread = DataIOKt.getUnread();
             if(oldData == null)
                 newData = new JSONArray();
             else
                 newData = new JSONArray(oldData);
 
             newData.put(obj);
+            unread++;
+
+//            데이터가 40개가 넘으면 첫번째 데이터 지움.
             if (newData.length() >= 40) {
+                if(!newData.getJSONObject(0).getBoolean("isRead"))
+                    unread--;
                 newData.remove(0);
                 Log.i(TAG, "saveMessage: first message deleted");
             }
-            sharedPreferences.edit().putString("notification_data", newData.toString()).commit();
+//            sharedPreferences.edit().putString("notification_data", newData.toString()).commit();
+            DataIOKt.setNotifications(newData.toString());
             Log.i(TAG, "saveMessage: message saved!");
 
 //            읽지 않은 알림 숫자
-            for (int i = 0 ; i < newData.length() ; i++) {
-                if(newData.getJSONObject(i).getBoolean("isRead") == false)
-                    unread++;
-            }
+//            for (int i = 0 ; i < newData.length() ; i++) {
+//                if(newData.getJSONObject(i).getBoolean("isRead") == false)
+//                    unread++;
+//            }
             DataIOKt.setUnread(unread);
-
 
             Intent intent = new Intent();
             intent.putExtra("unread", unread);
             intent.setAction("com.hfad.gamo.saveMessage");
             sendBroadcast(intent);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-
 }

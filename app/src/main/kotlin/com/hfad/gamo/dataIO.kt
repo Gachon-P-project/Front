@@ -72,11 +72,18 @@ fun removeSharedItems(vararg keys: String) = sharedPreferences.edit().apply {
 }.commit()
 
 fun setUnread(unread: Int) {
-    sharedPreferences.edit().putInt("unread", unread).apply()
+    sharedPreferences.edit().putInt("unread", unread).commit()
 }
 
 fun getUnread(): Int {
     return sharedPreferences.getInt("unread", 0)
+}
+
+fun setNotifications(newData: String) {
+    sharedPreferences.edit().putString("notification_data", newData).commit()
+}
+fun getNotifications(): String? {
+    return sharedPreferences.getString("notification_data", "")
 }
 
 fun resetSharedPreference() = sharedPreferences.edit().clear().commit()

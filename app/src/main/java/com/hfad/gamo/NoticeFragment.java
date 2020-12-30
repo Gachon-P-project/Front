@@ -234,6 +234,7 @@ public class NoticeFragment extends Fragment {
 
     }
 
+//    infinite scroll
     private void loadPost() {
         adapter.setOnLoadMoreListener(new Notice_RecyclerAdapter.OnLoadMoreListener() {
             @Override
@@ -418,7 +419,8 @@ public class NoticeFragment extends Fragment {
         adapter.setRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         loadPost();
-        adapter.dataUpdate();
+//        adapter.dataUpdate();
+        adapter.notifyDataSetChanged();
     }
 
 }
