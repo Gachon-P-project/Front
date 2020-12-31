@@ -51,7 +51,7 @@ public class WritingActivity extends AppCompatActivity {
 
         title_edit.addTextChangedListener(titleWatcher);
 
-        intent = getIntent();// major, subject, professor, user
+        intent = getIntent();// major, subject, professor, user_no
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +105,7 @@ public class WritingActivity extends AppCompatActivity {
             requestJSONObject.put("major_name", intent.getExtras().getString("major"));
             requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
             requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
-            requestJSONObject.put("user_id", intent.getExtras().getString("user"));
+            requestJSONObject.put("user_no", intent.getExtras().getString("user_no"));
         } catch(JSONException e) {
             e.printStackTrace();
         }

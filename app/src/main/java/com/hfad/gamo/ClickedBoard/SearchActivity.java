@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static android.view.KeyEvent.KEYCODE_ENTER;
+
 public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
     private static JSONObject requestJSONObject = new JSONObject();
@@ -63,7 +65,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 requestJSONArray = new JSONArray();
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
                 initRecyclerView();
                 finish();
             }
@@ -79,29 +81,21 @@ public class SearchActivity extends AppCompatActivity {
         search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                switch (i) {
-                    case EditorInfo.IME_ACTION_SEARCH:
+                if( i == EditorInfo.IME_ACTION_SEARCH || i == KEYCODE_ENTER) {
                         loadingDialog.start(SearchActivity.this);
                         String word = search_edit.getText().toString();
                         url = Component.default_url.concat(getString(R.string.searchWantedPostingsOfBoard,subject, professor, user_no, word));
-
                         Log.d(TAG, "onEditorAction: url : " + url);
-
-
                         search(new NoticeFragment.VolleyCallback() {
                             @Override
                             public void onSuccess() {
-
                                 adapter.notifyDataSetChanged();
                                 initRecyclerView();
 
                             }
                         });
-
-
                         adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, subject);
                         recyclerView.setAdapter(adapter);
-                        break;
                 }
                 return true;
             }

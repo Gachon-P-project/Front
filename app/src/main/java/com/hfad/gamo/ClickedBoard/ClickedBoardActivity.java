@@ -37,7 +37,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
     private ArrayList<String> a = new ArrayList<>();
     private String url;
     private String board_title;
-    private String professor, user_no;
+    private String professor, user_no, department;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,8 @@ public class ClickedBoardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         board_title = intent.getExtras().getString("title");
         professor = intent.getExtras().getString("professor");
-        user_no = sharedPreferences.getString("number", null);
+        user_no = sharedPreferences.getString("number", "");
+        department = sharedPreferences.getString("department", "");
         Log.d(TAG, "onCreate: title : " + board_title + ", professor : " + professor);
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
@@ -149,10 +150,15 @@ public class ClickedBoardActivity extends AppCompatActivity {
                 user_id: req.body.user_id
                  */
                 intent = new Intent(getBaseContext(), WritingActivity.class);
-                intent.putExtra("major", "컴퓨터공학과");
-                intent.putExtra("subject", "컴퓨터구조");
-                intent.putExtra("professor", "이상순");
-                intent.putExtra("user", "jy11290");
+//                intent.putExtra("major", "컴퓨터공학과");
+//                intent.putExtra("subject", "컴퓨터구조");
+//                intent.putExtra("professor", "이상순");
+//                intent.putExtra("user", "jy11290");
+                intent.putExtra("major", department);
+                intent.putExtra("subject", board_title);
+                intent.putExtra("professor", professor);
+                intent.putExtra("user_no", user_no);
+
                 startActivity(intent);
                 return true;
             default :
