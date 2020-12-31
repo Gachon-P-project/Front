@@ -3,24 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/rectangle_bgwhite_corner_radius_all"
     android:padding="20dp"
     >
 
 
     <ProgressBar
         android:id="@+id/progress_LoginDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvLoginDialog"
-        android:layout_marginEnd="20dp"
-        android:indeterminateTint="@color/colorPrimary"
         style="?android:attr/progressBarStyleSmall"
-        />
-    <TextView
+        android:layout_width="32dp"
+        android:layout_height="24dp"
+        android:indeterminateTint="@color/indigoA700"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--<TextView
         android:id="@+id/tvLoginDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,11 +25,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/progress_LoginDialog"
-        android:text="잠시 기다려 주세요."
+        android:text="로그인 중입니다."
         android:textColor="@color/BLACK"
         android:textSize="20sp"
 
-        />
+        />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

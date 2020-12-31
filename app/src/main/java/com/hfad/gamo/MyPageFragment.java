@@ -1,5 +1,6 @@
 package com.hfad.gamo;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -8,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -25,18 +25,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 import static com.hfad.gamo.DataIOKt.resetSharedPreference;
 
-///**
-// * A simple {@link Fragment} subclass.
-// * Use the {@link MyPageFragment#newInstance} factory method to
-// * create an instance of this fragment.
-// */
 public class MyPageFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private SharedPreferences prefs;
 
     private NickNameDialog nickNameDialog;
@@ -51,15 +40,6 @@ public class MyPageFragment extends Fragment {
 
 
 
-
-//    public static MyPageFragment newInstance(String param1, String param2) {
-//        MyPageFragment fragment = new MyPageFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,7 +111,8 @@ public class MyPageFragment extends Fragment {
         llAppInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "이용 안내", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), InformationActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -188,5 +169,7 @@ public class MyPageFragment extends Fragment {
             super.onProgressUpdate(values);
         }
     }
+
+
 
 }

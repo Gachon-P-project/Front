@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.sql.Time;
 
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+import static com.hfad.gamo.DataIOKt.getUnread;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -126,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        setBadge(getUnread());
 
     }
 

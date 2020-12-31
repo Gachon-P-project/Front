@@ -25,7 +25,7 @@ class LoadingDialog {
         dlg = Dialog(context)
         dlg?.setCanceledOnTouchOutside(false)
         dlg?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dlg?.setContentView(R.layout.dialog_login)
+        dlg?.setContentView(R.layout.dialog_loading)
         dlg?.window!!.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         Log.i("dialog", "start")
         dlg?.show()

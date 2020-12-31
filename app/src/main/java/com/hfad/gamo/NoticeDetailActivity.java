@@ -51,8 +51,6 @@ public class NoticeDetailActivity extends AppCompatActivity {
     private WebView wvContent;
     private LinearLayout llFiles;
     private androidx.appcompat.widget.Toolbar tb;
-//    private com.google.android.material.bottomnavigation.BottomNavigationView bottomNavNoticeDetail;
-//    private List<String> fileUrls;
 
 
     @Override
@@ -69,8 +67,6 @@ public class NoticeDetailActivity extends AppCompatActivity {
         wvContent = findViewById(R.id.wvNoticeDetailContent);
         tb = findViewById(R.id.toolbarNoticeDetail);
 
-//        bottomNavNoticeDetail = findViewById(R.id.bottomNavNoticeDetail);
-//        bottomNavNoticeDetail.setSelectedItemId(R.id.bottomNavigationNotice);
 
         prefs = context.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);

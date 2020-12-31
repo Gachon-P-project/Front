@@ -11,6 +11,11 @@
         3. 기타 현행법에 어긋나는 행위\n
     </string>
 
+    <string name="version">beta-0.0.1</string>
+    <string name="inquiry">Yet</string>
+    <string name="donate">카카오뱅크\n3333-00-0000000\n팀 MOGA</string>
+    <string name="openSource">opensources</string>
+
     <string name="button_nickname_register">닉네임 등록</string>
     <string name="button_nickname_update">닉네임 변경</string>
     <string name="nickname">닉네임</string>
@@ -42,4 +47,6 @@
     <string name="noticeUrl">/notice/url/%1$s/%2$s</string>
     <string name="noticeList">/notice/read/%1$d/%2$s</string>
     <string name="noticeSearchedList">/notice/read/%1$d/%2$s/%3$s</string>
+
+
 </resources>
