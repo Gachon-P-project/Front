@@ -107,7 +107,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
                             responseJSONArray.remove(--current_length);
                         }
 
-                        String url = Component.default_url.concat(getString(R.string.inquireReplies,"8"));
+                        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
 
                         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
                             @Override
@@ -129,13 +129,16 @@ public class ClickedPostingActivity extends AppCompatActivity {
             }
         });
 
+
+//        like_btn = findViewById(R.id.post_like_btn);    // 공감 버튼
+
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                 R.drawable.line_divider);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        String url = Component.default_url.concat(getString(R.string.inquireReplies,"20"));
+        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override

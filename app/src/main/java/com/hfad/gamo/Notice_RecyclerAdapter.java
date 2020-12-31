@@ -180,6 +180,7 @@ public class Notice_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+
     @Override
     public int getItemCount() {
         return JSONArrayData.length();

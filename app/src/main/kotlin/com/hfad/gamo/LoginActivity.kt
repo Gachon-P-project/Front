@@ -112,38 +112,45 @@ class LoginActivity : AppCompatActivity() {
 
         volley?.postJSONObjectString(jsonObject, url, { response: String ->
             try {
-                val responseJSONObject = JSONObject(response)
-
-                var data: JSONObject = responseJSONObject.get("data") as JSONObject
-
-                if (responseJSONObject.get("code") == registeredUser) {
-                    setSharedItem("nickname", data.getString("nickname"))
-                    val intent = Intent(this, MainActivity::class.java)
-                    this.startActivity(intent, null)
-                    this.finish()
+                if (response == "ID/PW를 확인하세요.") {
+                    Toast.makeText(this, "ID/PW를 확인하세요.", Toast.LENGTH_SHORT).show()
                 } else {
+                    val responseJSONObject = JSONObject(response)
 
-                    val windowManager = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                    val display = windowManager.defaultDisplay
-                    val size = Point()
-                    display.getSize(size)
+                    var data: JSONObject = responseJSONObject.get("data") as JSONObject
 
-                    nickNameDialog = NickNameDialog(this)
-                    nickNameDialog?.initDialog(size.x)
-                    nickNameDialog!!.start()
+                    if (responseJSONObject.get("code") == registeredUser) {
+                        Log.d(TAG, "newExecuteLogin: existing User")
+                        setSharedItem("nickname", data.getString("nickname"))
+                        val intent = Intent(this, MainActivity::class.java)
+                        this.startActivity(intent, null)
+                        this.finish()
+                    } else {
+
+                        Log.d(TAG, "newExecuteLogin: new User")
+                        val windowManager = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                        val display = windowManager.defaultDisplay
+                        val size = Point()
+                        display.getSize(size)
+
+                        nickNameDialog = NickNameDialog(this)
+                        nickNameDialog?.initDialog(size.x)
+                        nickNameDialog!!.start()
+                    }
+
+                    studentInformation = StudentInformation(
+                            data.get("user_name").toString(),
+                            data.get("user_no").toString(),
+                            data.get("user_id").toString(),
+                            "pwd",
+                            data.get("user_major").toString(),
+                            "http://gcis.gachon.ac.kr/common/picture/haksa/shj/" + data.get("user_no") + ".jpg",
+                            ""
+                    )
+                    saveInformation(studentInformation)
+
+
                 }
-
-                studentInformation = StudentInformation(
-                        data.get("user_name").toString(),
-                        data.get("user_no").toString(),
-                        data.get("user_id").toString(),
-                        "pwd",
-                        data.get("user_major").toString(),
-                        "http://gcis.gachon.ac.kr/common/picture/haksa/shj/" + data.get("user_no") + ".jpg",
-                        ""
-                )
-                saveInformation(studentInformation)
-
             } catch (e: Exception) {
                 e?.stackTrace
 

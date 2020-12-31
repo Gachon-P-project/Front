@@ -1,6 +1,7 @@
 package com.hfad.gamo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
@@ -114,28 +115,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             JSONObject obj = new JSONObject(msg);
             String oldData = sharedPreferences.getString("notification_data", null);
             JSONArray newData;
-            int unread = 0;
+            int unread = DataIOKt.getUnread();
             if(oldData == null)
                 newData = new JSONArray();
             else
                 newData = new JSONArray(oldData);
 
             newData.put(obj);
+            unread++;
+
+//            데이터가 40개가 넘으면 첫번째 데이터 지움.
             if (newData.length() >= 40) {
+                if(!newData.getJSONObject(0).getBoolean("isRead"))
+                    unread--;
                 newData.remove(0);
                 Log.i(TAG, "saveMessage: first message deleted");
             }
-            sharedPreferences.edit().putString("notification_data", newData.toString()).commit();
+//            sharedPreferences.edit().putString("notification_data", newData.toString()).commit();
+            DataIOKt.setNotifications(newData.toString());
             Log.i(TAG, "saveMessage: message saved!");
 
 //            읽지 않은 알림 숫자
-            for (int i = 0 ; i < newData.length() ; i++) {
-                if(newData.getJSONObject(i).getBoolean("isRead") == false)
-                    unread++;
-            }
+//            for (int i = 0 ; i < newData.length() ; i++) {
+//                if(newData.getJSONObject(i).getBoolean("isRead") == false)
+//                    unread++;
+//            }
             DataIOKt.setUnread(unread);
 
-
+            Intent intent = new Intent();
+            intent.putExtra("unread", unread);
+            intent.setAction("com.hfad.gamo.saveMessage");
+            sendBroadcast(intent);
 
         } catch (JSONException e) {
             e.printStackTrace();

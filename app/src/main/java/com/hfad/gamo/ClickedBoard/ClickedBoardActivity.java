@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,6 +28,7 @@ import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ClickedBoardActivity extends AppCompatActivity {
 
+    private static final String TAG = "ClickedBoardActivity";
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
     private ClickedBoard_RecyclerAdapter adapter;
@@ -34,17 +37,20 @@ public class ClickedBoardActivity extends AppCompatActivity {
     private ArrayList<String> a = new ArrayList<>();
     private String url;
     private String board_title;
-    private String professor;
+    private String professor, user_no;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_board);
 
+        SharedPreferences sharedPreferences = Component.sharedPreferences;
 
         Intent intent = getIntent();
         board_title = intent.getExtras().getString("title");
         professor = intent.getExtras().getString("professor");
+        user_no = sharedPreferences.getString("number", null);
+        Log.d(TAG, "onCreate: title : " + board_title + ", professor : " + professor);
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -91,8 +97,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
         //url = "http://172.30.1.2:17394/board/select/컴퓨터구조/이상순";
         String subject = "컴퓨터구조";
         String professor = "이상순";
-        String number = sharedPreferences.getString("number",null);
-        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,subject, professor,number));
+        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,subject, professor, user_no));
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
@@ -131,8 +136,9 @@ public class ClickedBoardActivity extends AppCompatActivity {
                 return true;
             case R.id.action_search :
                 intent = new Intent(getBaseContext(), SearchActivity.class);
-                intent.putExtra("subject", "모바일 웹");
+                intent.putExtra("professor", professor);
                 intent.putExtra("board_title", board_title);
+                intent.putExtra("user_no", user_no);
                 startActivity(intent);
                 return true;
             case R.id.action_add :

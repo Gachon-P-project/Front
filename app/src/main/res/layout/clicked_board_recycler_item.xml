@@ -106,7 +106,7 @@
                     <ImageView
                         android:layout_width="13dp"
                         android:layout_height="13dp"
-                        android:src="@drawable/comment3" />
+                        android:src="@drawable/comment" />
 
                     <TextView
                         android:id="@+id/clicked_board_recycler_item_reply_cnt"

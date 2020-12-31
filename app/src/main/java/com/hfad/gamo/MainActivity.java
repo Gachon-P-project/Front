@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean flag;
     private VolleyForHttpMethod volley;
     private SharedPreferences pref_token;
-    private MainBottomNavigation mbn;
+    private BadgeDrawable notificationBadge = null;
 
     private long firstBackPressTime = 0, secondBackPressTime;
 
@@ -125,9 +127,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mbn = new MainBottomNavigation(bottomNavigationView);
-//        읽지 않은 알림 개수 설정 & 알림 뱃지 설정
-        mbn.setBadge(DataIOKt.getUnread());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.hfad.gamo.saveMessage");
+        MyBroadcastReceiver receiver = new MyBroadcastReceiver();
+        registerReceiver(receiver, intentFilter);
     }
 
     @Override
@@ -212,8 +220,28 @@ public class MainActivity extends AppCompatActivity {
         ft.detach(fragment).attach(fragment).commit();
     }
 
-    public void setBadge(int unread) {
-        mbn.setBadge(unread);
+
+    public void setBadge(int count) {
+        if(count > 0 ) {
+            if(notificationBadge == null)
+                notificationBadge = bottomNavigationView.getOrCreateBadge(R.id.bottomNavigationNotification);
+            notificationBadge.setVisible(true);
+            notificationBadge.setNumber(count);
+        } else if(notificationBadge != null) {
+            notificationBadge.setVisible(false);
+            notificationBadge.clearNumber();
+        }
     }
+
+
+    private class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle extra = intent.getExtras();
+            int newUnread = extra.getInt("unread");
+            setBadge(newUnread);
+        }
+    }
+
 
 }

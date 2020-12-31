@@ -1,6 +1,9 @@
 package com.hfad.gamo;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -25,8 +28,12 @@ import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.hfad.gamo.DataIOKt.getNotifications;
+import static com.hfad.gamo.DataIOKt.getUnread;
+
 public class NotificationFragment extends Fragment {
 
+    private static final String TAG = "NotificationFragment";
     private Context context;
     private VolleyForHttpMethod volley;
     private Notification_RecyclerAdapter adapter;
@@ -60,11 +67,15 @@ public class NotificationFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rViewNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         try {
-            dataArray = new JSONArray(Component.sharedPreferences.getString("notification_data", ""));
+            dataArray = new JSONArray(DataIOKt.getNotifications());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+
+
+
+//        setBadge();
 //        임시데이터
 //        String content = "";
 //        for (int i = 0 ; i < 10 ; i++) {
@@ -97,7 +108,7 @@ public class NotificationFragment extends Fragment {
 
 
 
-        adapter = new Notification_RecyclerAdapter(dataArray);
+        adapter = new Notification_RecyclerAdapter(dataArray, this);
         adapter.setRecyclerView(recyclerView);
 
         recyclerView.setAdapter(adapter);
@@ -112,26 +123,66 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onRefresh() {
 
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        ((MainActivity)getActivity()).refreshFragment();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 500);
+                refresh();
+
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
         return view;
     }
 
-    private void setBadge() {
-        adapter.setOnReadSetBadge(new Notification_RecyclerAdapter.OnReadSetBadge() {
-            @Override
-            public void setBadge(int count) {
-                ((MainActivity)getActivity()).setBadge(count);
-            }
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.hfad.gamo.saveMessage");
+        NotificationFragment.MyBroadcastReceiver receiver = new NotificationFragment.MyBroadcastReceiver();
+        context.registerReceiver(receiver, intentFilter);
 
-        });
     }
+
+    public void setBadge(int newUnread) {
+        unread = newUnread;
+        DataIOKt.setUnread(newUnread);
+        DataIOKt.setNotifications(dataArray.toString());
+        ((MainActivity)getActivity()).setBadge(newUnread);
+    }
+
+
+    private class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle extra = intent.getExtras();
+            int newUnread = extra.getInt("unread");
+//            setBadge(newUnread);
+            Log.d(TAG, "onReceive: unread : " + unread + ", newUnread : " + newUnread);
+            if(unread == 0 || unread != newUnread) {
+//                try {
+//                    dataArray = new JSONArray(getNotifications());
+//                    adapter.notifyDataSetChanged();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+                refresh();
+            }
+        }
+    }
+
+    private void refresh() {
+
+        try {
+            dataArray = new JSONArray(DataIOKt.getNotifications());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+                recyclerView.removeAllViews();
+        adapter = new Notification_RecyclerAdapter(dataArray, NotificationFragment.this);
+        adapter.setRecyclerView(recyclerView);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+    }
+
 }

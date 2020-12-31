@@ -121,7 +121,7 @@
                         android:layout_width="13dp"
                         android:layout_height="13dp"
                         android:paddingTop="1dp"
-                        android:src="@drawable/comment3" />
+                        android:src="@drawable/comment" />
 
                     <TextView
                         android:id="@+id/activity_clicked_posting_reply_cnt"
