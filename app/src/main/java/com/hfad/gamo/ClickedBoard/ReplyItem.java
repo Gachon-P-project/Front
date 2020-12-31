@@ -1,6 +1,6 @@
 package com.hfad.gamo.ClickedBoard;
 
-public class CommentItem {
+public class ReplyItem {
     private int is_mine;
 
     private int post_no;

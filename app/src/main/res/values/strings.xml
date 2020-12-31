@@ -20,7 +20,7 @@
     <string name="gachonBaseUrl">https://www.gachon.ac.kr</string>
     <string name="msg_token_fmt" translatable="false">토큰 : %s</string>
     <string name="postWriting">/board/insert</string>
-    <string name="inquirePostingsOfBoard">/board/select/%1$s/%2$s</string>
+    <string name="inquirePostingsOfBoard">/board/select/%1$s/%2$s/%3$s</string>
     <string name="searchWantedPostingsOfBoard">/board/select/%1$s/%2$s/search/%3$s</string>
     <string name="modifyPosting">/board/update/%1$s</string>
     <string name="deletePosting">/board/delete/%1$s</string>

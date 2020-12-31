@@ -21,7 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
+
+import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ClickedBoardActivity extends AppCompatActivity {
 
@@ -75,7 +76,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
 
         swipeContainer.setColorSchemeResources(R.color.indigo500);
 
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
+        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle(board_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,7 +91,8 @@ public class ClickedBoardActivity extends AppCompatActivity {
         //url = "http://172.30.1.2:17394/board/select/컴퓨터구조/이상순";
         String subject = "컴퓨터구조";
         String professor = "이상순";
-        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,subject, professor));
+        String number = sharedPreferences.getString("number",null);
+        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,subject, professor,number));
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override

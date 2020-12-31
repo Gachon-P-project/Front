@@ -32,7 +32,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_reply);
+        setContentView(R.layout.dialog_reply_writer);
         setCancelable(true);
         setCanceledOnTouchOutside(true);
 

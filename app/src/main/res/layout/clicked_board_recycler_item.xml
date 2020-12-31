@@ -86,7 +86,7 @@
                         android:src="@drawable/ic_like" />
 
                     <TextView
-                        android:id="@+id/board_post_like"
+                        android:id="@+id/clicked_board_recycler_item_post_like_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
@@ -109,7 +109,7 @@
                         android:src="@drawable/comment3" />
 
                     <TextView
-                        android:id="@+id/board_reply_cnt"
+                        android:id="@+id/clicked_board_recycler_item_reply_cnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -126,9 +126,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:background="@color/text2" />
+        android:layout_height="0.7dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/line" />
 
 </LinearLayout>

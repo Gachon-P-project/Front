@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +29,12 @@ import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class ClickedPostingActivity extends AppCompatActivity {
 
-    private LinearLayout like_btn;  // 공감 버튼
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
-    private CommentAdapter adapter;
+    private ReplyAdapter adapter;
     private JSONArray responseJSONArray = new JSONArray();
     private JSONObject commentJSONObject = new JSONObject();
-    private EditText comment;
+    private EditText reply_text;
     private SharedPreferences prefs;
 
     private String url;
@@ -56,27 +54,33 @@ public class ClickedPostingActivity extends AppCompatActivity {
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar_clicked_board);
+        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
 
-        TextView title = findViewById(R.id.title_text);
-        TextView date = findViewById(R.id.date_text);
-        TextView contents = findViewById(R.id.contents_text);
-        TextView reply_cnt = findViewById(R.id.reply_text);
-        TextView post_like = findViewById(R.id.clicked_posting_post_like);
-        comment = findViewById(R.id.comment);
-        ImageView post_comment = findViewById(R.id.post_comment);
+        TextView title = findViewById(R.id.activity_clicked_posting_title);
+        TextView nickName = findViewById(R.id.activity_clicked_posting_nickname);
+        TextView date = findViewById(R.id.activity_clicked_posting_wrt_date);
+        TextView contents = findViewById(R.id.activity_clicked_posting_contents);
+        TextView reply_cnt = findViewById(R.id.activity_clicked_posting_reply_cnt);
+        ImageView post_like_img = findViewById(R.id.activity_clicked_posting_post_like_img);
+        TextView post_like_text = findViewById(R.id.activity_clicked_posting_post_like_text);
+
+        reply_text = findViewById(R.id.activity_clicked_posting_post_reply_text);
+        ImageView post_reply = findViewById(R.id.activity_clicked_posting_post_reply);
+
 
         title.setText(toClickedPosting.getPost_title());
+        nickName.setText("익명");
         date.setText(toClickedPosting.getWrt_date());
         contents.setText(toClickedPosting.getPost_contents());
         reply_cnt.setText(toClickedPosting.getReply_cnt());
-        post_like.setText(toClickedPosting.getPost_like());
+        post_like_text.setText(toClickedPosting.getPost_like());
 
-        post_comment.setOnClickListener(new View.OnClickListener() {
+
+        post_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //String url = "http://172.30.1.2:17394/reply/insert/" + "jy11290" + "/" + toClickedPosting.getPost_no();
@@ -87,7 +91,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
                 String url = Component.default_url.concat(getString(R.string.postReply,user,post_no));
 
                 try {
-                    commentJSONObject.put("reply_contents", comment.getText().toString());
+                    commentJSONObject.put("reply_contents", reply_text.getText().toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -125,16 +129,13 @@ public class ClickedPostingActivity extends AppCompatActivity {
             }
         });
 
-
-        like_btn = findViewById(R.id.post_like_btn);    // 공감 버튼
-
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                 R.drawable.line_divider);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        String url = Component.default_url.concat(getString(R.string.inquireReplies,"8"));
+        String url = Component.default_url.concat(getString(R.string.inquireReplies,"20"));
 
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
@@ -151,7 +152,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new CommentAdapter(responseJSONArray);
+        adapter = new ReplyAdapter(responseJSONArray, this);
         recyclerView.setAdapter(adapter);
     }
 

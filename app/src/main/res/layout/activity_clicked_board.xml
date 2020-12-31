@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:id="@+id/toolbar_clicked_board"
+        android:id="@+id/activity_clicked_posting_toolbar"
         android:background="@color/colorPrimary"
         app:theme="@style/AppTheme.Toolbar" />
 
