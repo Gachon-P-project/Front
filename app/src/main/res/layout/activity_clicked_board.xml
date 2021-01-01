@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:id="@+id/activity_clicked_posting_toolbar"
+        android:id="@+id/activity_clicked_board_toolbar"
         android:background="@color/colorPrimary"
         app:theme="@style/AppTheme.Toolbar" />
 
@@ -22,7 +22,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recycler_clicked_board" />
+            android:id="@+id/activity_clicked_board_recycler_view" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

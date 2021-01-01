@@ -12,16 +12,16 @@ import androidx.annotation.NonNull;
 
 import com.hfad.gamo.R;
 
-public class ReplyDialog extends Dialog implements View.OnClickListener {
+public class ClickedPostingDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
-    private TextView postRereply;
+    private TextView updatePosting;
+    private TextView deletePosting;
 
-    public ReplyDialog(@NonNull Context context) {
+    public ClickedPostingDialog(@NonNull Context context) {
         super(context);
 
         this.context = context;
-
     }
 
     @Override
@@ -29,20 +29,23 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_reply);
+        setContentView(R.layout.dialog_clicked_posting);
         setCancelable(true);
         setCanceledOnTouchOutside(true);
 
-        postRereply = findViewById(R.id.dialogReply_postRereply);
-        postRereply.setOnClickListener(this);
+        updatePosting = findViewById(R.id.dialog_clicked_posting_update);
+        updatePosting.setOnClickListener(this);
+
+        deletePosting = findViewById(R.id.dialog_clicked_posting_delete);
+        deletePosting.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.dialogReply_postRereply:
-                Intent rereplyIntent = new Intent(context, RereplyActivity.class);
-                context.startActivity(rereplyIntent);
+            case R.id.dialog_clicked_posting_update:
+                break;
+            case R.id.dialog_clicked_posting_delete:
                 break;
             default:
                 break;

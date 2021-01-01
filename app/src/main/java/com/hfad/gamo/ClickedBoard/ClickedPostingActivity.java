@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,10 +39,13 @@ public class ClickedPostingActivity extends AppCompatActivity {
     private JSONObject commentJSONObject = new JSONObject();
     private EditText reply_text;
     private SharedPreferences prefs;
+    private DisplayMetrics displayMetricsForDeviceSize = null;
 
     private String url;
     private String userId;
     private String post_no;
+    private String writer_number;
+    private String user_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
 
         prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         userId = prefs.getString("id", null);
+        user_number = prefs.getString("number", null);
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
@@ -59,6 +66,8 @@ public class ClickedPostingActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+
+        displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
 
         TextView title = findViewById(R.id.activity_clicked_posting_title);
         TextView nickName = findViewById(R.id.activity_clicked_posting_nickname);
@@ -71,7 +80,6 @@ public class ClickedPostingActivity extends AppCompatActivity {
         reply_text = findViewById(R.id.activity_clicked_posting_post_reply_text);
         ImageView post_reply = findViewById(R.id.activity_clicked_posting_post_reply);
 
-
         title.setText(toClickedPosting.getPost_title());
         nickName.setText("익명");
         date.setText(toClickedPosting.getWrt_date());
@@ -79,6 +87,8 @@ public class ClickedPostingActivity extends AppCompatActivity {
         reply_cnt.setText(toClickedPosting.getReply_cnt());
         post_like_text.setText(toClickedPosting.getPost_like());
 
+        final String post_no = toClickedPosting.getPost_no();
+        writer_number = toClickedPosting.getUser_no();
 
         post_reply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +96,6 @@ public class ClickedPostingActivity extends AppCompatActivity {
                 //String url = "http://172.30.1.2:17394/reply/insert/" + "jy11290" + "/" + toClickedPosting.getPost_no();
 
                 String user = "jy11290";
-                final String post_no = toClickedPosting.getPost_no();
 
                 String url = Component.default_url.concat(getString(R.string.postReply,user,post_no));
 
@@ -160,14 +169,49 @@ public class ClickedPostingActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_clicked_posting, menu);
+
+        if (!writer_number.equals(user_number)) {
+            MenuItem item = menu.findItem(R.id.menu_toolbar_clicked_posting_three_dots);
+            item.setVisible(false);
+
+            return true;
+        }
+        return true;
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home :
                 finish();
+                return true;
+            case R.id.menu_toolbar_clicked_posting_three_dots :
+                ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this);
+                clickedPostingDialog.show();
+                WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();
+                params.width = (int) (displayMetricsForDeviceSize.widthPixels * 0.8);
+                params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
+                clickedPostingDialog.getWindow().setAttributes(params);
                 return true;
             default :
                 return super.onOptionsItemSelected(item) ;
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        finish();
+    }
+
 }
 
