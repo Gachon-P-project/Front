@@ -87,7 +87,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
         reply_cnt.setText(toClickedPosting.getReply_cnt());
         post_like_text.setText(toClickedPosting.getPost_like());
 
-        final String post_no = toClickedPosting.getPost_no();
+        post_no = toClickedPosting.getPost_no();
         writer_number = toClickedPosting.getUser_no();
 
         post_reply.setOnClickListener(new View.OnClickListener() {
@@ -95,9 +95,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //String url = "http://172.30.1.2:17394/reply/insert/" + "jy11290" + "/" + toClickedPosting.getPost_no();
 
-                String user = "jy11290";
-
-                String url = Component.default_url.concat(getString(R.string.postReply,user,post_no));
+                String url = Component.default_url.concat(getString(R.string.postReply,user_number,post_no));
 
                 try {
                     commentJSONObject.put("reply_contents", reply_text.getText().toString());
