@@ -7,7 +7,6 @@ public class toClickedPosting implements Parcelable {
 
     private String board_title;
     private String post_no;
-    private String post_like;
     private String post_title;
     private String post_contents;
     private String wrt_date;
@@ -18,11 +17,10 @@ public class toClickedPosting implements Parcelable {
 
 
 
-    public toClickedPosting(String board_title, String post_no, String post_like, String post_title, String post_contents,
+    public toClickedPosting(String board_title, String post_no, String post_title, String post_contents,
                             String wrt_date, String reply_cnt, String reply_yn, String user_no) {
         this.board_title = board_title;
         this.post_no = post_no;
-        this.post_like = post_like;
         this.post_title = post_title;
         this.post_contents = post_contents;
         this.wrt_date = wrt_date;
@@ -37,10 +35,6 @@ public class toClickedPosting implements Parcelable {
 
     public void setPost_no(String post_no) {
         this.post_no = post_no;
-    }
-
-    public void setPost_like(String post_like) {
-        this.post_like = post_like;
     }
 
     public void setPost_title(String post_title) {
@@ -76,10 +70,6 @@ public class toClickedPosting implements Parcelable {
         return post_no;
     }
 
-    public String getPost_like() {
-        return post_like;
-    }
-
     public String getPost_title() {
         return post_title;
     }
@@ -108,7 +98,6 @@ public class toClickedPosting implements Parcelable {
     protected toClickedPosting(Parcel in) {
         this.board_title = in.readString();
         this.post_no = in.readString();
-        this.post_like = in.readString();
         this.post_title = in.readString();
         this.post_contents = in.readString();
         this.wrt_date = in.readString();
@@ -121,7 +110,6 @@ public class toClickedPosting implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(board_title);
         dest.writeString(post_no);
-        dest.writeString(post_like);
         dest.writeString(post_title);
         dest.writeString(post_contents);
         dest.writeString(wrt_date);
