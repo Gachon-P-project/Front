@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         Log.i("token!!!", "before : ".concat(pref_token.getString("token", "null")));
-        /*pref_token.edit().clear().commit();
-        Log.i("token!!", "after".concat(pref_token.getString("token", "null")));*/
+        //pref_token.edit().clear().commit();
+        /*Log.i("token!!", "after".concat(pref_token.getString("token", "null")));*/
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 jsonObject.put("number", sharedPreferences.getString("number", null));
                                 jsonObject.put("token",token);
+                                jsonObject.put("user_major", sharedPreferences.getString("department", null));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                             volley.postJSONObjectString(jsonObject, tokenUrl, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
-
+                                    Log.i("token!!!", "response");
                                 }
                             }, null);
                         }

@@ -60,6 +60,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 try {
                     jsonObject.put("number", sharedPreferences.getString("number", null));
                     jsonObject.put("token", token);
+                    jsonObject.put("user_major", sharedPreferences.getString("department", null));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
