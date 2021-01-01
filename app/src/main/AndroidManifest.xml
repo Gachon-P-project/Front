@@ -15,7 +15,6 @@
         <activity android:name=".InformationActivity"></activity>
         <activity android:name=".NoticeDetailActivity"></activity>
         <activity android:name=".ClickedBoard.RereplyActivity"></activity>
-        <activity android:name=".NoticeDetailActivity"></activity>
         <activity android:name=".ClickedBoard.ClickedPostingActivity" />
         <activity android:name=".ClickedBoard.SearchActivity" />
         <activity
