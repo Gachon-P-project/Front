@@ -24,8 +24,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.hfad.gamo.Component.sharedPreferences;
-
 public class ClickedBoardActivity extends AppCompatActivity {
 
     private static final String TAG = "ClickedBoardActivity";
@@ -82,7 +80,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
 
         swipeContainer.setColorSchemeResources(R.color.indigo500);
 
-        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_board_toolbar);
         setSupportActionBar(tb);
         getSupportActionBar().setTitle(board_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -91,7 +89,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_clicked_board);
+        RecyclerView recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //url = "http://172.30.1.2:17394/board/select/컴퓨터구조/이상순";

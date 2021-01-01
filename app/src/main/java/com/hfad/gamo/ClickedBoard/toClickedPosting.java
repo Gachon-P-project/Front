@@ -13,9 +13,13 @@ public class toClickedPosting implements Parcelable {
     private String wrt_date;
     private String reply_cnt;
     private String reply_yn;
+    private String user_no;
+
+
+
 
     public toClickedPosting(String board_title, String post_no, String post_like, String post_title, String post_contents,
-                            String wrt_date, String reply_cnt, String reply_yn) {
+                            String wrt_date, String reply_cnt, String reply_yn, String user_no) {
         this.board_title = board_title;
         this.post_no = post_no;
         this.post_like = post_like;
@@ -24,6 +28,7 @@ public class toClickedPosting implements Parcelable {
         this.wrt_date = wrt_date;
         this.reply_cnt = reply_cnt;
         this.reply_yn = reply_yn;
+        this.user_no = user_no;
     }
 
     public void setBoard_title(String board_title) {
@@ -58,6 +63,11 @@ public class toClickedPosting implements Parcelable {
         this.reply_yn = reply_yn;
     }
 
+    public void setUser_no(String user_no) {
+        this.user_no = user_no;
+    }
+
+
     public String getBoard_title() {
         return board_title;
     }
@@ -90,6 +100,10 @@ public class toClickedPosting implements Parcelable {
         return reply_yn;
     }
 
+    public String getUser_no() {
+        return user_no;
+    }
+
 
     protected toClickedPosting(Parcel in) {
         this.board_title = in.readString();
@@ -100,6 +114,7 @@ public class toClickedPosting implements Parcelable {
         this.wrt_date = in.readString();
         this.reply_cnt = in.readString();
         this.reply_yn = in.readString();
+        this.user_no = in.readString();
     }
 
     @Override
@@ -112,6 +127,7 @@ public class toClickedPosting implements Parcelable {
         dest.writeString(wrt_date);
         dest.writeString(reply_cnt);
         dest.writeString(reply_yn);
+        dest.writeString(user_no);
     }
 
     @Override

@@ -19,12 +19,13 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private TextView postRereply;
     private TextView deleteReply;
+    private int depth;
 
-    public ReplyWriterDialog(@NonNull Context context) {
+    public ReplyWriterDialog(@NonNull Context context, int depth) {
         super(context);
 
         this.context = context;
-
+        this.depth = depth;
     }
 
     @Override
@@ -36,11 +37,18 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         setCancelable(true);
         setCanceledOnTouchOutside(true);
 
+
         postRereply = findViewById(R.id.dialogReplyWriter_postRereply);
-        postRereply.setOnClickListener(this);
+        if(depth == 1) {
+            postRereply.setVisibility(View.GONE);
+        } else {
+            postRereply.setOnClickListener(this);
+        }
 
         deleteReply = findViewById(R.id.dialogReplyWriter_deleteReply);
         deleteReply.setOnClickListener(this);
+
+
     }
 
     @Override

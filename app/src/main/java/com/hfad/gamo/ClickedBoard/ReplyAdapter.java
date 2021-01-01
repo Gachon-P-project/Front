@@ -3,7 +3,6 @@ package com.hfad.gamo.ClickedBoard;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ import static com.hfad.gamo.Component.sharedPreferences;
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
     private JSONArray JSONArrayData = null;
     private float density;
-    DisplayMetrics displayMetrics = null;
+    private DisplayMetrics displayMetrics = null;
 
 
     ReplyAdapter(JSONArray list, Activity activity) {
@@ -49,7 +48,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView content;
         TextView wrt_date;
-        LinearLayout linearLayout;
+        LinearLayout item_replies_reply_layout;
         ImageView item_replies_three_dots;
 
         View view;
@@ -59,7 +58,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
             content = itemView.findViewById(R.id.item_replies_content);
             wrt_date = itemView.findViewById(R.id.item_replies_wrt_date);
-            linearLayout = itemView.findViewById(R.id.item_replies_reply_layout);
+            item_replies_reply_layout = itemView.findViewById(R.id.item_replies_reply_layout);
             item_replies_three_dots = itemView.findViewById(R.id.item_replies_three_dots);
 
             view = itemView;
@@ -104,14 +103,59 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         holder.wrt_date.setText(wrt_date);
 
         if(depth == 1) {
-            holder.linearLayout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
-        } else {
+            holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
 
+            assert reply_user_no != null;
+            if(reply_user_no.equals(user_no)) {
+                holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 1);
+                        replyWriterDialog.show();
+                        WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
+                        params.width = (int) (displayMetrics.widthPixels * 0.8);
+                        params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
+                        replyWriterDialog.getWindow().setAttributes(params);
+
+                    }
+                });
+            } else {
+                holder.item_replies_three_dots.setVisibility(View.GONE);
+            }
+        } else {
+            assert reply_user_no != null;
+            if(reply_user_no.equals(user_no)) {
+                holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 0);
+                        replyWriterDialog.show();
+                        WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
+                        params.width = (int) (displayMetrics.widthPixels * 0.8);
+                        params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
+                        replyWriterDialog.getWindow().setAttributes(params);
+                    }
+                });
+            } else {
+                holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        ReplyDialog replyDialog = new ReplyDialog(v.getContext());
+                        replyDialog.show();
+                        WindowManager.LayoutParams params = replyDialog.getWindow().getAttributes();
+                        params.width = (int) (displayMetrics.widthPixels * 0.8);
+                        params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
+                        replyDialog.getWindow().setAttributes(params);
+                    }
+                });
+            }
         }
 
-        assert reply_user_no != null;
-        if(reply_user_no.equals(user_no)) {
-            holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
+
+            /*holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -138,8 +182,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
                 }
             });
-        }
+        }*/
     }
+
 
     @Override
     public int getItemCount() {

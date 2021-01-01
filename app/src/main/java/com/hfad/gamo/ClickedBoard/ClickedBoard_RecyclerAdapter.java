@@ -98,7 +98,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             assert data != null;
             holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"), data.getString("post_like"),
                     data.getString("post_title"), data.getString("post_contents"), androidDate,
-                    data.getString("reply_cnt"), data.getString("reply_yn"));
+                    data.getString("reply_cnt"), data.getString("reply_yn"), data.getString("user_no"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
