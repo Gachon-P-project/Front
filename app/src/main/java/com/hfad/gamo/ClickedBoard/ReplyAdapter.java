@@ -34,6 +34,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     private JSONArray JSONArrayData = null;
     private float density;
     private DisplayMetrics displayMetrics = null;
+    private final String TRUE = "1";
+    private final String FALSE = "0";
 
 
     ReplyAdapter(JSONArray list, Activity activity) {
@@ -46,20 +48,24 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView content;
-        TextView wrt_date;
+        TextView item_replies_nickname;
+        TextView item_replies_content;
+        TextView item_replies_wrt_date;
         LinearLayout item_replies_reply_layout;
         ImageView item_replies_three_dots;
+        ImageView item_replies_user_img;
 
         View view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            content = itemView.findViewById(R.id.item_replies_content);
-            wrt_date = itemView.findViewById(R.id.item_replies_wrt_date);
+            item_replies_nickname = itemView.findViewById(R.id.item_replies_nickname);
+            item_replies_content = itemView.findViewById(R.id.item_replies_content);
+            item_replies_wrt_date = itemView.findViewById(R.id.item_replies_wrt_date);
             item_replies_reply_layout = itemView.findViewById(R.id.item_replies_reply_layout);
             item_replies_three_dots = itemView.findViewById(R.id.item_replies_three_dots);
+            item_replies_user_img = itemView.findViewById(R.id.item_replies_user_img);
 
             view = itemView;
         }
@@ -87,6 +93,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         String wrt_date = null;
         String reply_user_no = null;
         String user_no = sharedPreferences.getString("number", null);
+        String is_deleted = null;
 
         try {
             data = JSONArrayData.getJSONObject(position);
@@ -94,13 +101,24 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             wrt_date = processServerDateToAndroidDate(data.getString("wrt_date"));
             depth = data.getInt("depth");
             reply_user_no = data.getString("user_no");
+            is_deleted = data.getString("is_deleted");
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
         }
 
-        holder.content.setText(reply_contents);
-        holder.wrt_date.setText(wrt_date);
+        if(is_deleted.equals(TRUE)) {
+            holder.item_replies_user_img.setVisibility(View.GONE);
+            holder.item_replies_wrt_date.setVisibility(View.GONE);
+            holder.item_replies_three_dots.setVisibility(View.GONE);
+            holder.item_replies_nickname.setVisibility(View.INVISIBLE);
+            holder.item_replies_content.setText("삭제된 댓글입니다.");
+            return;
+        }
+
+
+        holder.item_replies_content.setText(reply_contents);
+        holder.item_replies_wrt_date.setText(wrt_date);
 
         if(depth == 1) {
             holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
@@ -155,34 +173,6 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         }
 
 
-            /*holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext());
-                    replyWriterDialog.show();
-                    WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
-                    params.width = (int) (displayMetrics.widthPixels * 0.8);
-                    params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
-                    replyWriterDialog.getWindow().setAttributes(params);
-
-                }
-            });
-        } else {
-            holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    ReplyDialog replyDialog = new ReplyDialog(v.getContext());
-                    replyDialog.show();
-                    WindowManager.LayoutParams params = replyDialog.getWindow().getAttributes();
-                    params.width = (int) (displayMetrics.widthPixels * 0.8);
-                    params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
-                    replyDialog.getWindow().setAttributes(params);
-
-                }
-            });
-        }*/
     }
 
 

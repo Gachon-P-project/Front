@@ -15,7 +15,7 @@
         android:paddingVertical="10dp">
 
         <ImageView
-            android:id="@+id/activity_clicked_posting_user_img"
+            android:id="@+id/item_replies_user_img"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="2dp"
