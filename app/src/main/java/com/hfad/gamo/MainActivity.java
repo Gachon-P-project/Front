@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
+        Log.i("token!!!", "before : ".concat(pref_token.getString("token", "null")));
+        /*pref_token.edit().clear().commit();
+        Log.i("token!!", "after".concat(pref_token.getString("token", "null")));*/
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
                         // 서버에 number, token 값 전송
                         if (!(pref_token.getString("token", "null").equals(token))) {
+                            Log.i("token!!", "if inner");
                             String tokenUrl = default_url+"/token/add";
                             pref_token.edit().putString("token", token).apply();
 
@@ -97,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("TAG", msg);
+                        Log.i("token!!!", msg);
                     }
                 });
 

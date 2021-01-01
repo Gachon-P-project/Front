@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+
+import static com.hfad.gamo.Component.default_url;
 import static com.hfad.gamo.Component.sharedPreferences;
 
 import androidx.annotation.NonNull;
@@ -39,31 +41,36 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
 
+        Log.i("token!!!", "firebase");
+
         String token = s;
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
         pref_token = getSharedPreferences("token", Context.MODE_PRIVATE);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
-        // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
-        // 서버에 number, token 값 전송
-        if (!(pref_token.getString("token", "null").equals(token))) {
-            String tokenUrl = "Good";
-            pref_token.edit().putString("token", token).apply();
 
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("number", sharedPreferences.getString("number", null));
-                jsonObject.put("token",token);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if(sharedPreferences.getBoolean("login", false)) {
+            // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
+            // 서버에 number, token 값 전송
+            if (!(pref_token.getString("token", "null").equals(token))) {
+                String tokenUrl = default_url + "/token/add";
+                pref_token.edit().putString("token", token).apply();
 
-            volley.postJSONObjectString(jsonObject, tokenUrl, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("number", sharedPreferences.getString("number", null));
+                    jsonObject.put("token", token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }, null);
+
+                volley.postJSONObjectString(jsonObject, tokenUrl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                }, null);
+            }
         }
     }
 
