@@ -85,7 +85,6 @@ public class ClickedPostingActivity extends AppCompatActivity {
         date.setText(toClickedPosting.getWrt_date());
         contents.setText(toClickedPosting.getPost_contents());
         reply_cnt.setText(toClickedPosting.getReply_cnt());
-        post_like_text.setText(toClickedPosting.getPost_like());
 
         post_no = toClickedPosting.getPost_no();
         writer_number = toClickedPosting.getUser_no();
