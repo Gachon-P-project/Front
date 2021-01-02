@@ -1,16 +1,26 @@
 package com.hfad.gamo;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.widget.Toast;
 
 import static com.hfad.gamo.Component.default_url;
 import static com.hfad.gamo.Component.sharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -79,9 +89,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.i("### data msgTitle : ", msgTitle);
         Log.i("### data msgContent : ", msgContent);
         String toastText = String.format("[Data 메시지] title: %s => content: %s", msgTitle, msgContent);
-        Looper.prepare();
-        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
-        Looper.loop();
+//        Looper.prepare();
+//        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
+//        Looper.loop();
     }
 
     /**
@@ -93,9 +103,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.i("### noti msgTitle : ", msgTitle);
         Log.i("### noti msgContent : ", msgContent);
         String toastText = String.format("%s : %s", msgTitle, msgContent);
-        Looper.prepare();
+//        Looper.prepare();
         Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
-        Looper.loop();
+//        Looper.loop();
     }
 
     /**
@@ -105,13 +115,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage msg) {
         Log.i("### msg : ", msg.toString());
+        String title, body;
         if (msg.getData().isEmpty()) {
-            saveMessage(msg.getNotification().getTitle(), msg.getNotification().getBody());
-            showNotificationMessage(msg.getNotification().getTitle(), msg.getNotification().getBody());  // Notification으로 받을 때
+            title = msg.getNotification().getTitle();
+            body = msg.getNotification().getBody();
+//            saveMessage(title, body);
+            showNotificationMessage(title, body);  // Notification으로 받을 때
         } else {
-            saveMessage(msg.getData().get("title"), msg.getData().get("content"));
-            showDataMessage(msg.getData().get("title"), msg.getData().get("content"));  // Data로 받을 때
+            title = msg.getData().get("title");
+            body = msg.getData().get("body");
+//            saveMessage(title,body);
+            showDataMessage(title, body);  // Data로 받을 때
         }
+        sendNotification(title, body, "testName");
+        saveMessage(title, body);
+
     }
 
     public void saveMessage(String title, String content) {
@@ -159,4 +177,52 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             e.printStackTrace();
         }
     }
+
+    private void sendNotification(String title, String message, String name) {
+        Intent intent;
+        PendingIntent pendingIntent;
+
+        intent = new Intent(this, SplashActivity.class);
+        intent.putExtra("name", name);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder notificationBuilder;
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        if(Build.VERSION.SDK_INT >= 26) {
+            String channelId = "Moga Push";
+            String channelName = "Moga Push Message";
+            String channelDescription = "Moga Push Information";
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(channelDescription);
+
+            channel.enableLights(true);
+            channel.setLightColor(R.color.colorPrimary);
+            channel.setVibrationPattern(new long[]{100, 100, 300});
+            notificationManager.createNotificationChannel(channel);
+
+            notificationBuilder = new NotificationCompat.Builder(this, channelId);
+        } else {
+            notificationBuilder = new NotificationCompat.Builder(this);
+        }
+
+        notificationBuilder.setSmallIcon(R.mipmap.ic_main)
+                .setContentTitle(title)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+                .setContentText(message);
+
+        notificationManager.notify(0, notificationBuilder.build());
+
+
+    }
+
+
 }
