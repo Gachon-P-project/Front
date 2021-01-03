@@ -16,6 +16,8 @@ object Component {
 
     lateinit var default_url: String
 
+    lateinit var shared_notification_data: SharedPreferences
+
     var keyWordData: String? = null
 
     var mHandler: Handler? = null

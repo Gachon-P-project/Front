@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_open_in_browser"
         android:icon="@drawable/ic_open_in_browser"
-        android:title="add"
+        android:title="open"
         app:iconTint="@color/white"
         app:showAsAction="always"/>
 

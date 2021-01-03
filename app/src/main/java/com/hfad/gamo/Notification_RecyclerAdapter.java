@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -31,16 +32,24 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private Context context;
-    private JSONArray dataArray;
+//    private JSONArray dataArray;
+    private Map<String, ?> dataMap;
     private NotificationFragment fragment;
+    private int last_index;
 
     private int unread = DataIOKt.getUnread();
 
 
     public Notification_RecyclerAdapter(JSONArray dataArray, NotificationFragment fragment) {
         super();
-        this.dataArray = dataArray;
+//        this.dataArray = dataArray;
         this.fragment = fragment;
+    }
+    public Notification_RecyclerAdapter(Map<String, ?> dataMap, NotificationFragment fragment, int last_index) {
+        super();
+        this.dataMap = dataMap;
+        this.fragment = fragment;
+        this.last_index = last_index;
     }
 
     @NonNull
@@ -65,73 +74,99 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
         dateFormat.setTimeZone(timeZone);
 
-        try {
-            data = dataArray.getJSONObject((dataArray.length() - position - 1));
-            title = data.getString("title");
-            content = data.getString("content");
-//            type = data.getString("type");
-//            board_no = data.getString("baord_no");
-            date = dateFormat.parse(data.getString("time"));
-            String sTime = new SimpleDateFormat("MM-dd HH:mm").format(date);
-            isRead = data.getBoolean("isRead");
-            ((viewHolder)holder).tvTitle.setText(title);
-            ((viewHolder)holder).tvContent.setText(content);
-            ((viewHolder)holder).tvTime.setText(sTime);
-//            androidx.cardview.widget.CardView cardView;
-//            switch (type) {
-//                case "notice_new" :
-//                    break;
-//                case "board_imply" :
-//                    break;
-//                case "board_reply" :
-//                    break;
-//                case "board_like" :
-//                    break;
-//                case "board_newPost_bookmark" :
-//                    break;
-//                default:
-//                    imgIcon.setImageResource(R.drawable.ic_pencil);
-//                    break;
-//            }
-            if(!isRead) {
-                ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
-            }
+        Log.d(TAG, "onBindViewHolder: Map : " + dataMap.toString());
+        Log.d(TAG, "onBindViewHolder: position : " + position);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
-                    if(!isRead)
-                        setRead(position, true);
-//                    switch (type) {
-//                        case "notice_new" :
-//                            break;
-//                        case "board_imply" :
-//                            break;
-//                        case "board_reply" :
-//                            break;
-//                        case "board_like" :
-//                            break;
-//                        case "board_newPost_bookmark" :
-//                            break;
-//                    }
+        if(last_index >= position - 1) {
+
+            try {
+//                Log.d(TAG, "onBindViewHolder: position: " + position + ", data: " + dataArray.toString());
+//                data = dataArray.getJSONObject((dataArray.length() - position - 1));
+//                title = data.getString("title");
+//                content = data.getString("content");
+//    //            type = data.getString("type");
+//    //            board_no = data.getString("baord_no");
+//                date = dateFormat.parse(data.getString("time"));
+//                String sTime = new SimpleDateFormat("MM-dd HH:mm").format(date);
+//                isRead = data.getBoolean("isRead");
+                String temp = String.valueOf(dataMap.get(String.valueOf(last_index - position)));
+                data = new JSONObject(temp) ;
+                Log.d(TAG, "onBindViewHolder: data : " + data.toString());
+                title = data.getString("title");
+                content = data.getString("content");
+    //            type = data.getString("type");
+    //            board_no = data.getString("baord_no");
+                date = dateFormat.parse(data.getString("time"));
+                String sTime = new SimpleDateFormat("MM-dd HH:mm").format(date);
+                isRead = data.getBoolean("isRead");
+                ((viewHolder)holder).tvTitle.setText(title);
+                ((viewHolder)holder).tvContent.setText(content);
+                ((viewHolder)holder).tvTime.setText(sTime);
+    //            androidx.cardview.widget.CardView cardView;
+    //            switch (type) {
+    //                case "notice_new" :
+    //                    break;
+    //                case "board_imply" :
+    //                    break;
+    //                case "board_reply" :
+    //                    break;
+    //                case "board_like" :
+    //                    break;
+    //                case "board_newPost_bookmark" :
+    //                    break;
+    //                default:
+    //                    imgIcon.setImageResource(R.drawable.ic_pencil);
+    //                    break;
+    //            }
+                if(!isRead) {
+                    ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
                 }
-            });
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                        if(!isRead)
+                            setRead(position, true);
+    //                    switch (type) {
+    //                        case "notice_new" :
+    //                            break;
+    //                        case "board_imply" :
+    //                            break;
+    //                        case "board_reply" :
+    //                            break;
+    //                        case "board_like" :
+    //                            break;
+    //                        case "board_newPost_bookmark" :
+    //                            break;
+    //                    }
+                    }
+                });
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+        }
+
         }
 
 
     }
 
+//    @Override
+//    public int getItemCount() {
+//        if(dataArray == null)
+//            return 0;
+//        else
+//            return dataArray.length();
+//    }
+
     @Override
     public int getItemCount() {
-        if(dataArray == null)
-            return 0;
+        if(last_index >= 40)
+            return 40;
         else
-            return dataArray.length();
+            return last_index+1;
     }
 
     public void setRecyclerView(RecyclerView recyclerView) {
@@ -157,22 +192,22 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public boolean setRead(int position, boolean isRead ) {
-        try {
-            Log.d(TAG, String.format("setRead: position : %d, isRead : " + isRead, position));
-            JSONObject obj = dataArray.getJSONObject((dataArray.length() - position - 1));
-            Log.d(TAG, "setRead: before : " + dataArray.toString());
-            obj.put("isRead", isRead);
-            dataArray.put((dataArray.length() - position - 1), obj);
-            this.notifyDataSetChanged();
-            Log.d(TAG, "setRead: after : " + dataArray.toString());
-            unread = isRead ? (unread-1) : (unread+1);
-            fragment.setBadge(unread);
+//        try {
+//            Log.d(TAG, String.format("setRead: position : %d, isRead : " + isRead, position));
+//            JSONObject obj = dataArray.getJSONObject((dataArray.length() - position - 1));
+//            Log.d(TAG, "setRead: before : " + dataArray.toString());
+//            obj.put("isRead", isRead);
+//            dataArray.put((dataArray.length() - position - 1), obj);
+//            this.notifyDataSetChanged();
+//            Log.d(TAG, "setRead: after : " + dataArray.toString());
+//            unread = isRead ? (unread-1) : (unread+1);
+//            fragment.setBadge(unread);
 
             return true;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
     }
 
 

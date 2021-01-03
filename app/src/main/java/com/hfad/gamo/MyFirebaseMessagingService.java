@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import static com.hfad.gamo.Component.default_url;
 import static com.hfad.gamo.Component.sharedPreferences;
+import static com.hfad.gamo.Component.shared_notification_data;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -55,6 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String token = s;
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+        shared_notification_data = getSharedPreferences("notification_data", Context.MODE_PRIVATE);
         pref_token = getSharedPreferences("token", Context.MODE_PRIVATE);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
@@ -104,7 +106,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.i("### noti msgContent : ", msgContent);
         String toastText = String.format("%s : %s", msgTitle, msgContent);
 //        Looper.prepare();
-        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
 //        Looper.loop();
     }
 
@@ -116,6 +118,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage msg) {
         Log.i("### msg : ", msg.toString());
         String title, body;
+
+
+
         if (msg.getData().isEmpty()) {
             title = msg.getNotification().getTitle();
             body = msg.getNotification().getBody();
@@ -128,7 +133,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             showDataMessage(title, body);  // Data로 받을 때
         }
         sendNotification(title, body, "testName");
-        saveMessage(title, body);
 
     }
 
@@ -136,29 +140,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "saveMessage: called!");
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
         String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
         try {
-            JSONObject obj = new JSONObject(msg);
-            String oldData = sharedPreferences.getString("notification_data", null);
-            JSONArray newData;
+            JSONObject notificationData = new JSONObject(msg);
             int unread = DataIOKt.getUnread();
-            if(oldData == null)
-                newData = new JSONArray();
-            else
-                newData = new JSONArray(oldData);
-
-            newData.put(obj);
             unread++;
 
 //            데이터가 40개가 넘으면 첫번째 데이터 지움.
-            if (newData.length() >= 40) {
-                if(!newData.getJSONObject(0).getBoolean("isRead"))
-                    unread--;
-                newData.remove(0);
-                Log.i(TAG, "saveMessage: first message deleted");
-            }
+//            if (newData.length() >= 40) {
+//                if(!newData.getJSONObject(0).getBoolean("isRead"))
+//                    unread--;
+//                newData.remove(0);
+//                Log.i(TAG, "saveMessage: first message deleted");
+//            }
 //            sharedPreferences.edit().putString("notification_data", newData.toString()).commit();
-            DataIOKt.setNotifications(newData.toString());
+            DataIOKt.setNotifications(notificationData.toString());
             Log.i(TAG, "saveMessage: message saved!");
 
 //            읽지 않은 알림 숫자
@@ -203,7 +200,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             channel.enableLights(true);
             channel.setLightColor(R.color.colorPrimary);
-            channel.setVibrationPattern(new long[]{100, 100, 300});
+            channel.setVibrationPattern(new long[]{0, 300, 300, 300});
             notificationManager.createNotificationChannel(channel);
 
             notificationBuilder = new NotificationCompat.Builder(this, channelId);
@@ -218,6 +215,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
                 .setContentText(message);
+
+        saveMessage(title, message);
 
         notificationManager.notify(0, notificationBuilder.build());
 

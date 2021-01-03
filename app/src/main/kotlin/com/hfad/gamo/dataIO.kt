@@ -2,12 +2,17 @@
 
 package com.hfad.gamo
 
+import android.content.Context
+import android.util.Log
 import com.hfad.gamo.Component.sharedPreferences
+import com.hfad.gamo.Component.shared_notification_data
 import java.util.*
 import kotlin.collections.HashSet
 
 
+private const val TAG = "DataIOkt"
 const val appConstantPreferences = "Moga"
+
 
 inline fun <reified T> setSharedItem(key: String, data: T) = sharedPreferences.edit().apply {
     when (T::class) {
@@ -71,19 +76,63 @@ fun removeSharedItems(vararg keys: String) = sharedPreferences.edit().apply {
     }
 }.commit()
 
-fun setUnread(unread: Int) {
-    sharedPreferences.edit().putInt("unread", unread).commit()
+
+
+fun setNotificationInit(user_no: String?) {
+    shared_notification_data.edit().putString("user_no", user_no).apply()
+    shared_notification_data.edit().putInt("index", -1).apply()
+    shared_notification_data.edit().putInt("unread", 0).apply()
+}
+fun getNotificationUserNo(): String? {
+    return shared_notification_data.getString("user_no", "")
+}
+fun clearNotificationData() {
+    shared_notification_data.edit().clear().commit()
 }
 
+fun setUnread(unread: Int) {
+    shared_notification_data.edit().putInt("unread", unread).apply()
+    }
+
 fun getUnread(): Int {
-    return sharedPreferences.getInt("unread", 0)
+    return shared_notification_data.getInt("unread", 0)
+}
+
+fun getNotificationIndex(): Int {
+    return shared_notification_data.getInt("index", 0)
 }
 
 fun setNotifications(newData: String) {
-    sharedPreferences.edit().putString("notification_data", newData).commit()
+    val index = getNotificationIndex() + 1
+    shared_notification_data.edit().putInt("index", index).apply()
+    shared_notification_data.edit().putString(index.toString(), newData).apply()
 }
-fun getNotifications(): String? {
-    return sharedPreferences.getString("notification_data", "")
+fun getNotifications(): MutableMap<String, *>? {
+    val entries = shared_notification_data.all;
+//    Log.d(TAG, "getNotifications: keys : $entries")
+    entries.remove("index")
+    entries.remove("user_no")
+    entries.remove("unread")
+//    val dataArray = JSONArray()
+//    for (entry in keys.entries) {
+//        var obj = entry.toPair()
+//        dataArray.put(obj)
+//    }
+//    Log.d(TAG, "getNotifications: dataArray : ${dataArray.toString()}")
+    Log.d(TAG, "getNotifications: entries : $entries")
+    return entries
+}
+
+fun removeNotifications(index: Int) {
+    shared_notification_data.edit().remove(index.toString()).apply()
+}
+
+fun setNotificationSetting(flag: Boolean) {
+    setSharedItem("notification", flag)
+}
+
+fun getNotificationSetting(): Boolean {
+    return getSharedItem("notification", true)
 }
 
 fun resetSharedPreference() = sharedPreferences.edit().clear().commit()

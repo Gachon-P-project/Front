@@ -5,19 +5,15 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.graphics.Point
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.MainThread
 
-import androidx.core.content.ContextCompat
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.Component.default_url
@@ -187,6 +183,11 @@ class LoginActivity : AppCompatActivity() {
                     Pair("clubCD", clubCD)
             )
             setSharedItem("login", true)
+            if(getNotificationUserNo() != information.number) {
+                clearNotificationData()
+                setNotificationInit(information.number)
+                setUnread(0)
+            }
         }
     }
 
