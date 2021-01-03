@@ -13,12 +13,15 @@ public class toClickedPosting implements Parcelable {
     private String reply_cnt;
     private String reply_yn;
     private String user_no;
+    private String like_cnt;
+    private String like_user;
 
 
 
 
     public toClickedPosting(String board_title, String post_no, String post_title, String post_contents,
-                            String wrt_date, String reply_cnt, String reply_yn, String user_no) {
+                            String wrt_date, String reply_cnt, String reply_yn, String user_no,
+                            String like_cnt, String like_user) {
         this.board_title = board_title;
         this.post_no = post_no;
         this.post_title = post_title;
@@ -27,6 +30,8 @@ public class toClickedPosting implements Parcelable {
         this.reply_cnt = reply_cnt;
         this.reply_yn = reply_yn;
         this.user_no = user_no;
+        this.like_cnt = like_cnt;
+        this.like_user = like_user;
     }
 
     public void setBoard_title(String board_title) {
@@ -59,6 +64,14 @@ public class toClickedPosting implements Parcelable {
 
     public void setUser_no(String user_no) {
         this.user_no = user_no;
+    }
+
+    public void setLike_cnt(String like_cnt) {
+        this.like_cnt = like_cnt;
+    }
+
+    public void setLike_user(String like_user) {
+        this.like_user = like_user;
     }
 
 
@@ -94,6 +107,14 @@ public class toClickedPosting implements Parcelable {
         return user_no;
     }
 
+    public String getLike_cnt() {
+        return like_cnt;
+    }
+
+    public String getLike_user() {
+        return like_user;
+    }
+
 
     protected toClickedPosting(Parcel in) {
         this.board_title = in.readString();
@@ -104,6 +125,8 @@ public class toClickedPosting implements Parcelable {
         this.reply_cnt = in.readString();
         this.reply_yn = in.readString();
         this.user_no = in.readString();
+        this.like_cnt = in.readString();
+        this.like_user = in.readString();
     }
 
     @Override
@@ -116,6 +139,8 @@ public class toClickedPosting implements Parcelable {
         dest.writeString(reply_cnt);
         dest.writeString(reply_yn);
         dest.writeString(user_no);
+        dest.writeString(like_cnt);
+        dest.writeString(like_user);
     }
 
     @Override
