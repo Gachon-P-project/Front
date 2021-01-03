@@ -117,10 +117,26 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="8dp">
 
+
+                    <ImageView
+                        android:id="@+id/activity_clicked_posting_post_like_img"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginRight="4dp"
+                        android:src="@drawable/ic_like" />
+
+                    <TextView
+                        android:id="@+id/activity_clicked_posting_post_like_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8"
+                        android:textColor="@color/like"
+                        android:textSize="12sp" />
+
                     <ImageView
                         android:layout_width="13dp"
                         android:layout_height="13dp"
-                        android:paddingTop="1dp"
+                        android:layout_marginStart="5dp"
                         android:src="@drawable/comment" />
 
                     <TextView
@@ -130,22 +146,6 @@
                         android:layout_marginStart="4dp"
                         android:text="0"
                         android:textColor="@color/reply"
-                        android:textSize="12sp" />
-
-                    <ImageView
-                        android:id="@+id/activity_clicked_posting_post_like_img"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/ic_like" />
-
-                    <TextView
-                        android:id="@+id/activity_clicked_posting_post_like_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="8"
-                        android:textColor="@color/like"
                         android:textSize="12sp" />
 
                 </LinearLayout>
