@@ -2,7 +2,6 @@ package com.hfad.gamo.ClickedBoard;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 /*import androidx.recyclerview.widget.DividerItemDecoration;*/
@@ -47,8 +46,6 @@ public class ClickedPostingActivity extends AppCompatActivity {
     private String post_no;
     private String writer_number;
     private String user_number;
-    private boolean isLiked;
-    private int like_cnt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +74,8 @@ public class ClickedPostingActivity extends AppCompatActivity {
         TextView date = findViewById(R.id.activity_clicked_posting_wrt_date);
         TextView contents = findViewById(R.id.activity_clicked_posting_contents);
         TextView reply_cnt = findViewById(R.id.activity_clicked_posting_reply_cnt);
-        final ImageView post_like_img = findViewById(R.id.activity_clicked_posting_post_like_img);
-        final TextView post_like_text = findViewById(R.id.activity_clicked_posting_post_like_text);
+        ImageView post_like_img = findViewById(R.id.activity_clicked_posting_post_like_img);
+        TextView post_like_text = findViewById(R.id.activity_clicked_posting_post_like_text);
 
         reply_text = findViewById(R.id.activity_clicked_posting_post_reply_text);
         ImageView post_reply = findViewById(R.id.activity_clicked_posting_post_reply);
@@ -88,21 +85,9 @@ public class ClickedPostingActivity extends AppCompatActivity {
         date.setText(toClickedPosting.getWrt_date());
         contents.setText(toClickedPosting.getPost_contents());
         reply_cnt.setText(toClickedPosting.getReply_cnt());
-        post_like_text.setText(toClickedPosting.getLike_cnt());
-
-
-        if(toClickedPosting.getLike_user().equals("0")) {
-            isLiked = false;
-            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
-        } else {
-            isLiked = true;
-            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
-        }
 
         post_no = toClickedPosting.getPost_no();
         writer_number = toClickedPosting.getUser_no();
-        like_cnt = Integer.parseInt(toClickedPosting.getLike_cnt());
-
 
         post_reply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,29 +136,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
         });
 
 
-        post_like_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post_like_img.setFocusable(false);
-                String postLikeUrl = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
-
-                volley.postJSONObjectString(null,postLikeUrl, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(isLiked) {
-                            isLiked = false;
-                            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
-                            /*post_like_text.setText(--like_cnt);*/
-                        } else {
-                            isLiked = true;
-                            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
-                            /*post_like_text.setText(++like_cnt);*/
-                        }
-                    }
-                }, null);
-                post_like_img.setFocusable(true);
-            }
-        });
+//        like_btn = findViewById(R.id.post_like_btn);    // 공감 버튼
 
         RecyclerView recyclerView = findViewById(R.id.recycler_reply);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

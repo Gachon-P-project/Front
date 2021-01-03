@@ -23,7 +23,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
@@ -84,7 +83,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_contents.setText(data.getString("post_contents"));
             wrt_date = data.getString("wrt_date");
             holder.board_reply_cnt.setText(data.getString("reply_cnt"));
-            holder.board_post_like.setText(data.getString("like_user"));
+            holder.board_post_like.setText(data.getString("post_like"));
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
@@ -99,8 +98,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             assert data != null;
             holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"),
                     data.getString("post_title"), data.getString("post_contents"), androidDate,
-                    data.getString("reply_cnt"), data.getString("reply_yn"), data.getString("user_no"),
-                    data.getString("like_cnt"), data.getString("like_user"));
+                    data.getString("reply_cnt"), data.getString("reply_yn"), data.getString("user_no"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -119,11 +117,9 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         long time;
         Date date = null;
 
-        DateFormat dateFormat_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
-        DateFormat dateFormat_2 = new SimpleDateFormat("yyyy.MM.dd. a hh:mm:ss", Locale.KOREA);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
-        dateFormat_1.setTimeZone(timeZone);
-        dateFormat_2.setTimeZone(timeZone);
+        dateFormat.setTimeZone(timeZone);
 
         Calendar beforeOneHour = Calendar.getInstance();
         beforeOneHour.add(Calendar.HOUR, -1);
@@ -134,18 +130,9 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         DateFormat dataFormatForFinalDate = new SimpleDateFormat("yy.MM.dd", java.util.Locale.getDefault());
         try {
             assert serverDate != null;
-            date = dateFormat_1.parse(serverDate);
+            date = dateFormat.parse(serverDate);
         } catch (ParseException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (date == null) {
-                    assert serverDate != null;
-                    date = dateFormat_2.parse(serverDate);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
         }
 
         String AndroidDate;

@@ -12,17 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".InformationActivity" />
-        <activity android:name=".NoticeDetailActivity" />
-        <activity android:name=".ClickedBoard.RereplyActivity" />
+        <activity android:name=".InformationActivity"></activity>
+        <activity android:name=".NoticeDetailActivity"></activity>
+        <activity android:name=".ClickedBoard.RereplyActivity"></activity>
         <activity android:name=".ClickedBoard.ClickedPostingActivity" />
         <activity android:name=".ClickedBoard.SearchActivity" />
         <activity
             android:name=".ClickedBoard.WritingActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ClickedBoard.ClickedBoardActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
         <activity android:name=".VolleyActivity" />
         <activity
             android:name=".SplashActivity"
