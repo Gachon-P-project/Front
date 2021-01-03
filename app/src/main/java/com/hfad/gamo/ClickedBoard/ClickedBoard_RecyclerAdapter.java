@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
@@ -117,9 +118,11 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         long time;
         Date date = null;
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        DateFormat dateFormat_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        DateFormat dateFormat_2 = new SimpleDateFormat("yyyy.MM.dd. a hh:mm:ss", Locale.KOREA);
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
-        dateFormat.setTimeZone(timeZone);
+        dateFormat_1.setTimeZone(timeZone);
+        dateFormat_2.setTimeZone(timeZone);
 
         Calendar beforeOneHour = Calendar.getInstance();
         beforeOneHour.add(Calendar.HOUR, -1);
@@ -130,9 +133,18 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         DateFormat dataFormatForFinalDate = new SimpleDateFormat("yy.MM.dd", java.util.Locale.getDefault());
         try {
             assert serverDate != null;
-            date = dateFormat.parse(serverDate);
+            date = dateFormat_1.parse(serverDate);
         } catch (ParseException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (date == null) {
+                    assert serverDate != null;
+                    date = dateFormat_2.parse(serverDate);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         String AndroidDate;
