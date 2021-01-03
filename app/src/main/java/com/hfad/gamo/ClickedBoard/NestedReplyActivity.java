@@ -11,6 +11,6 @@ public class RereplyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rereply);
+        setContentView(R.layout.activity_nested_reply);
     }
 }
