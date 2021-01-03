@@ -1,6 +1,9 @@
 package com.hfad.gamo.ClickedBoard;
 
-public class ReplyItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+/*public class ReplyItem {
     private int is_mine;
 
     private int post_no;
@@ -47,4 +50,60 @@ public class ReplyItem {
     public void setContents(String contents) {
         this.contents = contents;
     }
+}*/
+
+public class ReplyItem implements Parcelable {
+
+    private String content;
+    private String wrt_date;
+
+    public ReplyItem(String content, String wrt_date) {
+        this.content = content;
+        this.wrt_date = wrt_date;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setWrt_date(String wrt_date) {
+        this.wrt_date = wrt_date;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getWrt_date() {
+        return wrt_date;
+    }
+
+
+    protected ReplyItem(Parcel in) {
+        this.content = in.readString();
+        this.wrt_date = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(content);
+        dest.writeString(wrt_date);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ReplyItem> CREATOR = new Creator<ReplyItem>() {
+        @Override
+        public ReplyItem createFromParcel(Parcel in) {
+            return new ReplyItem(in);
+        }
+
+        @Override
+        public ReplyItem[] newArray(int size) {
+            return null;
+        }
+    };
 }

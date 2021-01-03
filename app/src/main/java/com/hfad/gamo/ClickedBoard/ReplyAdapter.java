@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hfad.gamo.R;
@@ -24,27 +25,37 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
     private JSONArray JSONArrayData = null;
+    private HashMap<Integer, JSONArray> toNestedReplyActivity = null;
     private float density;
     private DisplayMetrics displayMetrics = null;
     private final String TRUE = "1";
     private final String FALSE = "0";
+    private String where = null;
 
 
-    ReplyAdapter(JSONArray list, Activity activity) {
+    ReplyAdapter(JSONArray list, Activity activity, String where) {
         this.JSONArrayData = list;
+        this.where = where;
         DisplayMetrics displaymetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         density = activity.getResources().getDisplayMetrics().density;
 
         displayMetrics = activity.getApplicationContext().getResources().getDisplayMetrics();
+
+        if(where.equals("ClickedPostingActivity")) {
+            this.toNestedReplyActivity = new HashMap<>();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -87,13 +98,16 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ReplyAdapter.ViewHolder holder, int position) {
 
-        JSONObject data;
+        JSONObject data = null;
         int depth = 0;
         String reply_contents = null;
         String wrt_date = null;
         String reply_user_no = null;
         String user_no = sharedPreferences.getString("number", null);
         String is_deleted = null;
+        int reply_no = -1;
+        int post_no = -1;
+        int bundle_id = -1;
 
         try {
             data = JSONArrayData.getJSONObject(position);
@@ -102,6 +116,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             depth = data.getInt("depth");
             reply_user_no = data.getString("user_no");
             is_deleted = data.getString("is_deleted");
+            reply_no = data.getInt("reply_no");
+            post_no = data.getInt("post_no");
+            bundle_id = data.getInt("bundle_id");
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
@@ -142,13 +159,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                 holder.item_replies_three_dots.setVisibility(View.GONE);
             }
         } else {
+            final int finalReply_no = reply_no;
+            final int finalPost_no = post_no;
+
             assert reply_user_no != null;
             if(reply_user_no.equals(user_no)) {
                 holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
-                        ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 0);
+                        ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 0, finalReply_no, finalPost_no);
                         replyWriterDialog.show();
                         WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
                         params.width = (int) (displayMetrics.widthPixels * 0.8);
@@ -161,7 +180,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
                     @Override
                     public void onClick(View v) {
-                        ReplyDialog replyDialog = new ReplyDialog(v.getContext());
+                        ReplyDialog replyDialog = new ReplyDialog(v.getContext(), finalReply_no, finalPost_no);
                         replyDialog.show();
                         WindowManager.LayoutParams params = replyDialog.getWindow().getAttributes();
                         params.width = (int) (displayMetrics.widthPixels * 0.8);
@@ -172,7 +191,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             }
         }
 
-
+        if(where.equals("ClickedPostingActivity")) {
+            saveDataForNestedReplyActivity(data, depth, bundle_id);
+        }
     }
 
 
@@ -186,9 +207,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         long time;
         Date date = null;
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        DateFormat dateFormat_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        DateFormat dateFormat_2 = new SimpleDateFormat("yyyy.MM.dd. a hh:mm:ss", Locale.KOREA);
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
-        dateFormat.setTimeZone(timeZone);
+        dateFormat_1.setTimeZone(timeZone);
+        dateFormat_2.setTimeZone(timeZone);
 
         Calendar beforeOneHour = Calendar.getInstance();
         beforeOneHour.add(Calendar.HOUR, -1);
@@ -199,9 +222,18 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         DateFormat dataFormatForFinalDate = new SimpleDateFormat("yy.MM.dd", java.util.Locale.getDefault());
         try {
             assert serverDate != null;
-            date = dateFormat.parse(serverDate);
+            date = dateFormat_1.parse(serverDate);
         } catch (ParseException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (date == null) {
+                    assert serverDate != null;
+                    date = dateFormat_2.parse(serverDate);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         String AndroidDate;
@@ -227,6 +259,29 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
     private int getPixel(int dp){
         return (int)(dp * density);
+    }
+
+    private void saveDataForNestedReplyActivity(JSONObject reply_data, int depth, int bundle_id) {
+
+        if(depth == 0) {
+            JSONArray data = new JSONArray();
+            data.put(reply_data);
+            toNestedReplyActivity.put(bundle_id, data);
+        } else {
+            JSONArray data = toNestedReplyActivity.get(bundle_id);
+            data.put(reply_data);
+        }
+    }
+
+    private ArrayList<String> JSONArrayToArrayListOfString(JSONArray jsonArray) throws JSONException {
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            arrayList.add(jsonArray.getJSONObject(0).toString());
+        }
+
+        return arrayList;
     }
 
 }

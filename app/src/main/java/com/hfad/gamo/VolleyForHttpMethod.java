@@ -142,7 +142,7 @@ public class VolleyForHttpMethod {
             }
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -248,7 +248,7 @@ public class VolleyForHttpMethod {
         }
 
         Log.d(TAG, "postJSONObjectJSONArray: added to queue");
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -280,7 +280,7 @@ public class VolleyForHttpMethod {
             );
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -311,7 +311,7 @@ public class VolleyForHttpMethod {
             });
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -335,7 +335,7 @@ public class VolleyForHttpMethod {
             };
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -361,7 +361,7 @@ public class VolleyForHttpMethod {
             };
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 

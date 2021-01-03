@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.hfad.gamo.VolleyForHttpMethod;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
@@ -144,7 +147,6 @@ public class ClickedPostingActivity extends AppCompatActivity {
                                 adapter.notifyDataSetChanged();
                             }
                         });
-
                     }
                 }, null);
             }
@@ -163,11 +165,11 @@ public class ClickedPostingActivity extends AppCompatActivity {
                         if(isLiked) {
                             isLiked = false;
                             post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
-                            /*post_like_text.setText(--like_cnt);*/
+                            post_like_text.setText(String.valueOf(--like_cnt));
                         } else {
                             isLiked = true;
                             post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
-                            /*post_like_text.setText(++like_cnt);*/
+                            post_like_text.setText(String.valueOf(++like_cnt));
                         }
                     }
                 }, null);
@@ -183,9 +185,12 @@ public class ClickedPostingActivity extends AppCompatActivity {
 
         String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
 
+        final long startTime = System.currentTimeMillis();
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                long endTime = System.currentTimeMillis();
+                Log.i("inquireReplies", String.valueOf(endTime-startTime));
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         responseJSONObject = response.getJSONObject(i);
@@ -195,10 +200,11 @@ public class ClickedPostingActivity extends AppCompatActivity {
                     }
                 }
                 adapter.notifyDataSetChanged();
+
             }
         });
 
-        adapter = new ReplyAdapter(responseJSONArray, this);
+        adapter = new ReplyAdapter(responseJSONArray, this, "ClickedPostingActivity");
         recyclerView.setAdapter(adapter);
     }
 
