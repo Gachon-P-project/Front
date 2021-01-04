@@ -3,6 +3,7 @@ package com.hfad.gamo;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -23,6 +24,7 @@ import static com.hfad.gamo.Component.shared_notification_data;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -170,7 +172,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             Intent intent = new Intent();
             intent.putExtra("unread", unread);
-            intent.setAction("com.hfad.gamo.saveMessage");
+            intent.setAction(getString(R.string.broadcastSaveMessage));
             sendBroadcast(intent);
 
         } catch (JSONException e) {
@@ -181,37 +183,47 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(String title, String message, String name) {
         Intent intent;
         PendingIntent pendingIntent;
+        int unread = DataIOKt.getUnread();
+        Log.d(TAG, "sendNotification: unread : " + unread);
         boolean isNotify = DataIOKt.getNotificationSetting();
 
         intent = new Intent(this, SplashActivity.class);
         intent.putExtra("name", name);
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        pendingIntent = PendingIntent.getActivity(this, (int)(System.currentTimeMillis()/1000), intent, PendingIntent.FLAG_ONE_SHOT);
+        pendingIntent = PendingIntent.getActivity(this, (int)(System.currentTimeMillis()/1000), intent, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder;
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
+//        NotificationCompat.Builder summaryNotification;
 
         if(Build.VERSION.SDK_INT >= 26) {
             String channelId = "Moga Push";
-            String channelName = "Moga Push Message";
-            String channelDescription = "Moga Push Information";
+            String channelName = "Push Message";
+            String channelDescription = "Moga Push Message";
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(channelDescription);
 
             channel.enableLights(true);
             channel.setLightColor(R.color.colorPrimary);
             channel.setVibrationPattern(new long[]{0, 300, 300, 300});
+            channel.setShowBadge(true);
             notificationManager.createNotificationChannel(channel);
 
             notificationBuilder = new NotificationCompat.Builder(this, channelId);
+//            summaryNotification = new NotificationCompat.Builder(this, channelId);
         } else {
             notificationBuilder = new NotificationCompat.Builder(this);
+//            summaryNotification = new NotificationCompat.Builder(this);
         }
 
+//        String group_id = "push_group";
+//        String group_name = "푸시 그룹";
+        String group_name = "com.hfad.gamo.Push_Group";
         notificationBuilder.setSmallIcon(R.mipmap.ic_main)
                 .setContentTitle(title)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
@@ -220,10 +232,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent)
                 .setContentText(message);
 
+//        summaryNotification.set
+
+
+
+
         saveMessage(title, message);
 
-        if(isNotify)
-            notificationManager.notify(0, notificationBuilder.build());
+        if(isNotify) {
+            notificationManager.notify((int) (System.currentTimeMillis() / 1000), notificationBuilder.build());
+//            notificationManager.notify(0, );
+        }
 
 
     }
