@@ -12,14 +12,15 @@ import androidx.annotation.NonNull;
 
 import com.hfad.gamo.R;
 
+import java.util.ArrayList;
+
 public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
     private TextView postRereply;
     private TextView deleteReply;
     private int depth;
-    private int reply_no = -1;
-    private int post_no = -1;
+    private ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
 
     public ReplyWriterDialog(@NonNull Context context, int depth) {
         super(context);
@@ -27,13 +28,11 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         this.depth = depth;
     }
 
-    public ReplyWriterDialog(@NonNull Context context, int depth, int reply_no, int post_no) {
+    public ReplyWriterDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity) {
         super(context);
-
         this.context = context;
         this.depth = depth;
-        this.reply_no = reply_no;
-        this.post_no = post_no;
+        this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
     }
 
     @Override
@@ -63,11 +62,8 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialogReplyWriter_postRereply:
-                Intent nestedReplyIntent = new Intent(context, NestedReplyActivity.class);
-                if(reply_no != -1) {
-                    nestedReplyIntent.putExtra("reply_no", reply_no);
-                    nestedReplyIntent.putExtra("post_no", post_no);
-                }
+                Intent nestedReplyIntent = new Intent(context, WritingNestedReplyActivity.class);
+                nestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
                 context.startActivity(nestedReplyIntent);
                 break;
             case R.id.dialogReplyWriter_deleteReply:

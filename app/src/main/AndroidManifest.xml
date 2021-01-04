@@ -14,7 +14,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".InformationActivity" />
         <activity android:name=".NoticeDetailActivity" />
-        <activity android:name=".ClickedBoard.NestedReplyActivity" />
+        <activity android:name=".ClickedBoard.WritingNestedReplyActivity" />
         <activity android:name=".ClickedBoard.ClickedPostingActivity" />
         <activity android:name=".ClickedBoard.SearchActivity" />
         <activity

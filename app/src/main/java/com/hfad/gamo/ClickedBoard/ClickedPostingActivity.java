@@ -30,22 +30,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
-public class ClickedPostingActivity extends AppCompatActivity {
+public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private JSONObject responseJSONObject = new JSONObject();
-    private VolleyForHttpMethod volley;
-    private ReplyAdapter adapter;
-    private JSONArray responseJSONArray = new JSONArray();
-    private JSONObject commentJSONObject = new JSONObject();
-    private EditText reply_text;
-    private SharedPreferences prefs;
+    private VolleyForHttpMethod volley = null;
+    private toClickedPosting toClickedPosting = null;
+    private ReplyAdapter replyAdapter = null;
+    private JSONArray jsonArrayForReplyAdapter = new JSONArray();
+    private JSONObject jsonObjectForPostReply = new JSONObject();
+    private EditText postReply_et = null;
+    private ImageView postReply_iv = null;
+    private ImageView post_like_img = null;
+    private TextView post_like_text = null;
+    private SharedPreferences prefs = null;
     private DisplayMetrics displayMetricsForDeviceSize = null;
 
-    private String url;
+    private String urlForInquireReplies;
+    private String urlForPostReply;
+    private String urlForPostLike;
     private String userId;
     private String post_no;
     private String writer_number;
@@ -59,153 +62,29 @@ public class ClickedPostingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clicked_posting);
 
         Intent intent = getIntent();
-        final toClickedPosting toClickedPosting = intent.getParcelableExtra("toClickedPosting");
-
-        prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-        userId = prefs.getString("id", null);
-        user_number = prefs.getString("number", null);
-
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
-
-        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
-        setSupportActionBar(tb);
-        getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
-
-        displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
-
-        TextView title = findViewById(R.id.activity_clicked_posting_title);
-        TextView nickName = findViewById(R.id.activity_clicked_posting_nickname);
-        TextView date = findViewById(R.id.activity_clicked_posting_wrt_date);
-        TextView contents = findViewById(R.id.activity_clicked_posting_contents);
-        TextView reply_cnt = findViewById(R.id.activity_clicked_posting_reply_cnt);
-        final ImageView post_like_img = findViewById(R.id.activity_clicked_posting_post_like_img);
-        final TextView post_like_text = findViewById(R.id.activity_clicked_posting_post_like_text);
-
-        reply_text = findViewById(R.id.activity_clicked_posting_post_reply_text);
-        ImageView post_reply = findViewById(R.id.activity_clicked_posting_post_reply);
-
-        title.setText(toClickedPosting.getPost_title());
-        nickName.setText("익명");
-        date.setText(toClickedPosting.getWrt_date());
-        contents.setText(toClickedPosting.getPost_contents());
-        reply_cnt.setText(toClickedPosting.getReply_cnt());
-        post_like_text.setText(toClickedPosting.getLike_cnt());
-
-
-        if(toClickedPosting.getLike_user().equals("0")) {
-            isLiked = false;
-            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
-        } else {
-            isLiked = true;
-            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
-        }
+        toClickedPosting = intent.getParcelableExtra("toClickedPosting");
 
         post_no = toClickedPosting.getPost_no();
         writer_number = toClickedPosting.getUser_no();
         like_cnt = Integer.parseInt(toClickedPosting.getLike_cnt());
 
+        prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        userId = prefs.getString("id", null);
+        user_number = prefs.getString("number", null);
 
-        post_reply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //String url = "http://172.30.1.2:17394/reply/insert/" + "jy11290" + "/" + toClickedPosting.getPost_no();
-
-                String url = Component.default_url.concat(getString(R.string.postReply,user_number,post_no));
-
-                try {
-                    commentJSONObject.put("reply_contents", reply_text.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                volley.postJSONObjectString(commentJSONObject, url, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
-
-                        int original_length = responseJSONArray.length();
-                        int current_length = original_length;
-                        for(int i = 0; i < original_length; i++) {
-                            responseJSONArray.remove(--current_length);
-                        }
-
-                        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
-
-                        volley.getJSONArray(url, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                for (int i = 0; i < response.length(); i++) {
-                                    try {
-                                        responseJSONObject = response.getJSONObject(i);
-                                        responseJSONArray.put(responseJSONObject);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                }, null);
-            }
-        });
+        initVolley();
+        initToolBar();
+        initRecyclerViewForReply();
+        initView();
+        initPostLikeUsingUserValue();
+        initUrl();
 
 
-        post_like_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                post_like_img.setFocusable(false);
-                String postLikeUrl = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
+        postReply_iv.setOnClickListener(this);
 
-                volley.postJSONObjectString(null,postLikeUrl, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(isLiked) {
-                            isLiked = false;
-                            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
-                            post_like_text.setText(String.valueOf(--like_cnt));
-                        } else {
-                            isLiked = true;
-                            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
-                            post_like_text.setText(String.valueOf(++like_cnt));
-                        }
-                    }
-                }, null);
-                post_like_img.setFocusable(true);
-            }
-        });
+        post_like_img.setOnClickListener(this);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_reply);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                R.drawable.line_divider);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-        String url = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
-
-        final long startTime = System.currentTimeMillis();
-        volley.getJSONArray(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                long endTime = System.currentTimeMillis();
-                Log.i("inquireReplies", String.valueOf(endTime-startTime));
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        responseJSONObject = response.getJSONObject(i);
-                        responseJSONArray.put(responseJSONObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                adapter.notifyDataSetChanged();
-
-            }
-        });
-
-        adapter = new ReplyAdapter(responseJSONArray, this, "ClickedPostingActivity");
-        recyclerView.setAdapter(adapter);
+        inquireReplies();
     }
 
     @Override
@@ -230,6 +109,7 @@ public class ClickedPostingActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.menu_toolbar_clicked_posting_three_dots :
+                displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
                 ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this);
                 clickedPostingDialog.show();
                 WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();
@@ -253,5 +133,147 @@ public class ClickedPostingActivity extends AppCompatActivity {
         finish();
     }
 
+    private void inquireReplies() {
+        volley.getJSONArray(urlForInquireReplies, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                processReceivedReplies(response);
+            }
+        });
+    }
+
+    private void processReceivedReplies(JSONArray response) {
+        if(response.length() == 0)
+            return;
+
+        for (int i = 0; i < response.length(); i++) {
+            try {
+                JSONObject responseJSONObject = response.getJSONObject(i);
+                jsonArrayForReplyAdapter.put(responseJSONObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        replyAdapter.notifyDataSetChanged();
+    }
+
+    private void postReply() {
+        volley.postJSONObjectString(jsonObjectForPostReply, urlForPostReply, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                onResponseForPostReply();
+            }
+        }, null);
+    }
+
+    private void putReplyIntoJSONObject() {
+        try {
+            jsonObjectForPostReply.put("reply_contents", postReply_et.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onResponseForPostReply() {
+        Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
+        clearJSONArray();
+        inquireReplies();
+    }
+
+
+    private void clearJSONArray() {
+        int original_length = jsonArrayForReplyAdapter.length();
+        int current_length = original_length;
+        for(int i = 0; i < original_length; i++) {
+            jsonArrayForReplyAdapter.remove(--current_length);
+        }
+    }
+
+    private void initRecyclerViewForReply() {
+        RecyclerView recyclerViewForReply = findViewById(R.id.recycler_reply);
+        recyclerViewForReply.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                R.drawable.line_divider);
+        recyclerViewForReply.addItemDecoration(dividerItemDecoration);
+
+        replyAdapter = new ReplyAdapter(jsonArrayForReplyAdapter, this, "ClickedPostingActivity");
+        recyclerViewForReply.setAdapter(replyAdapter);
+        Log.i("recycler!!!" , "initRecyclerViewForReply");
+    }
+
+    private void initToolBar() {
+        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
+        setSupportActionBar(tb);
+        getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+    }
+
+    private void initView() {
+        TextView title = findViewById(R.id.activity_clicked_posting_title);
+        TextView nickName = findViewById(R.id.activity_clicked_posting_nickname);
+        TextView date = findViewById(R.id.activity_clicked_posting_wrt_date);
+        TextView contents = findViewById(R.id.activity_clicked_posting_contents);
+        TextView reply_cnt = findViewById(R.id.activity_clicked_posting_reply_cnt);
+        TextView post_like_text = findViewById(R.id.activity_clicked_posting_post_like_text);
+
+        post_like_img = findViewById(R.id.activity_clicked_posting_post_like_iv);
+        postReply_et = findViewById(R.id.activity_clicked_posting_post_reply_et);
+        postReply_iv = findViewById(R.id.activity_clicked_posting_post_reply_iv);
+
+        title.setText(toClickedPosting.getPost_title());
+        nickName.setText("익명");
+        date.setText(toClickedPosting.getWrt_date());
+        contents.setText(toClickedPosting.getPost_contents());
+        reply_cnt.setText(toClickedPosting.getReply_cnt());
+        post_like_text.setText(toClickedPosting.getLike_cnt());
+    }
+
+    private void initPostLikeUsingUserValue() {
+        if(toClickedPosting.getLike_user().equals("0")) {
+            isLiked = false;
+            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
+        } else {
+            isLiked = true;
+            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
+        }
+    }
+
+    private void initVolley() {
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+    }
+
+    private void initUrl() {
+        urlForPostReply = Component.default_url.concat(getString(R.string.postReply,user_number,post_no));
+        urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.activity_clicked_posting_post_reply_iv) {
+            putReplyIntoJSONObject();
+            postReply();
+        } else if (v.getId() == R.id.activity_clicked_posting_post_like_iv) {
+            post_like_img.setFocusable(false);
+            urlForPostLike = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
+
+            volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if(isLiked) {
+                        isLiked = false;
+                        post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
+                        post_like_text.setText(String.valueOf(--like_cnt));
+                    } else {
+                        isLiked = true;
+                        post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
+                        post_like_text.setText(String.valueOf(++like_cnt));
+                    }
+                }
+            }, null);
+            post_like_img.setFocusable(true);
+        }
+    }
 }
 
