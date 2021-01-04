@@ -1,9 +1,12 @@
 package com.hfad.gamo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +20,9 @@ import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -35,6 +41,8 @@ import org.json.JSONObject;
 import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.Component.default_url;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+import static com.hfad.gamo.DataIOKt.getNotificationSetting;
+import static com.hfad.gamo.DataIOKt.setNotificationSetting;
 
 public class NoticeFragment extends Fragment {
 
@@ -66,6 +74,7 @@ public class NoticeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
@@ -224,6 +233,7 @@ public class NoticeFragment extends Fragment {
         Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_clicked_board);
         ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + " 공지사항</b>", 0));
+
 
     }
 
@@ -423,4 +433,37 @@ public class NoticeFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+
+    @SuppressLint("ResourceAsColor")
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_toolbar_set_notification, menu);
+        if (getNotificationSetting()) {
+            Drawable icon_active = getResources().getDrawable(R.drawable.ic_notifications_active);
+            menu.getItem(0).setIcon(icon_active);
+        } else {
+            Drawable icon_disable = getResources().getDrawable(R.drawable.ic_notifications_disabled);
+            menu.getItem(0).setIcon(icon_disable);
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_set_notification) {
+            if (getNotificationSetting()) {
+                setNotificationSetting(false);
+                Drawable icon_disable = getResources().getDrawable(R.drawable.ic_notifications_disabled);
+                item.setIcon(icon_disable);
+                Toast.makeText(getContext(), "알림 비활성", Toast.LENGTH_SHORT).show();
+            } else {
+                setNotificationSetting(true);
+                Drawable icon_active = getResources().getDrawable(R.drawable.ic_notifications_active);
+                item.setIcon(icon_active);
+                Toast.makeText(getContext(), "알림 활성", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

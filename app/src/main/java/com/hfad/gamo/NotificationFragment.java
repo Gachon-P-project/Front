@@ -55,7 +55,6 @@ public class NotificationFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ImageButton imgBtnSetNotification;
 //    private JSONArray dataArray;
     private Map<String, ?> dataMap;
     private TextView tvNoData;
@@ -81,7 +80,6 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        imgBtnSetNotification = view.findViewById(R.id.imgBtnSetNotification);
         tvNoData = view.findViewById(R.id.tvNotificationNoData);
         swipeRefreshLayout = view.findViewById(R.id.swipeLayoutNotification);
         recyclerView = view.findViewById(R.id.rViewNotification);
@@ -152,29 +150,6 @@ public class NotificationFragment extends Fragment {
         });
 
 
-        if(getNotificationSetting()) {
-            imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_active);
-            imgBtnSetNotification.setColorFilter(Color.red(R.color.white));
-        } else {
-            imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_disabled);
-            imgBtnSetNotification.setColorFilter(Color.red(R.color.lightGray));
-        }
-        imgBtnSetNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getNotificationSetting()) {
-                    setNotificationSetting(false);
-                    imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_disabled);
-                    imgBtnSetNotification.setColorFilter(Color.red(R.color.lightGray));
-                    Toast.makeText(context, "알림 비활성", Toast.LENGTH_SHORT).show();
-                } else {
-                    setNotificationSetting(true);
-                    imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_active);
-                    imgBtnSetNotification.setColorFilter(Color.red(R.color.white));
-                    Toast.makeText(context, "알림 활성", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         return view;
     }
