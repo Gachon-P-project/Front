@@ -1,5 +1,6 @@
 package com.hfad.gamo;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -117,7 +118,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage msg) {
         Log.i("### msg : ", msg.toString());
         String title, body;
-
+        sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
         shared_notification_data = getSharedPreferences("notification_data", Context.MODE_PRIVATE);
 
 
@@ -139,23 +140,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void saveMessage(String title, String content) {
         Log.d(TAG, "saveMessage: called!");
         Date date = new Date();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
+        @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
+//        String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
         try {
-            JSONObject notificationData = new JSONObject(msg);
-            int unread = DataIOKt.getUnread();
-            unread++;
+            JSONObject obj = new JSONObject(msg);
+            String oldData = DataIOKt.getNotifications();
+            JSONArray newData;
+            if(oldData.equals(""))
+                newData = new JSONArray();
+            else
+                newData = new JSONArray(oldData);
+            newData.put(obj);
+            int unread = DataIOKt.getUnread() + 1;
 
 //            데이터가 40개가 넘으면 첫번째 데이터 지움.
-//            if (newData.length() >= 40) {
-//                if(!newData.getJSONObject(0).getBoolean("isRead"))
-//                    unread--;
-//                newData.remove(0);
-//                Log.i(TAG, "saveMessage: first message deleted");
-//            }
+            if (newData.length() >= 40) {
+                if(!newData.getJSONObject(0).getBoolean("isRead"))
+                    unread--;
+                newData.remove(0);
+                Log.i(TAG, "saveMessage: first message deleted");
+            }
+            DataIOKt.setNotifications(newData.toString());
 //            sharedPreferences.edit().putString("notification_data", newData.toString()).commit();
-            DataIOKt.setNotifications(notificationData.toString());
+//            DataIOKt.setNotifications(notificationData.toString());
             Log.i(TAG, "saveMessage: message saved!");
 
 //            읽지 않은 알림 숫자
@@ -178,6 +186,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(String title, String message, String name) {
         Intent intent;
         PendingIntent pendingIntent;
+        boolean isNotify = DataIOKt.getNotificationSetting();
 
         intent = new Intent(this, SplashActivity.class);
         intent.putExtra("name", name);
@@ -218,7 +227,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         saveMessage(title, message);
 
-        notificationManager.notify(0, notificationBuilder.build());
+        if(isNotify)
+            notificationManager.notify(0, notificationBuilder.build());
 
 
     }

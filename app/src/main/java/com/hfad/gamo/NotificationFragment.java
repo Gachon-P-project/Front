@@ -40,11 +40,11 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.hfad.gamo.DataIOKt.getNotificationIndex;
-import static com.hfad.gamo.DataIOKt.getNotificationSetting;
-import static com.hfad.gamo.DataIOKt.getNotifications;
-import static com.hfad.gamo.DataIOKt.getUnread;
-import static com.hfad.gamo.DataIOKt.setNotificationSetting;
+//import static com.hfad.gamo.DataIOKt.getNotificationIndex;
+//import static com.hfad.gamo.DataIOKt.getNotificationSetting;
+//import static com.hfad.gamo.DataIOKt.getNotifications;
+//import static com.hfad.gamo.DataIOKt.getUnread;
+//import static com.hfad.gamo.DataIOKt.setNotificationSetting;
 
 public class NotificationFragment extends Fragment {
 
@@ -55,11 +55,11 @@ public class NotificationFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-//    private JSONArray dataArray;
-    private Map<String, ?> dataMap;
+    private JSONArray dataArray;
+//    private Map<String, ?> dataMap;
     private TextView tvNoData;
     private int unread = 0;
-    private int last_index = DataIOKt.getNotificationIndex();
+//    private int last_index = DataIOKt.getNotificationIndex();
     private boolean isNotificationEnabled;
 
     public NotificationFragment() {
@@ -84,51 +84,16 @@ public class NotificationFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeLayoutNotification);
         recyclerView = view.findViewById(R.id.rViewNotification);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-//        try {
-//            dataArray = new JSONArray(DataIOKt.getNotifications());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        Log.d(TAG, "onCreateView: dataArray: " + dataArray.toString());
+//        dataMap = getNotifications();
 
-        dataMap = getNotifications();
+        try {
+            dataArray = new JSONArray(DataIOKt.getNotifications());
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
 
-
-//        setBadge();
-//        임시데이터
-//        String content = "";
-//        for (int i = 0 ; i < 10 ; i++) {
-//            String title = "제목 "+i;
-//            content += " 내용 내용 내용 " + i;
-//            String type = "";
-//            switch ((i / 3)) {
-//                case 1 :
-//                    type = "notice_new";
-//                    break;
-//                case 2:
-//                    type = "board_reply";
-//                    break;
-//                case 0:
-//                    type = "board_like";
-//                    break;
-//            }
-//            String board_no = String.valueOf(1919+3*i);
-//            String time = "2020-12-19 15:35:57";
-//
-//            try {
-//                JSONObject object = new JSONObject("{\"title\" : \"" + title + "\", \"content\" : \"" + content + "\", \"type\" : \"" + type + "\", " +
-//                        "\"baord_no\" : \"" + board_no + "\", \"time\" : \"" + time + "\" }");
-//                dataArray.put(object);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-
-
-
-//        adapter = new Notification_RecyclerAdapter(dataArray, this);
-        adapter = new Notification_RecyclerAdapter(dataMap, this, last_index);
+        adapter = new Notification_RecyclerAdapter(dataArray, this);
+//        adapter = new Notification_RecyclerAdapter(dataMap, this, last_index);
         adapter.setRecyclerView(recyclerView);
 
         recyclerView.setAdapter(adapter);
@@ -167,7 +132,7 @@ public class NotificationFragment extends Fragment {
     public void setBadge(int newUnread) {
         unread = newUnread;
         DataIOKt.setUnread(newUnread);
-//        DataIOKt.setNotifications(dataArray.toString());
+        DataIOKt.setNotifications(dataArray.toString());
         ((MainActivity)getActivity()).setBadge(newUnread);
     }
 
@@ -187,9 +152,9 @@ public class NotificationFragment extends Fragment {
 //                    e.printStackTrace();
 //                }
 
-                last_index = getNotificationIndex();
-                dataMap = getNotifications();
-                adapter.notifyDataSetChanged();
+//                last_index = getNotificationIndex();
+//                dataMap = getNotifications();
+//                adapter.notifyDataSetChanged();
 
                 refresh();
             }
@@ -198,29 +163,22 @@ public class NotificationFragment extends Fragment {
 
     private void refresh() {
 
-//        try {
-//            dataArray = new JSONArray(DataIOKt.getNotifications());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            dataArray = new JSONArray(DataIOKt.getNotifications());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        last_index = getNotificationIndex();
-        dataMap = getNotifications();
+//        last_index = getNotificationIndex();
+//        dataMap = getNotifications();
         recyclerView.removeAllViews();
-//        adapter = new Notification_RecyclerAdapter(dataArray, NotificationFragment.this);
-        adapter = new Notification_RecyclerAdapter(dataMap, this, last_index);
+        adapter = new Notification_RecyclerAdapter(dataArray, NotificationFragment.this);
+//        adapter = new Notification_RecyclerAdapter(dataMap, this, last_index);
         adapter.setRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
-
-
-    //    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getActivity().getMenuInflater().inflate(R.menu.menu_toolbar_set_notification, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
 
 
 }
