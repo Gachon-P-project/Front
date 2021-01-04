@@ -96,10 +96,12 @@ fun setUnread(unread: Int) {
 
 fun getUnread(): Int {
     return shared_notification_data.getInt("unread", 0)
+//    return 0
 }
 
 fun getNotificationIndex(): Int {
     return shared_notification_data.getInt("index", 0)
+//    return 0
 }
 
 fun setNotifications(newData: String) {

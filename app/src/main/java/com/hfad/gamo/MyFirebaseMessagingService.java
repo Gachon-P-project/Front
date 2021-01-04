@@ -56,7 +56,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String token = s;
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
-        shared_notification_data = getSharedPreferences("notification_data", Context.MODE_PRIVATE);
         pref_token = getSharedPreferences("token", Context.MODE_PRIVATE);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
@@ -119,6 +118,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.i("### msg : ", msg.toString());
         String title, body;
 
+        shared_notification_data = getSharedPreferences("notification_data", Context.MODE_PRIVATE);
 
 
         if (msg.getData().isEmpty()) {
