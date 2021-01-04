@@ -47,6 +47,7 @@
     <string name="noticeUrl">/notice/url/%1$s/%2$s</string>
     <string name="noticeList">/notice/read/%1$d/%2$s</string>
     <string name="noticeSearchedList">/notice/read/%1$d/%2$s/%3$s</string>
+    <string name="broadcastSaveMessage">com.hfad.gamo.saveMessage</string>
 
 
 </resources>

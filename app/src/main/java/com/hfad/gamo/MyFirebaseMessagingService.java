@@ -125,12 +125,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (msg.getData().isEmpty()) {
             title = msg.getNotification().getTitle();
             body = msg.getNotification().getBody();
-//            saveMessage(title, body);
             showNotificationMessage(title, body);  // Notification으로 받을 때
         } else {
             title = msg.getData().get("title");
             body = msg.getData().get("body");
-//            saveMessage(title,body);
             showDataMessage(title, body);  // Data로 받을 때
         }
         sendNotification(title, body, "testName");
@@ -142,7 +140,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Date date = new Date();
         @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
-//        String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
         try {
             JSONObject obj = new JSONObject(msg);
             String oldData = DataIOKt.getNotifications();
@@ -162,8 +159,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.i(TAG, "saveMessage: first message deleted");
             }
             DataIOKt.setNotifications(newData.toString());
-//            sharedPreferences.edit().putString("notification_data", newData.toString()).commit();
-//            DataIOKt.setNotifications(notificationData.toString());
             Log.i(TAG, "saveMessage: message saved!");
 
 //            읽지 않은 알림 숫자

@@ -109,20 +109,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        replaceFragment("timetable");
 
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-
-        Intent getIntent = getIntent();
-        flag = getIntent.getBooleanExtra("flag", false);
-
-        if(flag) {
-            String itemName = getIntent.getStringExtra("itemName");
-            replaceFragment(itemName);
-            flag = false;
-        } else {
-            fragmentTransaction.add(R.id.fragment, f_TimeTable2);
-            fragmentTransaction.commit();
-        }
+//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//        Intent getIntent = getIntent();
+//        flag = getIntent.getBooleanExtra("flag", false);
+//        if(flag) {
+//            String itemName = getIntent.getStringExtra("itemName");
+//            replaceFragment(itemName);
+//            flag = false;
+//        } else {
+//            fragmentTransaction.replace(R.id.fragment, f_TimeTable2);
+//            fragmentTransaction.commit();
+//        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -131,17 +130,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
         setBadge(getUnread());
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.hfad.gamo.saveMessage");
+        intentFilter.addAction(getString(R.string.broadcastSaveMessage));
         MyBroadcastReceiver receiver = new MyBroadcastReceiver();
         registerReceiver(receiver, intentFilter);
     }

@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-//import java.util.Map;
 import java.util.TimeZone;
 
 public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -33,9 +32,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private LinearLayoutManager linearLayoutManager;
     private Context context;
     private JSONArray dataArray;
-//    private Map<String, ?> dataMap;
     private NotificationFragment fragment;
-    private int last_index;
     private String dept = DataIOKt.getDepartment();
     private int unread = DataIOKt.getUnread();
 
@@ -45,12 +42,6 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         this.dataArray = dataArray;
         this.fragment = fragment;
     }
-//    public Notification_RecyclerAdapter(Map<String, ?> dataMap, NotificationFragment fragment, int last_index) {
-//        super();
-//        this.dataMap = dataMap;
-//        this.fragment = fragment;
-//        this.last_index = last_index;
-//    }
 
     @NonNull
     @Override
@@ -84,7 +75,6 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
         try {
             Log.d(TAG, "onBindViewHolder: position: " + position + ", data: " + dataArray.toString());
-//            String temp = String.valueOf(dataMap.get(String.valueOf(last_index - position)));
             data = dataArray.getJSONObject(dataArray.length() - position - 1) ;
             Log.d(TAG, "onBindViewHolder: data : " + data.toString());
             title = data.getString("title");
@@ -158,13 +148,6 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             return dataArray.length();
     }
 
-//    @Override
-//    public int getItemCount() {
-//        if(last_index >= 40)
-//            return 40;
-//        else
-//            return last_index+1;
-//    }
 
     public void setRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
@@ -189,11 +172,6 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public boolean setRead(int position, boolean isRead ) {
-//        Log.d(TAG, String.format("setRead: position : %d, isRead : " + isRead, position));
-//
-//
-//
-//        return true;
         try {
             Log.d(TAG, String.format("setRead: position : %d, isRead : " + isRead, position));
             JSONObject obj = dataArray.getJSONObject((dataArray.length() - position - 1));
@@ -211,6 +189,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             return false;
         }
     }
+
 
 
 
