@@ -257,7 +257,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         if(v.getId() == R.id.activity_clicked_posting_post_reply_iv) {
             putReplyIntoJSONObject();
             postReply();
-        } else if (v.getId() == R.id.activity_clicked_posting_post_like_iv) {
+        } else if (v.getId() == R.id.activity_clicked_posting_post_like_iv || v.getId() == R.id.activity_clicked_posting_post_like_text) {
             post_like_img.setFocusable(false);
 
             volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
