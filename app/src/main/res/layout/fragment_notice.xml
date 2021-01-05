@@ -53,6 +53,8 @@
                 android:inputType="text"
                 android:padding="9dp"
                 android:background="@android:color/transparent"
+                android:maxLength="20"
+                android:selectAllOnFocus="true"
                 />
 
 

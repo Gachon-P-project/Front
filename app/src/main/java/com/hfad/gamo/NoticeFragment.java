@@ -16,7 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
+import android.text.Editable;
 import android.text.Html;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,15 +42,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.content.Context.MODE_PRIVATE;
+import java.util.regex.Pattern;
+
 import static com.hfad.gamo.Component.default_url;
-import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 import static com.hfad.gamo.DataIOKt.getNotificationSetting;
 import static com.hfad.gamo.DataIOKt.setNotificationSetting;
 
 public class NoticeFragment extends Fragment {
 
-    private static final String TAG = "NOTI_FRAGMENT";
+    private static final String TAG = "NOTICE_FRAGMENT";
     private SharedPreferences prefs;
     private String dept;
     private Notice_RecyclerAdapter adapter;
@@ -55,7 +59,7 @@ public class NoticeFragment extends Fragment {
     private JSONObject responseJSONObject = new JSONObject();
     private JSONObject loadingJsonObject;
     private ImageView cancel_button_notice;
-    private EditText editText;
+    private EditText edtSearchNotice;
 
     private RecyclerView recyclerView = null;
     private SwipeRefreshLayout swipeContainer;
@@ -76,8 +80,7 @@ public class NoticeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-        dept = prefs.getString("department", null);
+        dept = DataIOKt.getDepartment();
 
 //        키보드 제어 변수
         imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -87,7 +90,6 @@ public class NoticeFragment extends Fragment {
         getFirstNoticeList(new VolleyCallback() {
             @Override
             public void onSuccess() {
-
                 adapter.dataUpdate();
             }
         });
@@ -99,8 +101,7 @@ public class NoticeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
         loadingDialog = new LoadingDialog();
@@ -110,14 +111,12 @@ public class NoticeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notice, container, false);
         cancel_button_notice = view.findViewById(R.id.cancel_button_notice);
-        editText = view.findViewById(R.id.edit);
-
+        edtSearchNotice = view.findViewById(R.id.edit);
         recyclerView = view.findViewById(R.id.recycler_notice);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         adapter = new Notice_RecyclerAdapter(responseJSONArray, dept);
         adapter.setRecyclerView(recyclerView);
-
         recyclerView.setAdapter(adapter);
         loadPost();
 
@@ -159,28 +158,28 @@ public class NoticeFragment extends Fragment {
 
         swipeContainer.setColorSchemeResources(R.color.indigo500);
 
-        ImageView search_button = view.findViewById(R.id.search_button);
+        final ImageView search_button = view.findViewById(R.id.search_button);
         search_button.setClickable(true);
 
+//        검색 EditText Filter
+        edtSearchNotice.setFilters(new InputFilter[]{new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if(source.equals(""))
+                    return source;
+                Pattern pattern = Pattern.compile("^[a-zA-Z0-9가-힣ㄱ-하-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025\\u00B7\\uFE55]+$");
+                if (pattern.matcher(source).matches()) {
+                    return source;
+                }
+                return "";
+            }
+        }});
 
 //        검색 (키보드 돋보기 클릭 시)
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        edtSearchNotice.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                adapter.setIsLoading(true);
-                page = 0;
-                responseJSONArray = new JSONArray();
-                search_word = editText.getText().toString();
-                getFirstSearchedNotice(new VolleyCallback() {
-                    @Override
-                    public void onSuccess() {
-                        initRecyclerView();
-                        Log.d(TAG, "Search :: onSuccess: finish");
-                    }
-                });
-//                키보드 숨김
-                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                search_button.performClick();
                 return true;
             }
         });
@@ -188,12 +187,16 @@ public class NoticeFragment extends Fragment {
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadingDialog.start(getContext());
+                adapter.setIsLoading(true);
                 page = 0;
-                search_word = editText.getText().toString();
+                search_word = edtSearchNotice.getText().toString();
                 getFirstSearchedNotice(new VolleyCallback() {
                     @Override
                     public void onSuccess() {
                         initRecyclerView();
+                        loadingDialog.finish();
+                        edtSearchNotice.clearFocus();
                         Log.d(TAG, "Search :: onSuccess: finish");
                     }
                 });
@@ -207,6 +210,7 @@ public class NoticeFragment extends Fragment {
         cancel_button_notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadingDialog.start(getContext());
                 search_word = "";
                 page = 0;
                 responseJSONArray = new JSONArray();
@@ -214,12 +218,14 @@ public class NoticeFragment extends Fragment {
                     @Override
                     public void onSuccess() {
                         initRecyclerView();
+                        loadingDialog.finish();
+                        edtSearchNotice.clearFocus();
                         Log.d(TAG, "cancel_search: onSuccess");
                     }
                 });
                 isSearching = false;
                 cancel_button_notice.setVisibility(View.GONE);
-                editText.getText().clear();
+                edtSearchNotice.getText().clear();
             }
         });
 
@@ -240,7 +246,7 @@ public class NoticeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        editText.setText("");
+        edtSearchNotice.setText("");
 
     }
 
