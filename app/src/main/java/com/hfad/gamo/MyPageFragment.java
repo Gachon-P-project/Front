@@ -1,6 +1,7 @@
 package com.hfad.gamo;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -8,12 +9,17 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,17 +35,14 @@ public class MyPageFragment extends Fragment {
     private SharedPreferences prefs;
 
     private NickNameDialog nickNameDialog;
+    private NotificationSettingDialog notificationSettingDialog;
     private LinearLayout llChangeNickname, llNotificationSettings, llAppInfo, llLogout;
     private TextView tvUsername, tvNickname, tvMajor, tvStudentId;
     private ImageView imgMyPhoto;
     private String username, major, nickname, studnetId, myPhotoUrl;
 
     public MyPageFragment() {
-
     }
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,9 +55,6 @@ public class MyPageFragment extends Fragment {
         nickname = prefs.getString("nickname", "-");
         studnetId = prefs.getString("number", null);
         myPhotoUrl = prefs.getString("image", null);
-
-
-
 
     }
 
@@ -83,18 +83,12 @@ public class MyPageFragment extends Fragment {
         tvStudentId.setText(studnetId);
         tvNickname.setText(nickname);
 
-
-//        getMyPhoto getMyPhoto = new getMyPhoto();
-//        getMyPhoto.execute();
+        DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
+        final int deviceWidth = dm.widthPixels;
 
         llChangeNickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getContext(), "닉네임 변경", Toast.LENGTH_SHORT).show();
-
-                DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
-                int deviceWidth = dm.widthPixels;
-
                 nickNameDialog = new NickNameDialog(getActivity());
                 nickNameDialog.initDialog(deviceWidth);
                 nickNameDialog.updateNickname();
@@ -104,7 +98,8 @@ public class MyPageFragment extends Fragment {
         llNotificationSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "알림 설정", Toast.LENGTH_SHORT).show();
+                notificationSettingDialog = new NotificationSettingDialog(getActivity(), deviceWidth);
+                notificationSettingDialog.show();
             }
         });
 
@@ -125,10 +120,6 @@ public class MyPageFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
-
-
         return view;
     }
 
@@ -136,8 +127,6 @@ public class MyPageFragment extends Fragment {
     public void onRefresh() {
         ((MainActivity)getActivity()).refreshFragment();
     }
-
-
 
     private class getMyPhoto extends AsyncTask<Void, Void, Bitmap> {
         @Override
@@ -172,4 +161,51 @@ public class MyPageFragment extends Fragment {
 
 
 
+    private class NotificationSettingDialog extends Dialog{
+
+        Context context;
+        SwitchCompat schSettingNotice;
+        Button btnDialogPositive;
+        boolean settingNotice = DataIOKt.getNotificationSetting();
+
+        public NotificationSettingDialog(@NonNull Context context, int deviceWidth) {
+            super(context);
+            this.context = context;
+            setContentView(R.layout.dialog_notification_setting);
+            schSettingNotice = findViewById(R.id.schNotificationSettingNotice);
+            btnDialogPositive = findViewById(R.id.btnNotificationSettingExit);
+
+            schSettingNotice.setChecked(settingNotice);
+            schSettingNotice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked)
+                        DataIOKt.setNotificationSetting(true);
+                    else
+                        DataIOKt.setNotificationSetting(false);
+                }
+            });
+
+            btnDialogPositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+
+
+            WindowManager.LayoutParams params = this.getWindow().getAttributes();
+            params.width = (int)(deviceWidth * 0.95);
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            this.onWindowAttributesChanged(params);
+
+
+        }
+
+        @Override
+        public void create() {
+            super.create();
+        }
+
+    }
 }

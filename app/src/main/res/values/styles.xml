@@ -22,5 +22,9 @@
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
+    <style name="switchTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">#B6BAD6</item>
+    </style>
+
 
 </resources>
