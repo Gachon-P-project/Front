@@ -85,6 +85,7 @@ public class NotificationFragment extends Fragment {
                 DataIOKt.setNotifications("");
                 DataIOKt.setUnread(0);
                 refresh();
+                setBadge(0);
             }
         });
 
