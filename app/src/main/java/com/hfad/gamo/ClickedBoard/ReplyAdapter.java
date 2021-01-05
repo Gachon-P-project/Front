@@ -79,6 +79,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         View view;
 
         int bundle_id;
+        JSONObject replyForData;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -113,16 +114,14 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         Log.i("recycler!!!" , "onBindViewHolder");
 
         try {
-            data = JSONArrayData.getJSONObject(position);
-            initData(data);
+            holder.replyForData = JSONArrayData.getJSONObject(position);
+            initData(holder.replyForData);
         } catch(JSONException e) {
             e.printStackTrace();
         }
 
-        holder.bundle_id = bundle_id;
-
         if(usingLocation.equals("ClickedPostingActivity")) {
-            saveDataForWritingNestedReplyActivity(data, depth, bundle_id);
+            saveDataForWritingNestedReplyActivity(holder.replyForData, depth, bundle_id);
         }
 
         if(is_deleted.equals(TRUE)) {
@@ -242,15 +241,16 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         holder.item_replies_user_img.setVisibility(View.GONE);
         holder.item_replies_wrt_date.setVisibility(View.GONE);
         holder.item_replies_three_dots.setVisibility(View.GONE);
-        holder.item_replies_nickname.setVisibility(View.INVISIBLE);
+        holder.item_replies_nickname.setVisibility(View.GONE);
         holder.item_replies_content.setText("삭제된 댓글입니다.");
     }
 
-    private void setViewOfUnDeletedReply(ReplyAdapter.ViewHolder holder, String usingLocation) throws JSONException {
+    private void setViewOfUnDeletedReply(final ReplyAdapter.ViewHolder holder, String usingLocation) throws JSONException {
         holder.item_replies_content.setText(reply_contents);
         holder.item_replies_wrt_date.setText(wrt_date);
 
-        final int final_bundle_id = holder.bundle_id;
+        final int bundle_id = holder.replyForData.getInt("bundle_id");
+        final int reply_no = holder.replyForData.getInt("reply_no");
 
         if(usingLocation.equals("ClickedPostingActivity")) {
             if(depth == 1) {
@@ -262,7 +262,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
                         @Override
                         public void onClick(View v) {
-                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 1);
+                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), clickedPostingActivity, holder.replyForData);
                             replyWriterDialog.show();
                             WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
                             params.width = (int) (displayMetrics.widthPixels * 0.8);
@@ -282,11 +282,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                         public void onClick(View v) {
                             ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
                             try {
-                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(final_bundle_id));
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(bundle_id));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity, clickedPostingActivity);
+                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(),clickedPostingActivity, dataUsedInWritingNestedReplyActivity, holder.replyForData);
                             replyWriterDialog.show();
                             WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
                             params.width = (int) (displayMetrics.widthPixels * 0.8);
@@ -301,7 +301,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                         public void onClick(View v) {
                             ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
                             try {
-                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(final_bundle_id));
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(bundle_id));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

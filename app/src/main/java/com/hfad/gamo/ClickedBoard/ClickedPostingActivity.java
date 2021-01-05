@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -33,7 +32,7 @@ import org.json.JSONObject;
 
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
-public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener {
+public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface {
 
     public static int WritingNestedReplyActivity = 0;
 
@@ -165,7 +164,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         volley.postJSONObjectString(jsonObjectForPostReply, urlForPostReply, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                showReceivedAllReplies();
+                showAllReplies();
             }
         }, null);
     }
@@ -178,7 +177,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         }
     }
 
-    private void showReceivedAllReplies() {
+    private void showAllReplies() {
         //Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
         clearJSONArray();
         inquireReplies();
@@ -285,8 +284,37 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
         if(requestCode == WritingNestedReplyActivity) {
             if(resultCode == RESULT_OK) {
-                showReceivedAllReplies();
+                showAllReplies();
             }
+        }
+    }
+
+    private void deleteReply(int reply_no) {
+        final String urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReply, String.valueOf(reply_no)));
+        volley.delete(null, urlDeleteReply, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                showAllReplies();
+            }
+        }, null);
+    }
+
+    private void deleteNestedReply(int reply_no) {
+        final String urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReply, String.valueOf(reply_no)));
+        volley.delete(null, urlDeleteNestedReply, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                showAllReplies();
+            }
+        }, null);
+    }
+
+    @Override
+    public void onDeleteReplyDialog(int depth, int reply_no) {
+        if(depth == 0) {
+            deleteReply(reply_no);
+        } else {
+            deleteNestedReply(reply_no);
         }
     }
 }
