@@ -27,85 +27,122 @@ public class VolleyForHttpMethod {
         this.queue = queue;
     }
 
-    public void postJSONObjectString(@NonNull final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener ErrorListener) {
+    public void postJSONObjectString(@Nullable final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener ErrorListener) {
 
         StringRequest request;
-        if(listener == null && ErrorListener == null) {
-            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("VolleyResponse", "Response is good");
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
-                    Log.i("VolleyError", "Volley Error in receive");
-                }
-            }) {
-                @Override
-                public byte[] getBody() {
-                    return Body.toString().getBytes();
-                }
-                @Override
-                public String getBodyContentType() {
-                    return "application/json";
-                }
-            };
 
-        } else if(listener != null && ErrorListener == null) {
-            request = new StringRequest(Request.Method.POST, url, listener, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
-                    Log.i("VolleyError", "Volley Error in receive");
-                }
-            }) {
-                @Override
-                public byte[] getBody() {
-                    return Body.toString().getBytes();
-                }
+        if (Body != null) {
+            if (listener == null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                }) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
 
-                @Override
-                public String getBodyContentType() {
-                    return "application/json";
-                }
-            };
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
 
-        } else if(listener == null && ErrorListener != null) {
-            request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.i("VolleyResponse", "Response is good");
-                }
-            }, ErrorListener) {
-                @Override
-                public byte[] getBody() {
-                    return Body.toString().getBytes();
-                }
+            } else if (listener != null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.POST, url, listener, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                }) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
 
-                @Override
-                public String getBodyContentType() {
-                    return "application/json";
-                }
-            };
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
 
+            } else if (listener == null && ErrorListener != null) {
+                request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, ErrorListener) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+            } else {
+                Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
+                request = new StringRequest(Request.Method.POST, url, listener, ErrorListener) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+            }
         } else {
-            Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
-            request = new StringRequest(Request.Method.POST, url, listener, ErrorListener) {
-                @Override
-                public byte[] getBody() {
-                    return Body.toString().getBytes();
-                }
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json";
-                }
-            };
+            if (listener == null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                });
+            } else if (listener != null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.POST, url, listener, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                });
+            } else if (listener == null && ErrorListener != null) {
+                request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, ErrorListener);
+            } else {
+                Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
+                request = new StringRequest(Request.Method.POST, url, listener, ErrorListener);
+            }
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -211,7 +248,7 @@ public class VolleyForHttpMethod {
         }
 
         Log.d(TAG, "postJSONObjectJSONArray: added to queue");
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -243,7 +280,7 @@ public class VolleyForHttpMethod {
             );
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -274,7 +311,7 @@ public class VolleyForHttpMethod {
             });
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
@@ -298,20 +335,20 @@ public class VolleyForHttpMethod {
             };
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
         queue.add(request);
     }
 
 
 
-    public void delete(@NonNull final JSONObject Body, @NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+    /*public void delete(@NonNull final JSONObject Body, @NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
         StringRequest request = null;
 
         if(listener == null || errorListener == null) {
             Log.e(TAG, "deleteJSONObjectString: Response.Listener is null or Response.ErrorListener is null");
         } else {
             Log.d(TAG, "deleteJSONObjectString: volley delete start");
-            request = new StringRequest(Request.Method.PUT, url, listener, errorListener) {
+            request = new StringRequest(Request.Method.DELETE, url, listener, errorListener) {
                 @Override
                 public byte[] getBody() {
                     return Body.toString().getBytes();
@@ -324,7 +361,126 @@ public class VolleyForHttpMethod {
             };
         }
 
-        request.setShouldCache(false);
+        request.setShouldCache(true);
+        queue.add(request);
+    }*/
+
+    public void delete(@Nullable final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener ErrorListener) {
+
+        StringRequest request;
+
+        if (Body != null) {
+            if (listener == null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                }) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+            } else if (listener != null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.DELETE, url, listener, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                }) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+            } else if (listener == null && ErrorListener != null) {
+                request = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, ErrorListener) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+            } else {
+                Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
+                request = new StringRequest(Request.Method.DELETE, url, listener, ErrorListener) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+            }
+        } else {
+            if (listener == null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                });
+            } else if (listener != null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.DELETE, url, listener, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                    }
+                });
+            } else if (listener == null && ErrorListener != null) {
+                request = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, ErrorListener);
+            } else {
+                Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
+                request = new StringRequest(Request.Method.DELETE, url, listener, ErrorListener);
+            }
+        }
+
+        request.setShouldCache(true);
         queue.add(request);
     }
 

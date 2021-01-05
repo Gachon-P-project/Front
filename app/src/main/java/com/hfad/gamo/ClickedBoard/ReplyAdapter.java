@@ -3,6 +3,7 @@ package com.hfad.gamo.ClickedBoard;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,8 +24,10 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -33,19 +35,37 @@ import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
     private JSONArray JSONArrayData = null;
+    private ClickedPostingActivity clickedPostingActivity = null;
+    private HashMap<Integer, JSONArray> toWritingNestedReplyActivity = null;
     private float density;
     private DisplayMetrics displayMetrics = null;
     private final String TRUE = "1";
     private final String FALSE = "0";
+    private String usingLocation = null;
+    private JSONObject data = null;
+    private int depth = 0;
+    private String reply_contents = null;
+    private String wrt_date = null;
+    private String reply_user_no = null;
+    private String user_no = sharedPreferences.getString("number", null);
+    private String is_deleted = null;
+    private int reply_no = -1;
+    private int post_no = -1;
+    private int bundle_id = -1;
 
-
-    ReplyAdapter(JSONArray list, Activity activity) {
+    ReplyAdapter(JSONArray list, Activity activity, String usingLocation) {
         this.JSONArrayData = list;
+        this.usingLocation = usingLocation;
         DisplayMetrics displaymetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         density = activity.getResources().getDisplayMetrics().density;
 
         displayMetrics = activity.getApplicationContext().getResources().getDisplayMetrics();
+
+        if(usingLocation.equals("ClickedPostingActivity")) {
+            this.toWritingNestedReplyActivity = new HashMap<>();
+            this.clickedPostingActivity = (ClickedPostingActivity) activity;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,6 +77,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         ImageView item_replies_user_img;
 
         View view;
+
+        int bundle_id;
+        JSONObject replyForData;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,91 +111,29 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ReplyAdapter.ViewHolder holder, int position) {
 
-        JSONObject data;
-        int depth = 0;
-        String reply_contents = null;
-        String wrt_date = null;
-        String reply_user_no = null;
-        String user_no = sharedPreferences.getString("number", null);
-        String is_deleted = null;
+        Log.i("recycler!!!" , "onBindViewHolder");
 
         try {
-            data = JSONArrayData.getJSONObject(position);
-            reply_contents = data.getString("reply_contents");
-            wrt_date = processServerDateToAndroidDate(data.getString("wrt_date"));
-            depth = data.getInt("depth");
-            reply_user_no = data.getString("user_no");
-            is_deleted = data.getString("is_deleted");
+            holder.replyForData = JSONArrayData.getJSONObject(position);
+            initData(holder.replyForData);
         } catch(JSONException e) {
             e.printStackTrace();
-            Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
+        }
+
+        if(usingLocation.equals("ClickedPostingActivity")) {
+            saveDataForWritingNestedReplyActivity(holder.replyForData, depth, bundle_id);
         }
 
         if(is_deleted.equals(TRUE)) {
-            holder.item_replies_user_img.setVisibility(View.GONE);
-            holder.item_replies_wrt_date.setVisibility(View.GONE);
-            holder.item_replies_three_dots.setVisibility(View.GONE);
-            holder.item_replies_nickname.setVisibility(View.INVISIBLE);
-            holder.item_replies_content.setText("삭제된 댓글입니다.");
+            setViewOfDeletedReply(holder);
             return;
         }
 
-
-        holder.item_replies_content.setText(reply_contents);
-        holder.item_replies_wrt_date.setText(wrt_date);
-
-        if(depth == 1) {
-            holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
-
-            assert reply_user_no != null;
-            if(reply_user_no.equals(user_no)) {
-                holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 1);
-                        replyWriterDialog.show();
-                        WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
-                        params.width = (int) (displayMetrics.widthPixels * 0.8);
-                        params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
-                        replyWriterDialog.getWindow().setAttributes(params);
-
-                    }
-                });
-            } else {
-                holder.item_replies_three_dots.setVisibility(View.GONE);
-            }
-        } else {
-            assert reply_user_no != null;
-            if(reply_user_no.equals(user_no)) {
-                holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 0);
-                        replyWriterDialog.show();
-                        WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
-                        params.width = (int) (displayMetrics.widthPixels * 0.8);
-                        params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
-                        replyWriterDialog.getWindow().setAttributes(params);
-                    }
-                });
-            } else {
-                holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        ReplyDialog replyDialog = new ReplyDialog(v.getContext());
-                        replyDialog.show();
-                        WindowManager.LayoutParams params = replyDialog.getWindow().getAttributes();
-                        params.width = (int) (displayMetrics.widthPixels * 0.8);
-                        params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
-                        replyDialog.getWindow().setAttributes(params);
-                    }
-                });
-            }
+        try {
+            setViewOfUnDeletedReply(holder, usingLocation);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
 
     }
 
@@ -239,6 +200,127 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
     private int getPixel(int dp){
         return (int)(dp * density);
+    }
+
+    private void saveDataForWritingNestedReplyActivity(JSONObject reply_data, int depth, int bundle_id) {
+
+        if(depth == 0) {
+            JSONArray data = new JSONArray();
+            data.put(reply_data);
+            toWritingNestedReplyActivity.put(bundle_id, data);
+        } else {
+            JSONArray data = toWritingNestedReplyActivity.get(bundle_id);
+            data.put(reply_data);
+        }
+    }
+
+    private ArrayList<String> transformData(JSONArray jsonArray) throws JSONException {
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            arrayList.add(jsonArray.getJSONObject(i).toString());
+        }
+
+        return arrayList;
+    }
+
+
+    private void initData(JSONObject data) throws JSONException{
+        reply_contents = data.getString("reply_contents");
+        wrt_date = processServerDateToAndroidDate(data.getString("wrt_date"));
+        depth = data.getInt("depth");
+        reply_user_no = data.getString("user_no");
+        is_deleted = data.getString("is_deleted");
+        reply_no = data.getInt("reply_no");
+        post_no = data.getInt("post_no");
+        bundle_id = data.getInt("bundle_id");
+    }
+
+    private void setViewOfDeletedReply(ReplyAdapter.ViewHolder holder) {
+        holder.item_replies_user_img.setVisibility(View.GONE);
+        holder.item_replies_wrt_date.setVisibility(View.GONE);
+        holder.item_replies_three_dots.setVisibility(View.GONE);
+        holder.item_replies_nickname.setVisibility(View.GONE);
+        holder.item_replies_content.setText("삭제된 댓글입니다.");
+    }
+
+    private void setViewOfUnDeletedReply(final ReplyAdapter.ViewHolder holder, String usingLocation) throws JSONException {
+        holder.item_replies_content.setText(reply_contents);
+        holder.item_replies_wrt_date.setText(wrt_date);
+
+        final int bundle_id = holder.replyForData.getInt("bundle_id");
+        final int reply_no = holder.replyForData.getInt("reply_no");
+
+        if(usingLocation.equals("ClickedPostingActivity")) {
+            if(depth == 1) {
+                holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
+
+                assert reply_user_no != null;
+                if(reply_user_no.equals(user_no)) {
+                    holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), clickedPostingActivity, holder.replyForData);
+                            replyWriterDialog.show();
+                            WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
+                            params.width = (int) (displayMetrics.widthPixels * 0.8);
+                            params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
+                            replyWriterDialog.getWindow().setAttributes(params);
+
+                        }
+                    });
+                } else {
+                    holder.item_replies_three_dots.setVisibility(View.GONE);
+                }
+            } else {
+                assert reply_user_no != null;
+                if(reply_user_no.equals(user_no)) {
+                    holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
+                            try {
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(bundle_id));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(),clickedPostingActivity, dataUsedInWritingNestedReplyActivity, holder.replyForData);
+                            replyWriterDialog.show();
+                            WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
+                            params.width = (int) (displayMetrics.widthPixels * 0.8);
+                            params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
+                            replyWriterDialog.getWindow().setAttributes(params);
+                        }
+                    });
+                } else {
+                    holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
+                            try {
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(bundle_id));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            ReplyDialog replyDialog = new ReplyDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity, clickedPostingActivity);
+                            replyDialog.show();
+                            WindowManager.LayoutParams params = replyDialog.getWindow().getAttributes();
+                            params.width = (int) (displayMetrics.widthPixels * 0.8);
+                            params.height = (int) (WindowManager.LayoutParams.WRAP_CONTENT * 1.1);
+                            replyDialog.getWindow().setAttributes(params);
+                        }
+                    });
+                }
+            }
+        } else {
+            if(depth == 1) {
+                holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
+            }
+            holder.item_replies_three_dots.setVisibility(View.INVISIBLE);
+        }
     }
 
 }

@@ -30,12 +30,12 @@
     <string name="modifyPosting">/board/update/%1$s</string>
     <string name="deletePosting">/board/delete/%1$s</string>
     <string name="postReply">/reply/insert/%1$s/%2$s</string>
-    <string name="postReReply">/reply/insert/rereply/%1$s/%2$s/%3$s</string>
+    <string name="postNestedReply">/reply/insert/rereply/%1$s/%2$s/%3$s</string>
     <string name="inquireReplies">/reply/read/%1$s</string>
     <string name="modifyReply">/reply/update/%1$s</string>
-    <string name="modifyReReply">/reply/update/rereply/$1$s</string>
+    <string name="modifyNestedReply">/reply/update/rereply/$1$s</string>
     <string name="deleteReply">/reply/delete/%1$s</string>
-    <string name="deleteReReply">/reply/delete/rereply/%1$s</string>
+    <string name="deleteNestedReply">/reply/delete/rereply/%1$s</string>
     <string name="inquireNotification">/notice/read/%1$s/%2$s</string>
     <string name="searchNotification">/notice/read/%1$s/%2$s/%3$s</string>
     <string name="registerUser">/user/add</string>
@@ -48,6 +48,7 @@
     <string name="noticeList">/notice/read/%1$d/%2$s</string>
     <string name="noticeSearchedList">/notice/read/%1$d/%2$s/%3$s</string>
     <string name="broadcastSaveMessage">com.hfad.gamo.saveMessage</string>
+    <string name="postLike">/like/insert/%1$s/%2$s</string>
 
 
 </resources>

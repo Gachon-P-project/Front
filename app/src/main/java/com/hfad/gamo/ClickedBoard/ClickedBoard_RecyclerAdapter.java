@@ -84,7 +84,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             holder.board_contents.setText(data.getString("post_contents"));
             wrt_date = data.getString("wrt_date");
             holder.board_reply_cnt.setText(data.getString("reply_cnt"));
-            holder.board_post_like.setText(data.getString("post_like"));
+            holder.board_post_like.setText(data.getString("like_user"));
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
@@ -99,7 +99,8 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             assert data != null;
             holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"),
                     data.getString("post_title"), data.getString("post_contents"), androidDate,
-                    data.getString("reply_cnt"), data.getString("reply_yn"), data.getString("user_no"));
+                    data.getString("reply_cnt"), data.getString("reply_yn"), data.getString("user_no"),
+                    data.getString("like_cnt"), data.getString("like_user"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

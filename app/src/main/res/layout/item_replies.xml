@@ -34,6 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="익명"
+                    android:layout_marginBottom="3dp"
                     android:textColor="@color/text2"
                     android:textSize="15dp" />
 
@@ -43,14 +44,13 @@
                     android:layout_height="wrap_content"
                     android:text="댓글 내용"
                     android:textColor="@color/text1"
-                    android:textSize="16dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="6dp"/>
+                    android:textSize="16dp"/>
 
             <TextView
                 android:id="@+id/item_replies_wrt_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:text="방금 전"
                 android:textColor="@color/text2"
                 android:textSize="11dp" />

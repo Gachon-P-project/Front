@@ -2,11 +2,9 @@ package com.hfad.gamo.ClickedBoard;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -14,18 +12,65 @@ import androidx.annotation.NonNull;
 
 import com.hfad.gamo.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
+    private ClickedPostingActivity clickedPostingActivity = null;
     private TextView postRereply;
     private TextView deleteReply;
     private int depth;
+    private int reply_no;
+    private ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
+    private ReplyDialogInterface replyDialogInterface = null;
 
-    public ReplyWriterDialog(@NonNull Context context, int depth) {
+    /*public ReplyWriterDialog(@NonNull Context context, int depth, ClickedPostingActivity clickedPostingActivity) {
         super(context);
-
         this.context = context;
         this.depth = depth;
+        this.clickedPostingActivity = clickedPostingActivity;
+        this.replyDialogInterface = clickedPostingActivity;
+    }*/
+
+    public ReplyWriterDialog(@NonNull Context context, ClickedPostingActivity clickedPostingActivity, JSONObject DataForReply) {
+        super(context);
+        this.context = context;
+        this.clickedPostingActivity = clickedPostingActivity;
+        this.replyDialogInterface = clickedPostingActivity;
+        try {
+            this.depth = DataForReply.getInt("depth");
+            this.reply_no = DataForReply.getInt("reply_no");
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*public ReplyWriterDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity,
+                             ClickedPostingActivity clickedPostingActivity) {
+        super(context);
+        this.context = context;
+        this.depth = depth;
+        this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
+        this.clickedPostingActivity = clickedPostingActivity;
+    }*/
+
+    public ReplyWriterDialog(@NonNull Context context, ClickedPostingActivity clickedPostingActivity,
+                             ArrayList<String> dataUsedInWritingNestedReplyActivity, JSONObject DataForReply) {
+        super(context);
+        this.context = context;
+        this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
+        this.clickedPostingActivity = clickedPostingActivity;
+        this.replyDialogInterface = clickedPostingActivity;
+        try {
+            this.depth = DataForReply.getInt("depth");
+            this.reply_no = DataForReply.getInt("reply_no");
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -55,10 +100,12 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialogReplyWriter_postRereply:
-                Intent rereplyIntent = new Intent(context, RereplyActivity.class);
-                context.startActivity(rereplyIntent);
+                Intent nestedReplyIntent = new Intent(clickedPostingActivity, WritingNestedReplyActivity.class);
+                nestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
+                clickedPostingActivity.startActivityForResult(nestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivity);
                 break;
             case R.id.dialogReplyWriter_deleteReply:
+                replyDialogInterface.onDeleteReplyDialog(depth, reply_no);
                 break;
             default:
                 break;

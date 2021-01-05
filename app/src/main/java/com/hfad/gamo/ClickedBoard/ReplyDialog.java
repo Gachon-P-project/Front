@@ -12,16 +12,31 @@ import androidx.annotation.NonNull;
 
 import com.hfad.gamo.R;
 
+import java.util.ArrayList;
+
 public class ReplyDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
+    private ClickedPostingActivity clickedPostingActivity = null;
     private TextView postRereply;
+    private int depth;
+    private ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
 
-    public ReplyDialog(@NonNull Context context) {
+    public ReplyDialog(@NonNull Context context, int depth) {
         super(context);
 
         this.context = context;
+        this.depth = depth;
+    }
 
+    public ReplyDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity,
+                       ClickedPostingActivity clickedPostingActivity) {
+        super(context);
+
+        this.context = context;
+        this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
+        this.depth = depth;
+        this.clickedPostingActivity = clickedPostingActivity;
     }
 
     @Override
@@ -41,8 +56,9 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialogReply_postRereply:
-                Intent rereplyIntent = new Intent(context, RereplyActivity.class);
-                context.startActivity(rereplyIntent);
+                Intent WritingNestedReplyIntent = new Intent(context, WritingNestedReplyActivity.class);
+                WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
+                context.startActivity(WritingNestedReplyIntent);
                 break;
             default:
                 break;
