@@ -15,6 +15,7 @@
         <activity android:name=".InformationActivity" />
         <activity android:name=".NoticeDetailActivity" />
         <activity android:name=".ClickedBoard.WritingNestedReplyActivity" />
+        <activity android:name=".StartGuideActivity"/>
         <activity android:name=".ClickedBoard.ClickedPostingActivity" />
         <activity android:name=".ClickedBoard.SearchActivity" />
         <activity

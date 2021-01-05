@@ -65,7 +65,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
 
                     volley!!.postJSONObjectString(userJsonObject,urlRegisterUser, { response ->
                         Log.i("response", response)
-                        val nextIntent = Intent(baseActivity, MainActivity::class.java)
+                        val nextIntent = Intent(baseActivity, StartGuideActivity::class.java)
                         baseActivity.startActivity(nextIntent, null)
                         dlg.dismiss()
                         baseActivity.finish()

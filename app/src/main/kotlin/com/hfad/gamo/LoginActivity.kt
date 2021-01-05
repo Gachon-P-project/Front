@@ -116,13 +116,14 @@ class LoginActivity : AppCompatActivity() {
                     var data: JSONObject = responseJSONObject.get("data") as JSONObject
 
                     if (responseJSONObject.get("code") == registeredUser) {
+//                        기존 유저
                         Log.d(TAG, "newExecuteLogin: existing User")
                         setSharedItem("nickname", data.getString("nickname"))
                         val intent = Intent(this, MainActivity::class.java)
                         this.startActivity(intent, null)
                         this.finish()
                     } else {
-
+//                        새로운 유저
                         Log.d(TAG, "newExecuteLogin: new User")
                         val windowManager = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
                         val display = windowManager.defaultDisplay
