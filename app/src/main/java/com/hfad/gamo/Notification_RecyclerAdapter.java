@@ -1,5 +1,6 @@
 package com.hfad.gamo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -61,17 +62,14 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         final String title;
         final String content;
         String type = null;
-        String board_no;
+        final String board_no = "1961";             // 임시
         Date date = null;
         final boolean isRead;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
         TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
         dateFormat.setTimeZone(timeZone);
 
-//        Log.d(TAG, "onBindViewHolder: Map : " + dataMap.toString());
         Log.d(TAG, "onBindViewHolder: position : " + position);
-
-//        if(last_index >= position - 1) {
 
         try {
             Log.d(TAG, "onBindViewHolder: position: " + position + ", data: " + dataArray.toString());
@@ -102,31 +100,38 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 case "board_newPost_bookmark" :
                     break;
                 default:
-//                        imgIcon.setImageResource(R.drawable.ic_pencil);
                     break;
             }
             if(!isRead) {
                 ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
             }
 
+            final String finalType = type;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     if(!isRead)
                         setRead(position, true);
-//                    switch (type) {
-//                        case "notice_new" :
-//                            break;
-//                        case "board_imply" :
-//                            break;
-//                        case "board_reply" :
-//                            break;
-//                        case "board_like" :
-//                            break;
-//                        case "board_newPost_bookmark" :
-//                            break;
-//                    }
+                    Intent intent = null;
+                    switch (finalType) {
+                        case "notice_new" :
+                            intent = new Intent(context, NoticeDetailActivity.class);
+                            intent.putExtra("board_no", board_no);
+                            intent.putExtra("dept", dept);
+//                            ((NotificationFragment) fragment).switchFragment("notice");
+                            ((MainActivity)((NotificationFragment) fragment).getActivity()).replaceFragment("notice");
+                            context.startActivity(intent);
+                            break;
+                        case "board_imply" :
+                            break;
+                        case "board_reply" :
+                            break;
+                        case "board_like" :
+                            break;
+                        case "board_newPost_bookmark" :
+                            break;
+                    };
                 }
             });
 

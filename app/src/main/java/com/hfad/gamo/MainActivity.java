@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private MyPageFragment f_MyPage = new MyPageFragment();
     private NotificationFragment f_Notification = new NotificationFragment();
     private BottomNavigationView bottomNavigationView;
-    private boolean flag;
     private VolleyForHttpMethod volley;
     private SharedPreferences pref_token;
     private BadgeDrawable notificationBadge = null;
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         secondBackPressTime = System.currentTimeMillis();
         Toast.makeText(this, "이전 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
         if(secondBackPressTime - firstBackPressTime < 2000) {
@@ -156,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchFragment(int itemId) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        Log.d("MainActivity", "switchFragment: flag : " + flag);
         switch (itemId) {
             case R.id.bottomNavigationTimeTable: {
                 fragmentTransaction.replace(R.id.fragment, f_TimeTable2).commitAllowingStateLoss();
@@ -165,13 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.bottomNavigationNotice: {
                 fragmentTransaction.replace(R.id.fragment, f_Notice).commitAllowingStateLoss();
-//                if(!flag) {
-//                    if (nowFragment == f_TimeTable2)
-//                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-//                    else {
-//                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//                    }
-//                }
                 break;
             }
 
@@ -186,16 +176,13 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.bottomNavigationMyPage: {
                 fragmentTransaction.replace(R.id.fragment, f_MyPage).commitAllowingStateLoss();
-//                if(!flag)
-//                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-//                break;
             }
         }
     }
 
-    public void replaceFragment(Fragment framgent) {
+    public void replaceFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment, framgent).commitAllowingStateLoss();
+        fragmentTransaction.replace(R.id.fragment, fragment).commitAllowingStateLoss();
     }
     public void replaceFragment(String itemName) {
         switch (itemName) {

@@ -65,6 +65,15 @@ public class NotificationFragment extends Fragment {
 
         getNewData();
 
+        if(dataArray.toString().equals("[]")) {
+            recyclerView.setVisibility(View.GONE);
+            imgNoData.setVisibility(View.VISIBLE);
+            tvNoData.setVisibility(View.VISIBLE);
+        } else {
+            imgNoData.setVisibility(View.GONE);
+            tvNoData.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
         adapter = new Notification_RecyclerAdapter(dataArray, this);
         adapter.setRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
@@ -123,9 +132,7 @@ public class NotificationFragment extends Fragment {
     }
 
     private void refresh() {
-
         getNewData();
-
         recyclerView.removeAllViews();
         adapter = new Notification_RecyclerAdapter(dataArray, NotificationFragment.this);
         adapter.setRecyclerView(recyclerView);
@@ -143,18 +150,11 @@ public class NotificationFragment extends Fragment {
     }
 
     private void getNewData(){
-
         String s = DataIOKt.getNotifications();
 
         if(s.equals("")) {
-            recyclerView.setVisibility(View.GONE);
-            imgNoData.setVisibility(View.VISIBLE);
-            tvNoData.setVisibility(View.VISIBLE);
             dataArray = new JSONArray();
         } else {
-            imgNoData.setVisibility(View.GONE);
-            tvNoData.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
             try {
                 dataArray = new JSONArray(DataIOKt.getNotifications());
             } catch (JSONException e) {
