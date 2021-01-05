@@ -35,6 +35,7 @@ import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
     private JSONArray JSONArrayData = null;
+    private ClickedPostingActivity clickedPostingActivity = null;
     private HashMap<Integer, JSONArray> toWritingNestedReplyActivity = null;
     private float density;
     private DisplayMetrics displayMetrics = null;
@@ -63,6 +64,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
         if(usingLocation.equals("ClickedPostingActivity")) {
             this.toWritingNestedReplyActivity = new HashMap<>();
+            this.clickedPostingActivity = (ClickedPostingActivity) activity;
         }
     }
 
@@ -75,6 +77,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         ImageView item_replies_user_img;
 
         View view;
+
+        int bundle_id;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +118,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         } catch(JSONException e) {
             e.printStackTrace();
         }
+
+        holder.bundle_id = bundle_id;
 
         if(usingLocation.equals("ClickedPostingActivity")) {
             saveDataForWritingNestedReplyActivity(data, depth, bundle_id);
@@ -214,7 +220,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         ArrayList<String> arrayList = new ArrayList<>();
 
         for(int i = 0; i < jsonArray.length(); i++) {
-            arrayList.add(jsonArray.getJSONObject(0).toString());
+            arrayList.add(jsonArray.getJSONObject(i).toString());
         }
 
         return arrayList;
@@ -244,6 +250,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         holder.item_replies_content.setText(reply_contents);
         holder.item_replies_wrt_date.setText(wrt_date);
 
+        final int final_bundle_id = holder.bundle_id;
+
         if(usingLocation.equals("ClickedPostingActivity")) {
             if(depth == 1) {
                 holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
@@ -267,14 +275,18 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                     holder.item_replies_three_dots.setVisibility(View.GONE);
                 }
             } else {
-                final ArrayList<String> dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(bundle_id));
-
                 assert reply_user_no != null;
                 if(reply_user_no.equals(user_no)) {
                     holder.item_replies_three_dots.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity);
+                            ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
+                            try {
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(final_bundle_id));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity, clickedPostingActivity);
                             replyWriterDialog.show();
                             WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
                             params.width = (int) (displayMetrics.widthPixels * 0.8);
@@ -287,7 +299,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
                         @Override
                         public void onClick(View v) {
-                            ReplyDialog replyDialog = new ReplyDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity);
+                            ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
+                            try {
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(final_bundle_id));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            ReplyDialog replyDialog = new ReplyDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity, clickedPostingActivity);
                             replyDialog.show();
                             WindowManager.LayoutParams params = replyDialog.getWindow().getAttributes();
                             params.width = (int) (displayMetrics.widthPixels * 0.8);

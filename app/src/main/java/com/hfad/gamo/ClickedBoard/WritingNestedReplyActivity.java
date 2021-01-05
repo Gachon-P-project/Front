@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -30,8 +29,8 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
     private VolleyForHttpMethod volley;
     private ReplyAdapter adapter;
     private JSONObject commentJSONObject = new JSONObject();
-    private JSONArray receivedJSONArray = null;
-    private int reply_no;
+    private JSONArray receivedJSONArray = new JSONArray();
+    private String reply_no;
     private String post_no;
     private String user_number;
 
@@ -46,7 +45,21 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
 
         Intent receivedIntent = getIntent();
         ArrayList<String> receivedData = receivedIntent.getStringArrayListExtra("replyData");
-        receivedJSONArray = new JSONArray(receivedData);
+
+        for(int i = 0; i < receivedData.size(); i++) {
+            try {
+                receivedJSONArray.put(new JSONObject(receivedData.get(i)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            post_no = receivedJSONArray.getJSONObject(0).getString("post_no");
+            reply_no = receivedJSONArray.getJSONObject(0).getString("reply_no");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         RecyclerView recyclerView = findViewById(R.id.activity_nested_reply_recycler);
@@ -65,7 +78,7 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
         post_nested_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = Component.default_url.concat(getString(R.string.postReply,user_number,post_no));
+                String urlPostNestedReply = Component.default_url.concat(getString(R.string.postNestedReply,user_number,post_no,reply_no));
 
                 try {
                     commentJSONObject.put("reply_contents", edit_text_nested_reply.getText().toString());
@@ -73,9 +86,10 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                volley.postJSONObjectString(commentJSONObject, url, new Response.Listener<String>() {
+                volley.postJSONObjectString(commentJSONObject, urlPostNestedReply, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        setResult(RESULT_OK);
                         finish();
                     }
                 }, null);

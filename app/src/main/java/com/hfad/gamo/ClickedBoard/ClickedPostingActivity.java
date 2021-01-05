@@ -1,5 +1,6 @@
 package com.hfad.gamo.ClickedBoard;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
@@ -33,6 +34,8 @@ import org.json.JSONObject;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener {
+
+    public static int WritingNestedReplyActivity = 0;
 
     private VolleyForHttpMethod volley = null;
     private toClickedPosting toClickedPosting = null;
@@ -162,7 +165,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         volley.postJSONObjectString(jsonObjectForPostReply, urlForPostReply, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                onResponseForPostReply();
+                showReceivedAllReplies();
             }
         }, null);
     }
@@ -175,8 +178,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         }
     }
 
-    private void onResponseForPostReply() {
-        Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
+    private void showReceivedAllReplies() {
+        //Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
         clearJSONArray();
         inquireReplies();
     }
@@ -247,6 +250,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private void initUrl() {
         urlForPostReply = Component.default_url.concat(getString(R.string.postReply,user_number,post_no));
         urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
+        urlForPostLike = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
     }
 
     @Override
@@ -256,7 +260,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             postReply();
         } else if (v.getId() == R.id.activity_clicked_posting_post_like_iv) {
             post_like_img.setFocusable(false);
-            urlForPostLike = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
 
             volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
                 @Override
@@ -273,6 +276,17 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 }
             }, null);
             post_like_img.setFocusable(true);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == WritingNestedReplyActivity) {
+            if(resultCode == RESULT_OK) {
+                showReceivedAllReplies();
+            }
         }
     }
 }

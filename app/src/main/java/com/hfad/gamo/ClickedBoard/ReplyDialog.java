@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class ReplyDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
+    private ClickedPostingActivity clickedPostingActivity = null;
     private TextView postRereply;
     private int depth;
     private ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
@@ -28,12 +29,14 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
         this.depth = depth;
     }
 
-    public ReplyDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity) {
+    public ReplyDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity,
+                       ClickedPostingActivity clickedPostingActivity) {
         super(context);
 
         this.context = context;
         this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
         this.depth = depth;
+        this.clickedPostingActivity = clickedPostingActivity;
     }
 
     @Override

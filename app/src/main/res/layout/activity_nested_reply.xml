@@ -28,83 +28,14 @@
         app:layout_constraintTop_toBottomOf="@id/activity_nested_reply_toolbar"
         app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/activity_nested_reply_master"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="10dp">
-
-                <ImageView
-                    android:id="@+id/activity_nested_reply_master_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginRight="3dp"
-                    android:background="@drawable/background_user_img"
-                    android:src="@drawable/ic_user" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/activity_nested_reply_master_nickname"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="익명"
-                            android:textColor="@color/text2"
-                            android:textSize="15dp" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/activity_nested_reply_master_contents"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="6dp"
-                        android:text="댓글 내용"
-                        android:textColor="@color/text1"
-                        android:textSize="16dp" />
-
-                    <TextView
-                        android:id="@+id/activity_nested_reply_master_wrt_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="방금 전"
-                        android:textColor="@color/text2"
-                        android:textSize="11dp" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/activity_nested_reply_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:paddingHorizontal="10dp"
                 android:background="@color/white" />
-        </LinearLayout>
+
 
 
     </androidx.core.widget.NestedScrollView>
@@ -131,7 +62,7 @@
             android:layout_marginStart="15dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:hint="댓글을 입력하세요."
+            android:hint="답글을 입력하세요."
             android:textColor="@color/black"
             android:textSize="13sp" />
 

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
+    private ClickedPostingActivity clickedPostingActivity = null;
     private TextView postRereply;
     private TextView deleteReply;
     private int depth;
@@ -26,13 +27,16 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         super(context);
         this.context = context;
         this.depth = depth;
+        clickedPostingActivity = (ClickedPostingActivity) this.getOwnerActivity();
     }
 
-    public ReplyWriterDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity) {
+    public ReplyWriterDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity,
+                             ClickedPostingActivity clickedPostingActivity) {
         super(context);
         this.context = context;
         this.depth = depth;
         this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
+        this.clickedPostingActivity = clickedPostingActivity;
     }
 
     @Override
@@ -62,9 +66,9 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialogReplyWriter_postRereply:
-                Intent nestedReplyIntent = new Intent(context, WritingNestedReplyActivity.class);
+                Intent nestedReplyIntent = new Intent(clickedPostingActivity, WritingNestedReplyActivity.class);
                 nestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
-                context.startActivity(nestedReplyIntent);
+                clickedPostingActivity.startActivityForResult(nestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivity);
                 break;
             case R.id.dialogReplyWriter_deleteReply:
                 break;
