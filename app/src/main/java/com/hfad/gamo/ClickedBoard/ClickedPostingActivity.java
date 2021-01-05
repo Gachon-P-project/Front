@@ -83,7 +83,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
 
         postReply_iv.setOnClickListener(this);
-
+        post_like_text.setOnClickListener(this);
         post_like_img.setOnClickListener(this);
 
         inquireReplies();
@@ -316,6 +316,10 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         } else {
             deleteNestedReply(reply_no);
         }
+    }
+
+    public String getWriter_number() {
+        return writer_number;
     }
 }
 

@@ -49,6 +49,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     private String reply_user_no = null;
     private String user_no = sharedPreferences.getString("number", null);
     private String is_deleted = null;
+    private String writer_no = null;
     private int reply_no = -1;
     private int post_no = -1;
     private int bundle_id = -1;
@@ -65,6 +66,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         if(usingLocation.equals("ClickedPostingActivity")) {
             this.toWritingNestedReplyActivity = new HashMap<>();
             this.clickedPostingActivity = (ClickedPostingActivity) activity;
+            this.writer_no = ((ClickedPostingActivity) activity).getWriter_number();
         }
     }
 
@@ -75,6 +77,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         LinearLayout item_replies_reply_layout;
         ImageView item_replies_three_dots;
         ImageView item_replies_user_img;
+        ImageView item_replies_is_writer;
 
         View view;
 
@@ -90,6 +93,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             item_replies_reply_layout = itemView.findViewById(R.id.item_replies_reply_layout);
             item_replies_three_dots = itemView.findViewById(R.id.item_replies_three_dots);
             item_replies_user_img = itemView.findViewById(R.id.item_replies_user_img);
+            item_replies_is_writer = itemView.findViewById(R.id.imgReplyIsWriter);
 
             view = itemView;
         }
@@ -248,6 +252,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     private void setViewOfUnDeletedReply(final ReplyAdapter.ViewHolder holder, String usingLocation) throws JSONException {
         holder.item_replies_content.setText(reply_contents);
         holder.item_replies_wrt_date.setText(wrt_date);
+
+        if(writer_no.equals(reply_user_no))
+            holder.item_replies_is_writer.setVisibility(View.VISIBLE);
+        else
+            holder.item_replies_is_writer.setVisibility(View.GONE);
 
         final int bundle_id = holder.replyForData.getInt("bundle_id");
         final int reply_no = holder.replyForData.getInt("reply_no");

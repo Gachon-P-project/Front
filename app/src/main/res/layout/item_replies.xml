@@ -19,7 +19,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="2dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginRight="7dp"
             android:src="@drawable/ic_user"
             android:background="@drawable/background_user_img"
             />
@@ -29,14 +29,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/item_replies_nickname"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="익명"
-                    android:layout_marginBottom="3dp"
-                    android:textColor="@color/text2"
-                    android:textSize="15dp" />
+                    android:layout_marginBottom="1dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
+                    <TextView
+                        android:id="@+id/item_replies_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="익명"
+                        android:textColor="@color/text2"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/imgReplyIsWriter"
+                        android:layout_width="50dp"
+                        android:layout_height="17dp"
+                        android:src="@drawable/ic_writer"
+                        android:visibility="gone"
+                        />
+
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/item_replies_content"
@@ -44,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:text="댓글 내용"
                     android:textColor="@color/text1"
-                    android:textSize="16dp"/>
+                    android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/item_replies_wrt_date"
@@ -53,7 +70,7 @@
                 android:layout_marginTop="6dp"
                 android:text="방금 전"
                 android:textColor="@color/text2"
-                android:textSize="11dp" />
+                android:textSize="11sp" />
 
         </LinearLayout>
 

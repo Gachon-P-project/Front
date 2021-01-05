@@ -43,6 +43,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 }) {
                     @Override
@@ -62,6 +63,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 }) {
                     @Override
@@ -119,6 +121,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 });
             } else if (listener != null && ErrorListener == null) {
@@ -127,6 +130,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 });
             } else if (listener == null && ErrorListener != null) {
