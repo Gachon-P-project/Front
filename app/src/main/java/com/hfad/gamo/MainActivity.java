@@ -47,12 +47,15 @@ public class MainActivity extends AppCompatActivity {
     private VolleyForHttpMethod volley;
     private SharedPreferences pref_token;
     private BadgeDrawable notificationBadge = null;
+    LoadingDialog loadingDialog;
 
     private long firstBackPressTime = 0, secondBackPressTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loadingDialog = new LoadingDialog();
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
 
@@ -156,7 +159,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         switch (itemId) {
             case R.id.bottomNavigationTimeTable: {
-                fragmentTransaction.replace(R.id.fragment, f_TimeTable2).commitAllowingStateLoss();
+                Fragment fragment = fm.findFragmentById(R.id.fragment);
+                if(!(fragment instanceof com.hfad.gamo.timeTable.TimeTableFragment)) {
+                    loadingDialog.start(this);
+                    fragmentTransaction.replace(R.id.fragment, f_TimeTable2).commitAllowingStateLoss();
+                }
                 break;
             }
 
@@ -234,5 +241,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void stopLoadingDialog() {
+        this.loadingDialog.finish();
+    }
 
 }
