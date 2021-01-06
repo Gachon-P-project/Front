@@ -49,7 +49,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     private String reply_user_no = null;
     private String user_no = sharedPreferences.getString("number", null);
     private String is_deleted = null;
-    private String writer_no = null;
+    private String writer_number = null;
     private int reply_no = -1;
     private int post_no = -1;
     private int bundle_id = -1;
@@ -66,7 +66,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         if(usingLocation.equals("ClickedPostingActivity")) {
             this.toWritingNestedReplyActivity = new HashMap<>();
             this.clickedPostingActivity = (ClickedPostingActivity) activity;
-            this.writer_no = ((ClickedPostingActivity) activity).getWriter_number();
+            this.writer_number = ((ClickedPostingActivity) activity).getWriter_number();
+        } else {
+            this.writer_number = ((WritingNestedReplyActivity) activity).getWriter_number();
         }
     }
 
@@ -253,7 +255,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         holder.item_replies_content.setText(reply_contents);
         holder.item_replies_wrt_date.setText(wrt_date);
 
-        if(writer_no.equals(reply_user_no))
+        if(writer_number.equals(reply_user_no))
             holder.item_replies_is_writer.setVisibility(View.VISIBLE);
         else
             holder.item_replies_is_writer.setVisibility(View.GONE);
@@ -271,7 +273,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
                         @Override
                         public void onClick(View v) {
-                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), clickedPostingActivity, holder.replyForData);
+                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(), clickedPostingActivity, holder.replyForData, writer_number);
                             replyWriterDialog.show();
                             WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
                             params.width = (int) (displayMetrics.widthPixels * 0.8);
@@ -295,7 +297,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(),clickedPostingActivity, dataUsedInWritingNestedReplyActivity, holder.replyForData);
+                            ReplyWriterDialog replyWriterDialog = new ReplyWriterDialog(v.getContext(),clickedPostingActivity, dataUsedInWritingNestedReplyActivity, holder.replyForData, writer_number);
                             replyWriterDialog.show();
                             WindowManager.LayoutParams params = replyWriterDialog.getWindow().getAttributes();
                             params.width = (int) (displayMetrics.widthPixels * 0.8);
@@ -314,7 +316,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            ReplyDialog replyDialog = new ReplyDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity, clickedPostingActivity);
+                            ReplyDialog replyDialog = new ReplyDialog(v.getContext(), 0, dataUsedInWritingNestedReplyActivity, clickedPostingActivity, writer_number);
                             replyDialog.show();
                             WindowManager.LayoutParams params = replyDialog.getWindow().getAttributes();
                             params.width = (int) (displayMetrics.widthPixels * 0.8);

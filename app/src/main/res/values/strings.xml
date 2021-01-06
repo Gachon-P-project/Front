@@ -27,13 +27,13 @@
     <string name="postWriting">/board/insert</string>
     <string name="inquirePostingsOfBoard">/board/select/%1$s/%2$s/%3$s</string>
     <string name="searchWantedPostingsOfBoard">/board/select/%1$s/%2$s/%3$s/search/%4$s</string>
-    <string name="modifyPosting">/board/update/%1$s</string>
+    <string name="updatePosting">/board/update/%1$s</string>
     <string name="deletePosting">/board/delete/%1$s</string>
     <string name="postReply">/reply/insert/%1$s/%2$s</string>
     <string name="postNestedReply">/reply/insert/rereply/%1$s/%2$s/%3$s</string>
     <string name="inquireReplies">/reply/read/%1$s</string>
-    <string name="modifyReply">/reply/update/%1$s</string>
-    <string name="modifyNestedReply">/reply/update/rereply/$1$s</string>
+    <string name="updateReply">/reply/update/%1$s</string>
+    <string name="updateNestedReply">/reply/update/rereply/$1$s</string>
     <string name="deleteReply">/reply/delete/%1$s</string>
     <string name="deleteNestedReply">/reply/delete/rereply/%1$s</string>
     <string name="inquireNotification">/notice/read/%1$s/%2$s</string>

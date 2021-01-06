@@ -93,14 +93,16 @@ public class ClickedBoardActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //url = "http://172.30.1.2:17394/board/select/컴퓨터구조/이상순";
         String subject = "컴퓨터구조";
         String professor = "이상순";
         url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,subject, professor, user_no));
 
+        final long startTime = System.currentTimeMillis();
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                long endTime = System.currentTimeMillis();
+                Log.i("boardTime", String.valueOf(endTime - startTime));
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         responseJSONObject = response.getJSONObject(i);
@@ -141,22 +143,11 @@ public class ClickedBoardActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_add :
-                /*
-                major_name: req.body.major_name,
-                subject_name: req.body.subject_name,
-                professor_name: req.body.professor_name,
-                user_id: req.body.user_id
-                 */
                 intent = new Intent(getBaseContext(), WritingActivity.class);
-//                intent.putExtra("major", "컴퓨터공학과");
-//                intent.putExtra("subject", "컴퓨터구조");
-//                intent.putExtra("professor", "이상순");
-//                intent.putExtra("user", "jy11290");
                 intent.putExtra("major", department);
                 intent.putExtra("subject", board_title);
                 intent.putExtra("professor", professor);
                 intent.putExtra("user_no", user_no);
-
                 startActivity(intent);
                 return true;
             default :

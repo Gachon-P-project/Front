@@ -33,6 +33,7 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
     private String reply_no;
     private String post_no;
     private String user_number;
+    private String writer_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,5 +96,9 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
                 }, null);
             }
         });
+    }
+
+    public String getWriter_number() {
+        return writer_number;
     }
 }

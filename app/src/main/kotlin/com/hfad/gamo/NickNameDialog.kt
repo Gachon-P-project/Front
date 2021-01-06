@@ -148,7 +148,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
                         userJsonObject.put("nickname", nickname)
                         userJsonObject.put("user_no", getSharedItem<String>("number"))
 
-                        volley!!.putJSONObject(userJsonObject, urlNicknameUpdate, { response: String ->
+                        volley!!.putJSONObjectString(userJsonObject, urlNicknameUpdate, { response: String ->
                             Log.i(TAG, "updateNickname: response : $response")
                             setSharedItem("nickname", nickname)
                             (baseActivity as MainActivity)?.refreshFragment();

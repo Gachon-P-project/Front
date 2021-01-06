@@ -25,6 +25,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     private TextView deleteReply;
     private int depth;
     private int reply_no;
+    private String writer_number = null;
     private ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
     private ReplyDialogInterface replyDialogInterface = null;
 
@@ -36,11 +37,12 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         this.replyDialogInterface = clickedPostingActivity;
     }*/
 
-    public ReplyWriterDialog(@NonNull Context context, ClickedPostingActivity clickedPostingActivity, JSONObject DataForReply) {
+    public ReplyWriterDialog(@NonNull Context context, ClickedPostingActivity clickedPostingActivity, JSONObject DataForReply, String writer_number) {
         super(context);
         this.context = context;
         this.clickedPostingActivity = clickedPostingActivity;
         this.replyDialogInterface = clickedPostingActivity;
+        this.writer_number = writer_number;
         try {
             this.depth = DataForReply.getInt("depth");
             this.reply_no = DataForReply.getInt("reply_no");
@@ -59,12 +61,13 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     }*/
 
     public ReplyWriterDialog(@NonNull Context context, ClickedPostingActivity clickedPostingActivity,
-                             ArrayList<String> dataUsedInWritingNestedReplyActivity, JSONObject DataForReply) {
+                             ArrayList<String> dataUsedInWritingNestedReplyActivity, JSONObject DataForReply, String writer_number) {
         super(context);
         this.context = context;
         this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
         this.clickedPostingActivity = clickedPostingActivity;
         this.replyDialogInterface = clickedPostingActivity;
+        this.writer_number = writer_number;
         try {
             this.depth = DataForReply.getInt("depth");
             this.reply_no = DataForReply.getInt("reply_no");
@@ -100,9 +103,10 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialogReplyWriter_postRereply:
-                Intent nestedReplyIntent = new Intent(clickedPostingActivity, WritingNestedReplyActivity.class);
-                nestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
-                clickedPostingActivity.startActivityForResult(nestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivity);
+                Intent WritingNestedReplyIntent = new Intent(clickedPostingActivity, WritingNestedReplyActivity.class);
+                WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
+                WritingNestedReplyIntent.putExtra("writerNumber", writer_number);
+                clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivityCode);
                 break;
             case R.id.dialogReplyWriter_deleteReply:
                 replyDialogInterface.onDeleteReplyDialog(depth, reply_no);

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ClickedBoard.WritingActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+        <ImageView
+            android:id="@+id/activity_writing_update_cancel_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/btn_cancel"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="글 쓰기"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/activity_writing_update_complete_bt"
+            android:layout_width="55dp"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_blue"
+            android:text="완료"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <EditText
+            android:id="@+id/activity_writing_update_title_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:inputType="text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:hint="@string/title"
+            android:layout_marginTop="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="11dp"
+            android:background="@color/line" />
+
+        <EditText
+            android:id="@+id/activity_writing_update_content_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:hint="@string/contents"
+            android:textSize="14sp" />
+
+        <!--<LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="#00ffffff"
+                android:src="@drawable/ic_camera" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:checked="true"
+                android:text="댓글 사용"/>
+
+        </LinearLayout>-->
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+

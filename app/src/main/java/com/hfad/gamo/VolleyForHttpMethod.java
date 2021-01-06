@@ -319,24 +319,122 @@ public class VolleyForHttpMethod {
         queue.add(request);
     }
 
-    public void putJSONObject(@NonNull final JSONObject Body, @NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
-        StringRequest request = null;
+    public void putJSONObjectString(@NonNull final JSONObject Body, @NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener ErrorListener) {
+        StringRequest request;
 
-        if(listener == null || errorListener == null) {
-            Log.e(TAG, "putJSONObjectString: Response.Listener is null or Response.ErrorListener is null");
+        if (Body != null) {
+            if (listener == null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
+                    }
+                }) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+            } else if (listener != null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.PUT, url, listener, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
+                    }
+                }) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+            } else if (listener == null && ErrorListener != null) {
+                request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, ErrorListener) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+            } else {
+                Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
+                request = new StringRequest(Request.Method.PUT, url, listener, ErrorListener) {
+                    @Override
+                    public byte[] getBody() {
+                        return Body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+            }
         } else {
-            Log.d(TAG, "putJSONObjectString: volley put start");
-            request = new StringRequest(Request.Method.PUT, url, listener, errorListener) {
-                @Override
-                public byte[] getBody() {
-                    return Body.toString().getBytes();
-                }
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json";
-                }
-            };
+            if (listener == null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
+                    }
+                });
+            } else if (listener != null && ErrorListener == null) {
+                request = new StringRequest(Request.Method.PUT, url, listener, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
+                        Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
+                    }
+                });
+            } else if (listener == null && ErrorListener != null) {
+                request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VolleyResponse", "Response is good");
+                    }
+                }, ErrorListener);
+            } else {
+                Log.d(TAG, "postJSONObjectString: listener != null, ErrorListener != null");
+                request = new StringRequest(Request.Method.PUT, url, listener, ErrorListener);
+            }
         }
 
         request.setShouldCache(true);

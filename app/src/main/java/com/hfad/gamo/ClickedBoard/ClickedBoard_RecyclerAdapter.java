@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -31,10 +32,12 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
     private JSONArray JSONArrayData = null;
     private final String board_title;
 
+
     ClickedBoard_RecyclerAdapter(JSONArray list, String board_title) {
         this.JSONArrayData = list;
         this.board_title = board_title;
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -45,6 +48,9 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         TextView board_reply_cnt;
         View view;
         toClickedPosting toClickedPosting;
+        JSONObject forUpdatePosting;
+
+
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -80,6 +86,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
 
         try {
             data = JSONArrayData.getJSONObject(position);
+            holder.forUpdatePosting = JSONArrayData.getJSONObject(position);
             holder.board_title.setText(data.getString("post_title"));
             holder.board_contents.setText(data.getString("post_contents"));
             wrt_date = data.getString("wrt_date");
@@ -110,6 +117,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ClickedPostingActivity.class);
                 intent.putExtra("toClickedPosting", holder.toClickedPosting);
+                intent.putExtra("forUpdatePosting", holder.forUpdatePosting.toString());
                 v.getContext().startActivity(intent);
             }
         });
@@ -167,6 +175,17 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         }
 
         return AndroidDate;
+    }
+
+    private ArrayList<String> transformData(JSONArray jsonArray) throws JSONException {
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            arrayList.add(jsonArray.getJSONObject(i).toString());
+        }
+
+        return arrayList;
     }
 
     @Override

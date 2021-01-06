@@ -30,7 +30,7 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
     }
 
     public ReplyDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity,
-                       ClickedPostingActivity clickedPostingActivity) {
+                       ClickedPostingActivity clickedPostingActivity, String writer_number) {
         super(context);
 
         this.context = context;
@@ -58,7 +58,8 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
             case R.id.dialogReply_postRereply:
                 Intent WritingNestedReplyIntent = new Intent(context, WritingNestedReplyActivity.class);
                 WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
-                context.startActivity(WritingNestedReplyIntent);
+                clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivityCode);
+
                 break;
             default:
                 break;
