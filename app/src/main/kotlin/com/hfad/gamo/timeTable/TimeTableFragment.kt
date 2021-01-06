@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,19 +15,18 @@ import com.android.volley.toolbox.Volley
 import com.github.eunsiljo.timetablelib.view.TimeTableView
 import com.hfad.gamo.*
 import com.hfad.gamo.ClickedBoard.ClickedBoardActivity
-import io.wiffy.extension.isNetworkConnected
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_information_timetable.view.*
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.util.EntityUtils
 import org.json.JSONArray
 import org.json.JSONObject
-import org.jsoup.Jsoup
-import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlin.collections.HashSet
 
 @Suppress("DEPRECATION")
 class TimeTableFragment : TimeTableContract.View() {
+    private val TAG = "TimeTableFragment"
     var myView: View? = null
     private var mPresenter: TimeTablePresenter = TimeTablePresenter(this)
     private var mInfo: String? = null
@@ -43,18 +43,28 @@ class TimeTableFragment : TimeTableContract.View() {
     private lateinit var responseJSONArray: JSONArray
     private lateinit var responseJSONObject: JSONObject
 
+
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
-    private val sem = when (2) {
-        1 -> "10"
-        2 -> "20"
-        3 -> "11"
-        else -> "21"
+
+//    private val year = "2020"
+//    private val semester = "20"
+    private val nowDate: LocalDate = LocalDate.now()
+    private val year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
+    private val month = nowDate.format(DateTimeFormatter.ofPattern("MM")).toInt()
+
+    private val semester = when (month) {
+        3, 4, 5, 6 -> "10"      // 1학기
+        9, 10, 11, 12 -> "20"   // 2학기
+        7, 8 -> "11"            // 여름학기
+        1, 2 -> "21"            // 겨울학기
+        else -> "00"            // 에러
     }
-    private val year = "2020";
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        Log.d(TAG, "doInBackground: now : $year, dateFormat: ${year.javaClass.name}")
 
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this.context))
         sharedPreferences = this.context?.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)!!
@@ -111,10 +121,11 @@ class TimeTableFragment : TimeTableContract.View() {
     // 시간표에 과목들 띄우기
     // 시간표 선택 리스너
     override fun initTable(set: HashSet<String>) {
-        val pref = this.context!!.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
+//        val pref = this.context!!.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         val context = myView?.context
 
-        jsonObjectForTitle = JSONObject(pref.getString("subject_professorJSONObject", null))
+//        jsonObjectForTitle = JSONObject(pref.getString("subject_professorJSONObject", null))
+        jsonObjectForTitle = JSONObject(getSharedItem<String>("subject_professorJSONObject"))
         Handler(Looper.getMainLooper()).post {
             val list = mPresenter.setTableList(set)
             myView?.mTable?.let {
@@ -129,14 +140,15 @@ class TimeTableFragment : TimeTableContract.View() {
                 it.setShowHeader(true)
                 it.setTableMode(TimeTableView.TableMode.SHORT)
                 it.setTimeTable(0, list)
-//                it.set
+
+                (activity as MainActivity).stopLoadingDialog()
             }
         }
     }
 
     private fun saveDataForTimeTable() {
 
-        urlInquireTimeTable = Component.default_url.plus(this.context?.getString(R.string.inquireTimeTable, sharedPreferences.getString("number", null), year, sem))
+        urlInquireTimeTable = Component.default_url.plus(this.context?.getString(R.string.inquireTimeTable, sharedPreferences.getString("number", null), year, semester))
 
         volley.getString(urlInquireTimeTable) { response ->
             responseJSONArray = JSONArray(response)
@@ -191,3 +203,4 @@ class TimeTableFragment : TimeTableContract.View() {
         }
     }
 }
+

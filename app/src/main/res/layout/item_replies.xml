@@ -49,7 +49,7 @@
                         android:layout_width="50dp"
                         android:layout_height="17dp"
                         android:src="@drawable/ic_writer"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         />
 
 

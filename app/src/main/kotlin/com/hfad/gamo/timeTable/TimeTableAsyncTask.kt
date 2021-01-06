@@ -2,7 +2,7 @@ package com.hfad.gamo.timeTable
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.android.volley.RequestQueue
+import android.util.Log
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.*
 import io.wiffy.extension.isNetworkConnected
@@ -14,10 +14,13 @@ import org.json.JSONObject
 import org.jsoup.Jsoup
 import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val number: String) :
     SuperContract.SuperAsyncTask<Void, Void, Int>() {
 
+    private val TAG = "TimeTableAsyncTask"
     val set = HashSet<String>()
     private val subjectSet = mutableSetOf<String>()
     private val professorMap = mutableMapOf<String,String>()
@@ -31,16 +34,30 @@ class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val 
 
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
-    private val sem = when (2) {
-        1 -> "10"
-        2 -> "20"
-        3 -> "11"
-        else -> "21"
+
+
+    private val nowDate: LocalDate = LocalDate.now()
+    private val year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
+    private val month = nowDate.format(DateTimeFormatter.ofPattern("MM")).toInt()
+
+    private val semester = when (month) {
+        3, 4, 5, 6 -> "10"      // 1학기
+        9, 10, 11, 12 -> "20"   // 2학기
+        7, 8 -> "11"            // 여름학기
+        1, 2 -> "21"            // 겨울학기
+        else -> "00"            // 에러
     }
-    private val year = "2020";
+//    private val semester = when (2) {
+//        1 -> "10"
+//        2 -> "20"
+//        3 -> "11"
+//        else -> "21"
+//    }
+//    private val year = "2020";
 
     override fun onPreExecute() {
         //Component.getBuilder()?.show()
+        Log.d(TAG, "doInBackground: now : $nowDate")
     }
 
     override fun doInBackground(vararg params: Void?): Int {
@@ -51,13 +68,13 @@ class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val 
             val page = Jsoup.parseBodyFragment(
                 EntityUtils.toString(
                     DefaultHttpClient().execute(
-                        HttpPost("http://smart.gachon.ac.kr:8080/WebMain?YEAR=$year&TERM_CD=$sem&STUDENT_NO=$number&GROUP_CD=CS&SQL_ID=mobile%2Faffairs%3ACLASS_TIME_TABLE_STUDENT_SQL_S01&fsp_action=AffairsAction&fsp_cmd=executeMapList&callback_page=%2Fmobile%2Fgachon%2Faffairs%2FAffClassTimeTableList.jsp")
+                        HttpPost("http://smart.gachon.ac.kr:8080/WebMain?YEAR=$year&TERM_CD=$semester&STUDENT_NO=$number&GROUP_CD=CS&SQL_ID=mobile%2Faffairs%3ACLASS_TIME_TABLE_STUDENT_SQL_S01&fsp_action=AffairsAction&fsp_cmd=executeMapList&callback_page=%2Fmobile%2Fgachon%2Faffairs%2FAffClassTimeTableList.jsp")
                     ).entity
                 )
             ).select("li")
 
             if (sharedPreferences != null) {
-                urlInquireTimeTable = Component.default_url.plus(mView.context?.getString(R.string.inquireTimeTable,sharedPreferences.getString("number ", null), year, sem ))
+                urlInquireTimeTable = Component.default_url.plus(mView.context?.getString(R.string.inquireTimeTable,sharedPreferences.getString("number ", null), year, semester ))
             }
 
             volley.getString(urlInquireTimeTable) { response ->
