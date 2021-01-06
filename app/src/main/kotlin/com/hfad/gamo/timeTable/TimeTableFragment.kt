@@ -50,10 +50,10 @@ class TimeTableFragment : TimeTableContract.View() {
 //    private val year = "2020"
 //    private val semester = "20"
     private val nowDate: LocalDate = LocalDate.now()
-    private val year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
+    private var year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
     private val month = nowDate.format(DateTimeFormatter.ofPattern("MM")).toInt()
 
-    private val semester = when (month) {
+    private var semester = when (month) {
         3, 4, 5, 6 -> "10"      // 1학기
         9, 10, 11, 12 -> "20"   // 2학기
         7, 8 -> "11"            // 여름학기
@@ -150,56 +150,76 @@ class TimeTableFragment : TimeTableContract.View() {
 
         urlInquireTimeTable = Component.default_url.plus(this.context?.getString(R.string.inquireTimeTable, sharedPreferences.getString("number", null), year, semester))
 
+
         volley.getString(urlInquireTimeTable) { response ->
             responseJSONArray = JSONArray(response)
+            Log.d(TAG, "saveDataForTimeTable: response : $response")
 
-            for (i in 0 until responseJSONArray.length()) {
-                responseJSONObject = responseJSONArray[i] as JSONObject
-
-                val day = responseJSONObject.get("day").toString().split("요일")[0]
-                val data = responseJSONObject.get("data") as JSONArray
-
-                for (k in 0 until data.length()) {
-                    val information = (data[k] as JSONObject).getString("subject").split("/")
-                    val time = (data[k] as JSONObject).getString("time").split("~")
-                    val subject = information[0].trim()
-                    val table = TimeTableInformation(
-                            day.trim(),
-                            subject,
-                            information[2].trim(),
-                            information[1].trim(),
-                            format.parse(time[0].let {
-                                "${it.substring(0, 2)}:${it.substring(2, 4)}:00"
-                            }.trim())?.time ?: 0,
-                            format.parse(time[1].let {
-                                "${it.substring(1, 3)}:${it.substring(3, 5)}:00"
-                            }.trim())?.time ?: 0
-                    )
-
-                    set.add(table.information)
-                    subjectSet.add(subject)
-                    subjectHashSet.add(subject)
-                    professorMap[subject] = information[2].trim()
+            if(semester != "00" && (response == "" || response == null || responseJSONArray.getJSONObject(0).getJSONArray("data") == null) || response == "[{\"day\":\"\",\"data\":[]}]"){
+                semester = when (semester) {
+                    "10" -> "21"
+                    "11" -> "10"
+                    "20" -> "21"
+                    "21" -> "20"
+                    else -> "00"            // 에러
                 }
+                if (semester == "21") {
+                    year = (year.toInt() - 1).toString()
+                }
+
+                saveDataForTimeTable()
+
+            } else {
+
+                for (i in 0 until responseJSONArray.length()) {
+                    responseJSONObject = responseJSONArray[i] as JSONObject
+
+                    val day = responseJSONObject.get("day").toString().split("요일")[0]
+                    val data = responseJSONObject.get("data") as JSONArray
+
+                    for (k in 0 until data.length()) {
+                        val information = (data[k] as JSONObject).getString("subject").split("/")
+                        val time = (data[k] as JSONObject).getString("time").split("~")
+                        val subject = information[0].trim()
+                        val table = TimeTableInformation(
+                                day.trim(),
+                                subject,
+                                information[2].trim(),
+                                information[1].trim(),
+                                format.parse(time[0].let {
+                                    "${it.substring(0, 2)}:${it.substring(2, 4)}:00"
+                                }.trim())?.time ?: 0,
+                                format.parse(time[1].let {
+                                    "${it.substring(1, 3)}:${it.substring(3, 5)}:00"
+                                }.trim())?.time ?: 0
+                        )
+
+                        set.add(table.information)
+                        subjectSet.add(subject)
+                        subjectHashSet.add(subject)
+                        professorMap[subject] = information[2].trim()
+                    }
+                }
+
+                for (string in subjectSet) {
+                    professorMap[string]?.let { professorSet.add(it) }
+                }
+
+
+                val subjectSetIterator = subjectSet.iterator()
+                val professorSetIterator = professorSet.iterator()
+
+                for (i in 0 until subjectSet.count()) {
+                    jsonObject.put(subjectSetIterator.next(), professorSetIterator.next())
+                }
+
+                setSharedItem("tableSet", set)
+                setSharedItem("subjectSet", subjectHashSet)
+                setSharedItem("professorSet", professorSet)
+                setSharedItem("subject_professorJSONObject", jsonObject.toString());
+                initTable(set)
             }
 
-            for (string in subjectSet) {
-                professorMap[string]?.let { professorSet.add(it) }
-            }
-
-
-            val subjectSetIterator = subjectSet.iterator()
-            val professorSetIterator = professorSet.iterator()
-
-            for (i in 0 until subjectSet.count()) {
-                jsonObject.put(subjectSetIterator.next(), professorSetIterator.next())
-            }
-
-            setSharedItem("tableSet", set)
-            setSharedItem("subjectSet", subjectHashSet)
-            setSharedItem("professorSet", professorSet)
-            setSharedItem("subject_professorJSONObject", jsonObject.toString());
-            initTable(set)
         }
     }
 }
