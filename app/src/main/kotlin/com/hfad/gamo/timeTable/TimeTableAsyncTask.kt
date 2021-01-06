@@ -15,6 +15,7 @@ import org.jsoup.Jsoup
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val number: String) :
     SuperContract.SuperAsyncTask<Void, Void, Int>() {
@@ -32,20 +33,27 @@ class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val 
     private lateinit var responseJSONArray: JSONArray
 
     @SuppressLint("SimpleDateFormat")
-    private val format_time = SimpleDateFormat("HH:mm:ss")
-    @SuppressLint("SimpleDateFormat")
-    private val format_data = SimpleDateFormat("yyyy-MM")
+    private val format = SimpleDateFormat("HH:mm:ss")
+
 
     private val nowDate: LocalDate = LocalDate.now()
+    private val year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
+    private val month = nowDate.format(DateTimeFormatter.ofPattern("MM")).toInt()
 
-
-    private val semester = when (2) {
-        1 -> "10"
-        2 -> "20"
-        3 -> "11"
-        else -> "21"
+    private val semester = when (month) {
+        3, 4, 5, 6 -> "10"      // 1학기
+        9, 10, 11, 12 -> "20"   // 2학기
+        7, 8 -> "11"            // 여름학기
+        1, 2 -> "21"            // 겨울학기
+        else -> "00"            // 에러
     }
-    private val year = "2020";
+//    private val semester = when (2) {
+//        1 -> "10"
+//        2 -> "20"
+//        3 -> "11"
+//        else -> "21"
+//    }
+//    private val year = "2020";
 
     override fun onPreExecute() {
         //Component.getBuilder()?.show()
@@ -86,10 +94,10 @@ class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val 
                             subject,
                             information[2].trim(),
                             information[1].trim(),
-                            format_time.parse(preInformation[1].let {
+                            format.parse(preInformation[1].let {
                                 "${it.substring(0, 2)}:${it.substring(2, 4)}:00"
                             }.trim())?.time ?: 0,
-                            format_time.parse(preInformation[3].let {
+                            format.parse(preInformation[3].let {
                                 "${it.substring(0, 2)}:${it.substring(2, 4)}:00"
                             }.trim())?.time ?: 0
                         )

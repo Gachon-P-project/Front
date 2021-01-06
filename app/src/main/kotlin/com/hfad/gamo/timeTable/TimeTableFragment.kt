@@ -47,19 +47,19 @@ class TimeTableFragment : TimeTableContract.View() {
     @SuppressLint("SimpleDateFormat")
     private val format = SimpleDateFormat("HH:mm:ss")
 
+//    private val year = "2020"
+//    private val semester = "20"
     private val nowDate: LocalDate = LocalDate.now()
-    private val year = "2020"
-    private val semester = "20"
-//    private val year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
+    private val year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
     private val month = nowDate.format(DateTimeFormatter.ofPattern("MM")).toInt()
 
-//    private val semester = when (month) {
-//        3, 4, 5, 6 -> "10"      // 1학기
-//        9, 10, 11, 12 -> "20"   // 2학기
-//        7, 8 -> "11"            // 여름학기
-//        1, 2 -> "21"            // 겨울학기
-//        else -> "00"            // 에러
-//    }
+    private val semester = when (month) {
+        3, 4, 5, 6 -> "10"      // 1학기
+        9, 10, 11, 12 -> "20"   // 2학기
+        7, 8 -> "11"            // 여름학기
+        1, 2 -> "21"            // 겨울학기
+        else -> "00"            // 에러
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
