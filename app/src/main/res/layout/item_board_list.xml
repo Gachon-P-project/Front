@@ -46,16 +46,12 @@
                     android:textStyle="bold"
                     />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/board_list_new"
-                    android:layout_width="30dp"
+                    android:layout_width="23dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_new" />
+                    android:src="@drawable/ic_new_red" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
