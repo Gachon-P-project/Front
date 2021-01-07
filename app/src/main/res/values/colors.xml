@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+        <color name="colorPrimary2">#fff</color>
         <color name="colorPrimary">#303f9f</color>
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorSub">#8D99EB</color>
@@ -72,4 +73,6 @@
     <color name="white_brightless">#FAFAFA</color>
     <color name="reply">#0288D1</color>
     <color name="like">#c62917</color>
+    <color name="toolbarBackground">#ffffff</color>
+    <color name="toolbarTitle">#303f9f</color>
 </resources>

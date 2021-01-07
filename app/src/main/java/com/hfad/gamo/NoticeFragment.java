@@ -2,7 +2,6 @@ package com.hfad.gamo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -16,11 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
-import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -51,7 +48,6 @@ import static com.hfad.gamo.DataIOKt.setNotificationSetting;
 public class NoticeFragment extends Fragment {
 
     private static final String TAG = "NOTICE_FRAGMENT";
-    private SharedPreferences prefs;
     private String dept;
     private Notice_RecyclerAdapter adapter;
     private JSONArray responseJSONArray = new JSONArray();
@@ -236,7 +232,7 @@ public class NoticeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_clicked_board);
+        Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_notice);
         ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + " 공지사항</b>", 0));
 

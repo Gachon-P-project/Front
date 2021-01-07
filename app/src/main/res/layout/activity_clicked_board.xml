@@ -8,10 +8,9 @@
     tools:context=".ClickedBoard.ClickedBoardActivity">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/activity_clicked_board_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:id="@+id/activity_clicked_board_toolbar"
-        android:background="@color/colorPrimary"
         app:theme="@style/AppTheme.Toolbar" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

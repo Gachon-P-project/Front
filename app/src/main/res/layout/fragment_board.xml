@@ -7,6 +7,23 @@
     android:background="@color/white"
     tools:context=".BoardFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:theme="@style/AppTheme.Toolbar"
+        >
+        <TextView
+            android:id="@+id/fragment_information_timetable_toolbar_first_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="게시판"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
     <LinearLayout
         android:id="@+id/dept"
         android:layout_width="match_parent"
@@ -64,7 +81,9 @@
         android:background="@drawable/bg_board_list"
         app:layout_constraintTop_toBottomOf="@id/subject"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/community_recyclerView"

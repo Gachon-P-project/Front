@@ -10,7 +10,7 @@
         android:id="@+id/activity_clicked_posting_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/toolbarBackground"
         app:theme="@style/AppTheme.Toolbar" >
 
         <TextView
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/toolbarTitle"
             android:text="2학기"
             android:textStyle="bold"
             android:textSize="20dp"/>
@@ -30,7 +30,7 @@
             android:paddingTop="7dp"
             android:paddingStart="2dp"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/toolbarTitle"
             android:text="2020년"
             android:textSize="12dp"/>
 
@@ -52,12 +52,17 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 app:cardCornerRadius="5dp"
-                app:cardElevation="10dp">
+                app:cardElevation="1dp"
+
+                >
 
                 <com.github.eunsiljo.timetablelib.view.TimeTableView
                     android:id="@+id/mTable"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+
+                    app:cardBackgroundColor="@color/grey"
+                    />
 
             </androidx.cardview.widget.CardView>
 

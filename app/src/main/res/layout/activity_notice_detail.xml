@@ -11,12 +11,11 @@
         android:id="@+id/toolbarNoticeDetail"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:theme="@style/AppTheme.Toolbar"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/AppTheme.Toolbar" />
 
     <ScrollView
         android:id="@+id/scrollView"

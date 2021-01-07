@@ -14,7 +14,11 @@
     </style>
 
     <style name="AppTheme.Toolbar" parent="AppTheme">
-        <item name="android:textColorPrimary">@color/WHITE</item>
+        <item name="android:background">@color/toolbarBackground</item>
+        <item name="android:textColorPrimary">@color/toolbarTitle</item>
+        <item name="android:textColor">@color/toolbarTitle</item>
+        <item name="android:tint">@color/toolbarTitle</item>
+        <item name="android:iconTint">@color/toolbarTitle</item>
     </style>
 
 
