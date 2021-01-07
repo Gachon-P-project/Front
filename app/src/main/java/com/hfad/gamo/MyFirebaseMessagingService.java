@@ -89,10 +89,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    public void showDataMessage(String msgTitle, String msgContent) {
+    public void showDataMessage(String msgTitle, String msgContent, String msgBoardNo) {
         Log.i("### data msgTitle : ", msgTitle);
         Log.i("### data msgContent : ", msgContent);
-        String toastText = String.format("[Data 메시지] title: %s => content: %s", msgTitle, msgContent);
+        Log.i("### data msgBoardNo : ", msgBoardNo);
+//        String toastText = String.format("[Data 메시지] title: %s => content: %s", msgTitle, msgContent);
+        String toastText = String.format("%s : %s", msgTitle, msgContent);
 //        Looper.prepare();
 //        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
 //        Looper.loop();
@@ -119,7 +121,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage msg) {
         Log.i("### msg : ", msg.toString());
-        String title, body;
+        String title, body, board_no;
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
         shared_notification_data = getSharedPreferences("notification_data", Context.MODE_PRIVATE);
 
@@ -127,21 +129,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (msg.getData().isEmpty()) {
             title = msg.getNotification().getTitle();
             body = msg.getNotification().getBody();
+            board_no = "";
             showNotificationMessage(title, body);  // Notification으로 받을 때
         } else {
             title = msg.getData().get("title");
             body = msg.getData().get("body");
-            showDataMessage(title, body);  // Data로 받을 때
+            board_no = msg.getData().get("num");
+            Log.d(TAG, "onMessageReceived: title : " + title + ", body : " + body + ", board_no : " + board_no);
+            showDataMessage(title, body, board_no);  // Data로 받을 때
         }
-        sendNotification(title, body, "testName");
+        sendNotification(title, body, board_no);
 
     }
 
-    public void saveMessage(String title, String content) {
+    public void saveMessage(String title, String content, String board_no) {
         Log.d(TAG, "saveMessage: called!");
         Date date = new Date();
         @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, df.format(date));
+        String msg = String.format("{\"title\" : \"%s\", \"content\" : \"%s\",  \"board_no\" : \"%s\", \"time\" : \"%s\", \"isRead\" : false}", title, content, board_no, df.format(date));
         try {
             JSONObject obj = new JSONObject(msg);
             String oldData = DataIOKt.getNotifications();
@@ -180,7 +185,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void sendNotification(String title, String message, String name) {
+    private void sendNotification(String title, String message, String board_no) {
         Intent intent;
         PendingIntent pendingIntent;
         int unread = DataIOKt.getUnread();
@@ -188,7 +193,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         boolean isNotify = DataIOKt.getNotificationSetting();
 
         intent = new Intent(this, SplashActivity.class);
-        intent.putExtra("name", name);
+        intent.putExtra("name", "name");
 
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -234,14 +239,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 //        summaryNotification.set
 
-
-
-
-        saveMessage(title, message);
+        saveMessage(title, message, board_no);
 
         if(isNotify) {
             notificationManager.notify((int) (System.currentTimeMillis() / 1000), notificationBuilder.build());
-//            notificationManager.notify(0, );
         }
 
 

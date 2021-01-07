@@ -62,7 +62,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         final String title;
         final String content;
         String type = null;
-        final String board_no = "1961";             // 임시
+//        final String board_no = "1961";             // 임시
+        String board_no = null;
         Date date = null;
         final boolean isRead;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
@@ -79,7 +80,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
             content = data.getString("content");
             if(title.equals("["+dept+"]"))
                 type="notice_new";
-//            board_no = data.getString("baord_no");
+            board_no = data.getString("board_no");
             date = dateFormat.parse(data.getString("time"));
             String sTime = new SimpleDateFormat("MM-dd HH:mm").format(date);
             isRead = data.getBoolean("isRead");
@@ -106,6 +107,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                 ((viewHolder)holder).cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.jinColor));
             }
 
+            final String finalBoard_no = board_no;
             final String finalType = type;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,7 +119,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<RecyclerV
                     switch (finalType) {
                         case "notice_new" :
                             intent = new Intent(context, NoticeDetailActivity.class);
-                            intent.putExtra("board_no", board_no);
+                            intent.putExtra("board_no", finalBoard_no);
                             intent.putExtra("dept", dept);
 //                            ((NotificationFragment) fragment).switchFragment("notice");
                             ((MainActivity)((NotificationFragment) fragment).getActivity()).replaceFragment("notice");
