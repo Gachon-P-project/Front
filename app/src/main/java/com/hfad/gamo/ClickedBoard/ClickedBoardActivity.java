@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,6 +56,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                swipeContainer.setEnabled(false);
                 int original_length = responseJSONArray.length();
                 int current_length = original_length;
                 for(int i = 0; i < original_length; i++) {
@@ -73,9 +75,15 @@ public class ClickedBoardActivity extends AppCompatActivity {
                             }
                         }
                         adapter.notifyDataSetChanged();
+                        swipeContainer.setRefreshing(false);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                swipeContainer.setEnabled(true);
+                            }
+                        }, 1000);
                     }
                 });
-                swipeContainer.setRefreshing(false);
             }
         });
 
@@ -93,9 +101,9 @@ public class ClickedBoardActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String subject = "컴퓨터구조";
-        String professor = "이상순";
-        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,subject, professor, user_no));
+        /*String subject = "컴퓨터구조";
+        String professor = "이상순";*/
+        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,board_title, professor, user_no));
 
         final long startTime = System.currentTimeMillis();
         volley.getJSONArray(url, new Response.Listener<JSONArray>() {

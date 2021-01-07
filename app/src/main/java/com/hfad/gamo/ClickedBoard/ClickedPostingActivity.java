@@ -17,9 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -175,19 +177,26 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.activity_clicked_posting_post_reply_iv) {
-            postReply_et.setFocusable(false);
-            putReplyIntoJSONObject();
-            postReply();
-            postReply_et.setText(null);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    postReply_et.setFocusable(true);
-                }
-            }, 500);
+            if(isReplyNoneText()) {
+                Toast.makeText(this, "댓글이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
+            } else {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                postReply_iv.setEnabled(false);
+                putReplyIntoJSONObject();
+                postReply();
+                postReply_et.setText(null);
+                postReply_et.clearFocus();
+                inputMethodManager.hideSoftInputFromWindow(postReply_et.getWindowToken(), 0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        postReply_iv.setEnabled(true);
+                    }
+                }, 1000);
+            }
         } else if (v.getId() == R.id.activity_clicked_posting_post_like_iv) {
-            post_like_img.setFocusable(false);
-
+            post_like_img.setEnabled(false);
+            Log.i("postLike", "postLike");
             volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -202,7 +211,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                     }
                 }
             }, null);
-            post_like_img.setFocusable(true);
+            post_like_img.setEnabled(true);
         }
     }
 
@@ -527,6 +536,10 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         }
 
         return AndroidDate;
+    }
+
+    private boolean isReplyNoneText() {
+        return postReply_et.getText().toString().trim().length() == 0;
     }
 
     public String getWriter_number() {

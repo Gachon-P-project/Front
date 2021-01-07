@@ -21,6 +21,7 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
     private TextView postRereply;
     private int depth;
     private ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
+    private String writer_number = null;
 
     public ReplyDialog(@NonNull Context context, int depth) {
         super(context);
@@ -37,6 +38,7 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
         this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
         this.depth = depth;
         this.clickedPostingActivity = clickedPostingActivity;
+        this.writer_number = null;
     }
 
     @Override
@@ -58,6 +60,7 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
             case R.id.dialogReply_postRereply:
                 Intent WritingNestedReplyIntent = new Intent(context, WritingNestedReplyActivity.class);
                 WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
+                WritingNestedReplyIntent.putExtra("writerNumber", writer_number);
                 clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivityCode);
 
                 break;

@@ -77,8 +77,14 @@ class TimeTableFragment : TimeTableContract.View() {
     ): View? {
         myView = inflater.inflate(R.layout.fragment_information_timetable, container, false)
 
-        saveDataForTimeTable()
+        val tableSet = getSharedItem<HashSet<String>>("tableSet")
 
+        if(tableSet.size != 0) {
+            initTable(tableSet)
+        } else {
+            saveDataForTimeTable()
+        }
+        //saveDataForTimeTable()
         return myView
     }
 
@@ -218,6 +224,7 @@ class TimeTableFragment : TimeTableContract.View() {
                 setSharedItem("professorSet", professorSet)
                 setSharedItem("subject_professorJSONObject", jsonObject.toString());
                 initTable(set)
+
             }
 
         }
