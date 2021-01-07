@@ -190,7 +190,6 @@ public class ClickedBoardActivity extends AppCompatActivity {
         if(doDataExist()) {
         } else {
             swipe_clicked_board.setVisibility(View.GONE);
-            activity_clicked_board_sleep_tv.setText(board_title.concat("게시판의 글이 존재하지 않습니다."));
             activity_clicked_board_sleep_layout.setVisibility(View.VISIBLE);
         }
 
