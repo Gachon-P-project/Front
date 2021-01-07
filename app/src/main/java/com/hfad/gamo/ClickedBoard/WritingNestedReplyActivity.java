@@ -46,6 +46,7 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
 
         Intent receivedIntent = getIntent();
         ArrayList<String> receivedData = receivedIntent.getStringArrayListExtra("replyData");
+        writer_number = receivedIntent.getExtras().getString("writerNumber");
 
         for(int i = 0; i < receivedData.size(); i++) {
             try {
