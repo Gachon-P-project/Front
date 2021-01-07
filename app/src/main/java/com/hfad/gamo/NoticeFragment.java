@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,6 +60,7 @@ public class NoticeFragment extends Fragment {
 
     private RecyclerView recyclerView = null;
     private SwipeRefreshLayout swipeContainer;
+    private ConstraintLayout clNoData;
     private VolleyForHttpMethod volley;
     private String url;
     private boolean isSearching = false;
@@ -106,8 +108,9 @@ public class NoticeFragment extends Fragment {
         responseJSONArray = new JSONArray();
 
         View view = inflater.inflate(R.layout.fragment_notice, container, false);
+        clNoData = view.findViewById(R.id.clNoDataNotice);
         cancel_button_notice = view.findViewById(R.id.cancel_button_notice);
-        edtSearchNotice = view.findViewById(R.id.edit);
+        edtSearchNotice = view.findViewById(R.id.edtSearchNotice);
         recyclerView = view.findViewById(R.id.recycler_notice);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -207,6 +210,8 @@ public class NoticeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadingDialog.start(getContext());
+                swipeContainer.setVisibility(View.VISIBLE);
+                clNoData.setVisibility(View.GONE);
                 search_word = "";
                 page = 0;
                 responseJSONArray = new JSONArray();
@@ -259,7 +264,7 @@ public class NoticeFragment extends Fragment {
                         @Override
                         public void run() {
                             adapter.notifyItemInserted(responseJSONArray.length() - 1);
-                            Log.d(TAG, "onLoadMore: responseJSONArray : tempItemInserted!!");
+                            Log.d(TAG, "onLoadMore: responseJSONArray : loadingItemInserted!!");
                         }
                     });
                     if(!isSearching) {
@@ -267,7 +272,7 @@ public class NoticeFragment extends Fragment {
                     } else {
                         getMoreSearchedNotice();
                     }
-                } else  {
+                } else if (responseJSONArray.length() > 1000){          // recyclerview 아이템 최대 1000개.
                     Toast.makeText(getActivity(), "검색 완료", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -349,10 +354,13 @@ public class NoticeFragment extends Fragment {
             public void onResponse(JSONArray response) {
 
                 if(response.length() == 0) {
-                    Toast.makeText(getActivity(), "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
+                    swipeContainer.setVisibility(View.GONE);
+                    clNoData.setVisibility(View.VISIBLE);
                     isResult = false;
                 } else {
                     Log.d("FRAGMENT::", "SEARCH :: RESULT : " + response);
+                    swipeContainer.setVisibility(View.VISIBLE);
+                    clNoData.setVisibility(View.GONE);
                     for (int i = 0; i < response.length(); i++) {
                         try {
                             responseJSONObject = response.getJSONObject(i);

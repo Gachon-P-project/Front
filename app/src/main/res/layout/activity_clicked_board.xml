@@ -44,7 +44,7 @@
         app:layout_constraintWidth_percent="0.2"
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintVertical_bias="0.4"
-        android:src="@drawable/ic_sleeping"/>
+        android:src="@drawable/ic_sad"/>
 
     <TextView
         android:id="@+id/activity_clicked_board_sleep_tv"
@@ -55,7 +55,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.05"
-        android:text="게시물이 작성되지 않았습니다."
+        android:text="작성된 게시물이 없습니다."
         android:textSize="20dp"
         android:textStyle="bold"
         android:textColor="@color/text2"

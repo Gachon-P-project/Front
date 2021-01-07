@@ -53,8 +53,10 @@ class TimeTableFragment : TimeTableContract.View() {
 //    private val semester = "20"
     private val nowDate: LocalDate = LocalDate.now()
     private var year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
-    private val month = nowDate.format(DateTimeFormatter.ofPattern("MM")).toInt()
-    private var semester = when (month) {
+    private val month = nowDate.format(DateTimeFormatter.ofPattern("MM"))
+    private val day = nowDate.format(DateTimeFormatter.ofPattern("dd"))
+    private val lastDaySaved = getSharedItem("lastDaySavingTimeTable", "")
+    private var semester = when (month.toInt()) {
         3, 4, 5, 6 -> "10"      // 1학기
         9, 10, 11, 12 -> "20"   // 2학기
         7, 8 -> "11"            // 여름학기
@@ -62,15 +64,13 @@ class TimeTableFragment : TimeTableContract.View() {
         else -> "00"            // 에러
     }
 
-    private val user_no = getSharedItem<String>("number")
-    private val yearOfAdmission = user_no.substring(0, 4);
+    private val userNo = getSharedItem<String>("number")
+    private val yearOfAdmission = userNo.substring(0, 4);
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        Log.d(TAG, "doInBackground: now : $year, dateFormat: ${year.javaClass.name}")
-
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this.context))
         sharedPreferences = this.context?.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)!!
     }
@@ -81,19 +81,8 @@ class TimeTableFragment : TimeTableContract.View() {
             savedInstanceState: Bundle?
     ): View? {
         myView = inflater.inflate(R.layout.fragment_timetable, container, false)
-
-//        tvToolbarSemester = this.activity?.findViewById<TextView>(R.id.tv_timetable_fragment_toolbar_semester)!!
-//        tvToolbarYear = this.activity?.findViewById<TextView>(R.id.tv_timetable_fragment_toolbar_year)!!
-
         tvToolbarSemester = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_semester)!!
         tvToolbarYear = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_year)!!
-        val tableSet = getSharedItem<HashSet<String>>("tableSet")
-        Log.d(TAG, "onCreateView: yearOfAdmission : $yearOfAdmission")
-        if(tableSet.size != 0) {
-            initTable(tableSet)
-        } else {
-            saveDataForTimeTable()
-        }
 
         tvToolbarYear.text = getSharedItem<String>("year")+"년"
         tvToolbarSemester.text = when(getSharedItem<String>("semester")) {
@@ -104,8 +93,17 @@ class TimeTableFragment : TimeTableContract.View() {
             else -> "시간표"
         }
 
+        if(lastDaySaved != day || lastDaySaved == "")
+            saveDataForTimeTable()
+        else
+            initTable(getSharedItem("tableSet"))
 
-
+//        val tableSet = getSharedItem<HashSet<String>>("tableSet")
+//        if(tableSet.size != 0) {
+//            initTable(tableSet)
+//        } else {
+//            saveDataForTimeTable()
+//        }
         //saveDataForTimeTable()
         return myView
     }
