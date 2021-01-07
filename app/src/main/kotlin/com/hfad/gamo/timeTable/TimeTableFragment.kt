@@ -77,7 +77,7 @@ class TimeTableFragment : TimeTableContract.View() {
             savedInstanceState: Bundle?
     ): View? {
         myView = inflater.inflate(R.layout.fragment_information_timetable, container, false)
-
+/*
         val tableSet = getSharedItem<HashSet<String>>("tableSet")
 
         if(tableSet.size != 0) {
@@ -97,9 +97,9 @@ class TimeTableFragment : TimeTableContract.View() {
         val year = getSharedItem<String>("year")
 
         fragment_information_timetable_toolbar_first_text.text = semester
-        fragment_information_timetable_toolbar_second_text.text = year
+        fragment_information_timetable_toolbar_second_text.text = year*/
 
-
+        saveDataForTimeTable()
         //saveDataForTimeTable()
         return myView
     }
@@ -193,8 +193,9 @@ class TimeTableFragment : TimeTableContract.View() {
 
             } else {
                 setSharedItem("semester", semester)
+                Log.i("semester", getSharedItem("semester"))
                 setSharedItem("year", year)
-
+                Log.i("year", getSharedItem("year"))
                 for (i in 0 until responseJSONArray.length()) {
                     responseJSONObject = responseJSONArray[i] as JSONObject
 
