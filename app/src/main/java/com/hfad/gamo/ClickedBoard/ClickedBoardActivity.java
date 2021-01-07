@@ -2,6 +2,7 @@ package com.hfad.gamo.ClickedBoard;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -13,6 +14,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -37,11 +40,18 @@ public class ClickedBoardActivity extends AppCompatActivity {
     private String url;
     private String board_title;
     private String professor, user_no, department;
+    private SwipeRefreshLayout swipe_clicked_board;
+    private ConstraintLayout activity_clicked_board_sleep_layout;
+    private TextView activity_clicked_board_sleep_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_board);
+
+        swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
+        activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
+        activity_clicked_board_sleep_tv = findViewById(R.id.activity_clicked_board_sleep_tv);
 
         SharedPreferences sharedPreferences = Component.sharedPreferences;
 
@@ -74,6 +84,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        changeViewIfDoNotHaveData();
                         adapter.notifyDataSetChanged();
                         swipeContainer.setRefreshing(false);
                         new Handler().postDelayed(new Runnable() {
@@ -119,6 +130,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                changeViewIfDoNotHaveData();
                 adapter.notifyDataSetChanged();
             }
         });
@@ -173,4 +185,22 @@ public class ClickedBoardActivity extends AppCompatActivity {
 //        super.onBackPressed();
         finish();
     }
+
+    private void changeViewIfDoNotHaveData() {
+        if(doDataExist()) {
+        } else {
+            swipe_clicked_board.setVisibility(View.GONE);
+            activity_clicked_board_sleep_tv.setText(board_title.concat("게시판의 글이 존재하지 않습니다."));
+            activity_clicked_board_sleep_layout.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private boolean doDataExist() {
+        if(responseJSONArray.length() == 0)
+            return false;
+        else
+            return true;
+    }
+
 }
