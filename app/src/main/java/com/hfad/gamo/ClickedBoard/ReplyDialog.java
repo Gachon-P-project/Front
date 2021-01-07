@@ -38,7 +38,7 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
         this.dataUsedInWritingNestedReplyActivity = dataUsedInWritingNestedReplyActivity;
         this.depth = depth;
         this.clickedPostingActivity = clickedPostingActivity;
-        this.writer_number = null;
+        this.writer_number = writer_number;
     }
 
     @Override
