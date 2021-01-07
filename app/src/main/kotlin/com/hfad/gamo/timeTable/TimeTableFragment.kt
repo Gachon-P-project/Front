@@ -16,6 +16,7 @@ import com.github.eunsiljo.timetablelib.view.TimeTableView
 import com.hfad.gamo.*
 import com.hfad.gamo.ClickedBoard.ClickedBoardActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_information_timetable.*
 import kotlinx.android.synthetic.main.fragment_information_timetable.view.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -84,6 +85,21 @@ class TimeTableFragment : TimeTableContract.View() {
         } else {
             saveDataForTimeTable()
         }
+
+        val semester = when(getSharedItem<String>("semester")) {
+            "10" -> "1학기"
+            "11" -> "여름학기"
+            "20" -> "2학기"
+            "21" -> "겨울학기"
+            else -> "시간표"
+        }
+
+        val year = getSharedItem<String>("year")
+
+        fragment_information_timetable_toolbar_first_text.text = semester
+        fragment_information_timetable_toolbar_second_text.text = year
+
+
         //saveDataForTimeTable()
         return myView
     }
@@ -176,6 +192,8 @@ class TimeTableFragment : TimeTableContract.View() {
                 saveDataForTimeTable()
 
             } else {
+                setSharedItem("semester", semester)
+                setSharedItem("year", year)
 
                 for (i in 0 until responseJSONArray.length()) {
                     responseJSONObject = responseJSONArray[i] as JSONObject
