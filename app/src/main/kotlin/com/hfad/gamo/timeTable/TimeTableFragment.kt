@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.android.volley.toolbox.Volley
 import com.github.eunsiljo.timetablelib.view.TimeTableView
 import com.hfad.gamo.*
@@ -77,7 +78,11 @@ class TimeTableFragment : TimeTableContract.View() {
             savedInstanceState: Bundle?
     ): View? {
         myView = inflater.inflate(R.layout.fragment_information_timetable, container, false)
-/*
+
+        val textView1 = this.activity?.findViewById<TextView>(R.id.fragment_information_timetable_toolbar_first_text)
+        val textView2 = this.activity?.findViewById<TextView>(R.id.fragment_information_timetable_toolbar_second_text)
+
+        //TextView fragment_information_timetable_toolbar_first_text = myView.findViewById(R.id.fragment_information_timetable_toolbar_first_text)
         val tableSet = getSharedItem<HashSet<String>>("tableSet")
 
         if(tableSet.size != 0) {
@@ -86,7 +91,7 @@ class TimeTableFragment : TimeTableContract.View() {
             saveDataForTimeTable()
         }
 
-        val semester = when(getSharedItem<String>("semester")) {
+        val semester2 = when(getSharedItem<String>("semester")) {
             "10" -> "1학기"
             "11" -> "여름학기"
             "20" -> "2학기"
@@ -96,10 +101,15 @@ class TimeTableFragment : TimeTableContract.View() {
 
         val year = getSharedItem<String>("year")
 
-        fragment_information_timetable_toolbar_first_text.text = semester
-        fragment_information_timetable_toolbar_second_text.text = year*/
+        if (textView1 != null) {
+            textView1.text = semester2
+        }
+        if (textView2 != null) {
+            textView2.text = year
+        }
 
-        saveDataForTimeTable()
+
+
         //saveDataForTimeTable()
         return myView
     }
