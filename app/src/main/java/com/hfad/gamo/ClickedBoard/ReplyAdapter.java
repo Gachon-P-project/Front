@@ -248,6 +248,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         holder.item_replies_wrt_date.setVisibility(View.GONE);
         holder.item_replies_three_dots.setVisibility(View.GONE);
         holder.item_replies_nickname.setVisibility(View.GONE);
+        holder.item_replies_is_writer.setVisibility(View.GONE);
         holder.item_replies_content.setText("삭제된 댓글입니다.");
     }
 

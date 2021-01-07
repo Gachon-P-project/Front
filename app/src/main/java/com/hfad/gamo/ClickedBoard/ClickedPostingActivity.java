@@ -31,12 +31,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface {
 
     public static int WritingNestedReplyActivityCode = 0;
     public static int WritingUpdateActivityCode = 1;
+    public static boolean called_onStart = false;
 
     private VolleyForHttpMethod volley = null;
     private toClickedPosting toClickedPosting = null;
@@ -60,6 +69,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private String urlForPostReply;
     private String urlForPostLike;
     private String urlForInquirePostingsOfBoard;
+    private String urlForDeletePosting;
     private String subject_name;
     private String professor_name;
     private String post_no;
@@ -90,9 +100,9 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         initVolley();
         initToolBar();
         initRecyclerViewForReply();
+        initUrl();
         initView();
         initPostLikeUsingUserValue();
-        initUrl();
 
 
         postReply_iv.setOnClickListener(this);
@@ -100,6 +110,25 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         post_like_img.setOnClickListener(this);
 
         inquireReplies();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        called_onStart = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        called_onStart = false;
     }
 
     @Override
@@ -135,11 +164,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             default :
                 return super.onOptionsItemSelected(item) ;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -193,7 +217,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onDeleteClickedPostingDialog() {
-
+        deletePosting();
     }
 
     @Override
@@ -206,7 +230,11 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             }
         } else if (requestCode == WritingUpdateActivityCode) {
             if(resultCode == WritingUpdateActivity.getUpdateResponseCode()) {
+                if(called_onStart) {
+                    setViewText("", "", "", "", "");
+                }
                 showUpdatedPosting();
+                showAllReplies();
             }
         }
     }
@@ -255,12 +283,12 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     private void showAllReplies() {
         //Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
-        clearJSONArray();
+        clearReplyJSONArray();
         inquireReplies();
     }
 
 
-    private void clearJSONArray() {
+    private void clearReplyJSONArray() {
         int original_length = jsonArrayForReplyAdapter.length();
         int current_length = original_length;
         for(int i = 0; i < original_length; i++) {
@@ -289,6 +317,11 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void initView() {
+        setFindViewById();
+        showUpdatedPosting();
+    }
+
+    private void setFindViewById() {
         title = findViewById(R.id.activity_clicked_posting_title);
         nickName = findViewById(R.id.activity_clicked_posting_nickname);
         date = findViewById(R.id.activity_clicked_posting_wrt_date);
@@ -299,14 +332,18 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         post_like_img = findViewById(R.id.activity_clicked_posting_post_like_iv);
         postReply_et = findViewById(R.id.activity_clicked_posting_post_reply_et);
         postReply_iv = findViewById(R.id.activity_clicked_posting_post_reply_iv);
-
-        title.setText(toClickedPosting.getPost_title());
-        nickName.setText("익명");
-        date.setText(toClickedPosting.getWrt_date());
-        contents.setText(toClickedPosting.getPost_contents());
-        reply_cnt.setText(toClickedPosting.getReply_cnt());
-        post_like_text.setText(toClickedPosting.getLike_cnt());
     }
+
+    private void setViewText(String titleText, String dateText, String contentsText, String replyCntText,
+                             String postLikeText) {
+        title.setText(titleText);
+        nickName.setText("익명");
+        date.setText(dateText);
+        contents.setText(contentsText);
+        reply_cnt.setText(replyCntText);
+        post_like_text.setText(postLikeText);
+    }
+
 
     private void initPostLikeUsingUserValue() {
         if(toClickedPosting.getLike_user().equals("0")) {
@@ -327,6 +364,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
         urlForPostLike = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
         urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard, subject_name, professor_name, user_number));
+        urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePosting, post_no));
     }
 
     private void initDataForInquirePostingsOfBoard() {
@@ -360,6 +398,16 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             }
         }, null);
     }
+
+    private void deletePosting() {
+        volley.delete(null, urlForDeletePosting, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                finish();
+            }
+        }, null);
+    }
+
 
     private void showUpdatedPosting() {
         inquirePostingsOfBoard();
@@ -399,34 +447,91 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     private void onResponseInquirePostingsOfBoard(JSONArray response) {
         dataForUpdatePosting = findUpdatedPosting(response);
+
         String titleText = null;
         String contentsText = null;
         String replyCntText = null;
         String postLikeText = null;
+        String wrt_date = null;
 
+        if(dataForUpdatePosting != null) {
 
-        try {
-            titleText = dataForUpdatePosting.getString("post_title");
-            contentsText = dataForUpdatePosting.getString("post_contents");
-            replyCntText = dataForUpdatePosting.getString("reply_cnt");
-            postLikeText = dataForUpdatePosting.getString("like_cnt");
-        } catch(JSONException e) {
-            e.printStackTrace();
+            try {
+                titleText = dataForUpdatePosting.getString("post_title");
+                wrt_date = dataForUpdatePosting.getString("wrt_date");
+                contentsText = dataForUpdatePosting.getString("post_contents");
+                replyCntText = dataForUpdatePosting.getString("reply_cnt");
+                postLikeText = dataForUpdatePosting.getString("like_cnt");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            wrt_date = processServerDateToAndroidDate(wrt_date);
+            setViewText(titleText, wrt_date, contentsText, replyCntText, postLikeText );
+        } else {
+            setViewText("존재하지 않는 게시물 입니다.", "방금","","0", "0" );
         }
 
-        title.setText(titleText);
-        nickName.setText("익명");
-        contents.setText(contentsText);
-        reply_cnt.setText(replyCntText);
-        post_like_text.setText(postLikeText);
 
-        updateToClickedPosting(titleText, contentsText);
+        //updateToClickedPosting(titleText, contentsText);
+    }
+
+    private String processServerDateToAndroidDate(String serverDate) {
+        long time;
+        Date date = null;
+
+        DateFormat dateFormat_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        DateFormat dateFormat_2 = new SimpleDateFormat("yyyy.MM.dd. a hh:mm:ss", Locale.KOREA);
+        TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
+        dateFormat_1.setTimeZone(timeZone);
+        dateFormat_2.setTimeZone(timeZone);
+
+        Calendar beforeOneHour = Calendar.getInstance();
+        beforeOneHour.add(Calendar.HOUR, -1);
+
+        Calendar beforeOneDay = Calendar.getInstance();
+        beforeOneDay.add(Calendar.DATE, -1);
+
+        DateFormat dataFormatForFinalDate = new SimpleDateFormat("yy.MM.dd", java.util.Locale.getDefault());
+        try {
+            assert serverDate != null;
+            date = dateFormat_1.parse(serverDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (date == null) {
+                    assert serverDate != null;
+                    date = dateFormat_2.parse(serverDate);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String AndroidDate;
+        assert date != null;
+        if(date.after(beforeOneHour.getTime())) {
+            time =  date.getTime() - beforeOneHour.getTimeInMillis();
+            if(time > (59 * 60000) && time <= (60 * 600000)) {
+                AndroidDate = "방금 전";
+            } else {
+                long minutesAgo = (60*60*1000 - time) / (60*1000);
+                AndroidDate = String.valueOf((minutesAgo)).concat("분 전");
+            }
+        } else if(date.after(beforeOneDay.getTime())) {
+            time =  date.getTime() - beforeOneDay.getTimeInMillis();
+            long timesAgo = (24*60*60*1000 - time) / (60*60*1000);
+            AndroidDate = String.valueOf(timesAgo).concat("시간 전");
+        } else {
+            AndroidDate = dataFormatForFinalDate.format(date);
+        }
+
+        return AndroidDate;
     }
 
     public String getWriter_number() {
         return writer_number;
     }
-
 
 }
 

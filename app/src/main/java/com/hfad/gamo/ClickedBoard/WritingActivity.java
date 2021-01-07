@@ -64,7 +64,11 @@ public class WritingActivity extends AppCompatActivity {
         btn_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writingBtnClick();
+                if(isNoneText()) {
+                    Toast.makeText(view.getContext(), "제목이나 내용이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
+                } else {
+                    writingBtnClick();
+                }
             }
         });
     }
@@ -94,6 +98,19 @@ public class WritingActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean isNoneText() {
+        return isTitleNoneText() || isContentsNoneText();
+    }
+
+    private boolean isTitleNoneText() {
+        return title_edit.getText().toString().trim().length() == 0;
+    }
+
+    private boolean isContentsNoneText() {
+        return contents_edit.getText().toString().trim().length() == 0;
+    }
+
+
 
     private void writingBtnClick() {
         String url = Component.default_url.concat(getString(R.string.postWriting));
@@ -101,7 +118,7 @@ public class WritingActivity extends AppCompatActivity {
         try {
             requestJSONObject.put("post_title", title_edit.getText().toString());
             requestJSONObject.put("post_contents", contents_edit.getText().toString());
-            requestJSONObject.put("reply_yn", 1);
+            requestJSONObject.put("reply_yn", "1");
             requestJSONObject.put("major_name", intent.getExtras().getString("major"));
             requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
             requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
