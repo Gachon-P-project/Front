@@ -16,9 +16,7 @@ import com.android.volley.toolbox.Volley
 import com.github.eunsiljo.timetablelib.view.TimeTableView
 import com.hfad.gamo.*
 import com.hfad.gamo.ClickedBoard.ClickedBoardActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_information_timetable.*
-import kotlinx.android.synthetic.main.fragment_information_timetable.view.*
+import kotlinx.android.synthetic.main.fragment_timetable.view.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -44,6 +42,8 @@ class TimeTableFragment : TimeTableContract.View() {
     private lateinit var urlInquireTimeTable : String
     private lateinit var responseJSONArray: JSONArray
     private lateinit var responseJSONObject: JSONObject
+    private lateinit var tvToolbarSemester: TextView
+    private lateinit var tvToolbarYear: TextView
 
 
     @SuppressLint("SimpleDateFormat")
@@ -54,7 +54,6 @@ class TimeTableFragment : TimeTableContract.View() {
     private val nowDate: LocalDate = LocalDate.now()
     private var year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
     private val month = nowDate.format(DateTimeFormatter.ofPattern("MM")).toInt()
-
     private var semester = when (month) {
         3, 4, 5, 6 -> "10"      // 1학기
         9, 10, 11, 12 -> "20"   // 2학기
@@ -62,6 +61,10 @@ class TimeTableFragment : TimeTableContract.View() {
         1, 2 -> "21"            // 겨울학기
         else -> "00"            // 에러
     }
+
+    private val user_no = getSharedItem<String>("number")
+    private val yearOfAdmission = user_no.substring(0, 4);
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,35 +80,28 @@ class TimeTableFragment : TimeTableContract.View() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        myView = inflater.inflate(R.layout.fragment_information_timetable, container, false)
+        myView = inflater.inflate(R.layout.fragment_timetable, container, false)
 
-        val textView1 = this.activity?.findViewById<TextView>(R.id.fragment_information_timetable_toolbar_first_text)
-        val textView2 = this.activity?.findViewById<TextView>(R.id.fragment_information_timetable_toolbar_second_text)
+//        tvToolbarSemester = this.activity?.findViewById<TextView>(R.id.tv_timetable_fragment_toolbar_semester)!!
+//        tvToolbarYear = this.activity?.findViewById<TextView>(R.id.tv_timetable_fragment_toolbar_year)!!
 
-        //TextView fragment_information_timetable_toolbar_first_text = myView.findViewById(R.id.fragment_information_timetable_toolbar_first_text)
+        tvToolbarSemester = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_semester)!!
+        tvToolbarYear = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_year)!!
         val tableSet = getSharedItem<HashSet<String>>("tableSet")
-
+        Log.d(TAG, "onCreateView: yearOfAdmission : $yearOfAdmission")
         if(tableSet.size != 0) {
             initTable(tableSet)
         } else {
             saveDataForTimeTable()
         }
 
-        val semester2 = when(getSharedItem<String>("semester")) {
+        tvToolbarYear.text = getSharedItem<String>("year")+"년"
+        tvToolbarSemester.text = when(getSharedItem<String>("semester")) {
             "10" -> "1학기"
             "11" -> "여름학기"
             "20" -> "2학기"
             "21" -> "겨울학기"
             else -> "시간표"
-        }
-
-        val year = getSharedItem<String>("year")
-
-        if (textView1 != null) {
-            textView1.text = semester2
-        }
-        if (textView2 != null) {
-            textView2.text = year
         }
 
 
@@ -156,6 +152,8 @@ class TimeTableFragment : TimeTableContract.View() {
 //        val pref = this.context!!.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         val context = myView?.context
 
+
+
 //        jsonObjectForTitle = JSONObject(pref.getString("subject_professorJSONObject", null))
         jsonObjectForTitle = JSONObject(getSharedItem<String>("subject_professorJSONObject"))
         Handler(Looper.getMainLooper()).post {
@@ -187,7 +185,7 @@ class TimeTableFragment : TimeTableContract.View() {
             responseJSONArray = JSONArray(response)
             Log.d(TAG, "saveDataForTimeTable: response : $response")
 
-            if(semester != "00" && (response == "" || response == null || responseJSONArray.getJSONObject(0).getJSONArray("data") == null) || response == "[{\"day\":\"\",\"data\":[]}]"){
+            if(semester != "00" && (yearOfAdmission.toInt() - 1) <= year.toInt() && (response == "" || response == null || responseJSONArray.getJSONObject(0).getJSONArray("data") == null) || response == "[{\"day\":\"\",\"data\":[]}]"){
                 semester = when (semester) {
                     "10" -> "21"
                     "11" -> "10"
@@ -199,13 +197,24 @@ class TimeTableFragment : TimeTableContract.View() {
                     year = (year.toInt() - 1).toString()
                 }
 
-                saveDataForTimeTable()
+                if((yearOfAdmission.toInt() - 1) <= year.toInt())
+                    saveDataForTimeTable()
+                else
+                    initTable(set)
+
 
             } else {
-                setSharedItem("semester", semester)
-                Log.i("semester", getSharedItem("semester"))
-                setSharedItem("year", year)
-                Log.i("year", getSharedItem("year"))
+
+//                sharedPreferences에 저장된 값과 비교해서 다르면 툴바 업데이트
+                if(getSharedItem<String>("semester") != semester || getSharedItem<String>("year") != year) {
+                    updateToolbarTitle(year, semester)
+                    setSharedItem("semester", semester)
+                    Log.i("semester", getSharedItem("semester"))
+                    setSharedItem("year", year)
+                    Log.i("year", getSharedItem("year"))
+                }
+
+
                 for (i in 0 until responseJSONArray.length()) {
                     responseJSONObject = responseJSONArray[i] as JSONObject
 
@@ -254,8 +263,20 @@ class TimeTableFragment : TimeTableContract.View() {
                 setSharedItem("subject_professorJSONObject", jsonObject.toString());
                 initTable(set)
 
+
             }
 
+        }
+    }
+
+    private fun updateToolbarTitle(year: String, semester: String) {
+        tvToolbarYear.text = year+"년"
+        tvToolbarSemester.text = when(semester) {
+            "10" -> "1학기"
+            "11" -> "여름학기"
+            "20" -> "2학기"
+            "21" -> "겨울학기"
+            else -> "시간표"
         }
     }
 }
