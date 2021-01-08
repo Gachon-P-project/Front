@@ -112,30 +112,6 @@
             android:textStyle="bold"
             android:textAlignment="center"
             />
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_searching_not_found"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_sad_face" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="검색결과가 없습니다."
-            android:textColor="@color/grey"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

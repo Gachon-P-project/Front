@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".ClickedBoard.WritingUpdateActivity" />
-        <activity android:name=".InformationActivity" />
         <activity android:name=".NoticeDetailActivity" />
         <activity android:name=".ClickedBoard.WritingNestedReplyActivity" />
         <activity android:name=".StartGuideActivity"/>
@@ -25,7 +24,6 @@
         <activity android:name=".ClickedBoard.ClickedBoardActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".VolleyActivity" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"

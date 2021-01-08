@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-        <color name="colorPrimary2">#fff</color>
+<!--        <color name="colorPrimary2">#fff</color>-->
         <color name="colorPrimary">#303f9f</color>
-    <color name="colorPrimaryDark">#303f9f</color>
+<!--    <color name="colorPrimaryDark">#303f9f</color>-->
+    <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorSub">#8D99EB</color>
 <!--    <color name="colorSub">#BEC2ED</color>-->
 <!--    <color name="colorPrimaryDark">#3700B3</color>-->

@@ -96,33 +96,6 @@ object Component {
         R.color.ran8
     )
 
-    fun getBuilder(): Dialog? = builder
 
-    fun setBuilder(activity: AppCompatActivity) {
-        builder = object : Dialog(activity) {
-            override fun show() {
-                if (!isShowing) {
-                    if (mHandler == null) mHandler = Handler(Looper.getMainLooper())
-                    mHandler?.post {
-                        super.show()
-                    }
-                }
-            }
-
-            override fun dismiss() {
-                if (isShowing) {
-                    if (mHandler == null) mHandler = Handler(Looper.getMainLooper())
-                    mHandler?.post {
-                        super.dismiss()
-                    }
-                }
-            }
-        }.apply {
-            setContentView(R.layout.builder)
-            setCancelable(false)
-            setCanceledOnTouchOutside(false)
-            this.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        }
-    }
 
 }

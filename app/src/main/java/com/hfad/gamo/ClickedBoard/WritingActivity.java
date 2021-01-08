@@ -96,12 +96,6 @@ public class WritingActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_writing, menu);
-        return true;
-    }
-
     private boolean isNoneText() {
         return isTitleNoneText() || isContentsNoneText();
     }
