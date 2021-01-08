@@ -36,8 +36,8 @@ public class MyPageFragment extends Fragment {
 
     private NickNameDialog nickNameDialog;
     private NotificationSettingDialog notificationSettingDialog;
-    private LinearLayout llChangeNickname, llNotificationSettings, llAppInfo, llLogout;
-    private TextView tvUsername, tvNickname, tvMajor, tvStudentId;
+//    private LinearLayout llAppInfo;
+    private TextView tvUsername, tvNickname, tvMajor, tvStudentId, tvChangeNickname, tvLogout, llNotificationSettings, tvAppVersion, tvInquiry, tvServiceInfo, tvOpenSource;
     private ImageView imgMyPhoto;
     private String username, major, nickname, studnetId, myPhotoUrl;
 
@@ -63,18 +63,25 @@ public class MyPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
-        llChangeNickname = view.findViewById(R.id.change_nickname);
+        tvChangeNickname = view.findViewById(R.id.change_nickname);
         llNotificationSettings = view.findViewById(R.id.notification_settings);
-        llAppInfo = view.findViewById(R.id.information_use);
-        llLogout = view.findViewById(R.id.logout);
-        llChangeNickname.setClickable(true);
+//        llAppInfo = view.findViewById(R.id.information_use);
+        tvLogout = view.findViewById(R.id.logout);
+        tvChangeNickname.setClickable(true);
         llNotificationSettings.setClickable(true);
-        llAppInfo.setClickable(true);
-        llLogout.setClickable(true);
+//        llAppInfo.setClickable(true);
+        tvLogout.setClickable(true);
         tvUsername = view.findViewById(R.id.user_name);
         tvMajor = view.findViewById(R.id.user_major);
         tvStudentId = view.findViewById(R.id.user_no);
         tvNickname = view.findViewById(R.id.tv_mypage_nickname);
+
+        //
+        tvAppVersion = view.findViewById(R.id.app_version);
+        tvInquiry = view.findViewById(R.id.inquiry);
+        tvServiceInfo = view.findViewById(R.id.service_info);
+        tvOpenSource = view.findViewById(R.id.open_source);
+
         imgMyPhoto = view.findViewById(R.id.iv_mypage_photo);
 
         nickname = prefs.getString("nickname", "-");
@@ -86,7 +93,7 @@ public class MyPageFragment extends Fragment {
         DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
         final int deviceWidth = dm.widthPixels;
 
-        llChangeNickname.setOnClickListener(new View.OnClickListener() {
+        tvChangeNickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nickNameDialog = new NickNameDialog(getActivity());
@@ -103,21 +110,58 @@ public class MyPageFragment extends Fragment {
             }
         });
 
-        llAppInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), InformationActivity.class);
-                startActivity(intent);
-            }
-        });
+//        llAppInfo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), InformationActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        llLogout.setOnClickListener(new View.OnClickListener() {
+        tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 resetSharedPreference();
                 startActivity(intent);
+            }
+        });
+
+        tvAppVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
+                dialog.setTvInfo(getString(R.string.version));
+                dialog.show();
+
+            }
+        });
+
+        tvInquiry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
+                dialog.setTvInfo(getString(R.string.inquiry));
+                dialog.show();
+            }
+        });
+
+        tvServiceInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
+                dialog.setTvInfo("서비스 이용약관");
+                dialog.show();
+            }
+        });
+
+        tvOpenSource.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
+                dialog.setTvInfo("오픈소스 라이선스");
+                dialog.show();
             }
         });
         return view;
@@ -156,6 +200,46 @@ public class MyPageFragment extends Fragment {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
+        }
+    }
+
+    private class InfoDialog extends Dialog {
+
+        TextView tvInfo;
+        Context context;
+        Button btnDialogPositive;
+
+        public InfoDialog(@NonNull Context context, int deviceWidth) {
+            super(context);
+            this.context = context;
+            setContentView(R.layout.dialog_info);
+            tvInfo = findViewById(R.id.tvDialogInfo);
+            btnDialogPositive = findViewById(R.id.btnDialogPositive);
+
+
+            btnDialogPositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+
+
+            WindowManager.LayoutParams params = this.getWindow().getAttributes();
+            params.width = (int) (deviceWidth * 0.95);
+            this.onWindowAttributesChanged(params);
+        }
+        @Override
+        public void create() {
+            super.create();
+        }
+
+        public void setTvInfo(String s) {
+            this.tvInfo.setText(s);
+        }
+
+        public void setTvInfoTextSize(int size) {
+            this.tvInfo.setTextSize(size);
         }
     }
 

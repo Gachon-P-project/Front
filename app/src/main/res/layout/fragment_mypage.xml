@@ -48,7 +48,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="160dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="12dp">
@@ -63,17 +63,17 @@
                 <ImageView
                     android:id="@+id/iv_mypage_photo"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:src="@drawable/profile_default" />
 
                 <TextView
                     android:id="@+id/tv_mypage_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:text="jy11290"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -96,16 +96,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="이름: "
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textColor="@color/text2"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="김진영"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textColor="@color/text2"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -125,16 +125,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="학과: "
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textColor="@color/text2"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/user_major"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="컴퓨터공학과"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textColor="@color/text2"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -147,16 +147,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="학번: "
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textColor="@color/text2"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/user_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="201739412"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textColor="@color/text2"
+                        android:textSize="14sp" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/llIsVerified"
@@ -170,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="가천대 인증"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/light_blue" />
 
                     <ImageView
@@ -201,35 +201,106 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/change_nickname"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
             android:background="@drawable/bg_round_corner_grey">
             <TextView
-                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="설정"
+                android:textColor="@color/text1"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="로그아웃"
+                android:textColor="@color/text1"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/change_nickname"
+                android:layout_marginTop="25dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="닉네임 변경"
                 android:textColor="@color/text1"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/notification_settings"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="알림"
+                android:textColor="@color/text1"
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/notification_settings"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
             android:background="@drawable/bg_round_corner_grey">
             <TextView
-                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="알림 설정"
+                android:text="이용안내"
                 android:textColor="@color/text1"
-                android:textSize="18sp"/>
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="앱 버전"
+                android:textColor="@color/text1"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/inquiry"
+                android:layout_marginTop="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문의하기"
+                android:textColor="@color/text1"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/service_info"
+                android:layout_marginTop="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="서비스 이용약관"
+                android:textColor="@color/text1"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/open_source"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오픈소스 라이선스"
+                android:textColor="@color/text1"
+                android:textSize="14sp"/>
         </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/information_use"
@@ -248,21 +319,21 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/logout"
-            android:layout_marginTop="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/bg_round_corner_grey">
-            <TextView
-                android:layout_marginStart="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="로그아웃"
-                android:textColor="@color/text1"
-                android:textSize="18sp"/>
-        </LinearLayout>
+<!--        <LinearLayout-->
+<!--            android:id="@+id/logout"-->
+<!--            android:layout_marginTop="6dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:background="@drawable/bg_round_corner_grey">-->
+<!--            <TextView-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="로그아웃"-->
+<!--                android:textColor="@color/text1"-->
+<!--                android:textSize="18sp"/>-->
+<!--        </LinearLayout>-->
 
 
     </LinearLayout>
