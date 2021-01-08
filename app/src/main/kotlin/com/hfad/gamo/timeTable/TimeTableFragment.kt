@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.toolbox.Volley
 import com.github.eunsiljo.timetablelib.view.TimeTableView
 import com.hfad.gamo.*
@@ -44,6 +45,7 @@ class TimeTableFragment : TimeTableContract.View() {
     private lateinit var responseJSONObject: JSONObject
     private lateinit var tvToolbarSemester: TextView
     private lateinit var tvToolbarYear: TextView
+    private lateinit var swipeLayout: SwipeRefreshLayout
 
 
     @SuppressLint("SimpleDateFormat")
@@ -83,6 +85,7 @@ class TimeTableFragment : TimeTableContract.View() {
         myView = inflater.inflate(R.layout.fragment_timetable, container, false)
         tvToolbarSemester = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_semester)!!
         tvToolbarYear = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_year)!!
+        swipeLayout = myView?.findViewById(R.id.swipeLayout_timetable_fragment)!!
 
         tvToolbarYear.text = getSharedItem<String>("year")+"년"
         tvToolbarSemester.text = when(getSharedItem<String>("semester")) {
@@ -105,8 +108,18 @@ class TimeTableFragment : TimeTableContract.View() {
 //            saveDataForTimeTable()
 //        }
         //saveDataForTimeTable()
+
+        swipeLayout.setColorSchemeResources(R.color.indigo500)
+        swipeLayout.setOnRefreshListener {
+            saveDataForTimeTable()
+
+            swipeLayout.isRefreshing = false
+        }
+
         return myView
     }
+
+
 
     override fun sendContext() = context
     override fun initView() {
