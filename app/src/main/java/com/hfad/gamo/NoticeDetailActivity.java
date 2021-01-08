@@ -2,7 +2,6 @@ package com.hfad.gamo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,6 +19,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,7 +34,7 @@ import org.jsoup.select.Elements;
 
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
-public class NoticeDetailActivity extends AppCompatActivity {
+public class NoticeDetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "NOTICE_DETAIL";
     private VolleyForHttpMethod volley;
@@ -46,11 +45,10 @@ public class NoticeDetailActivity extends AppCompatActivity {
     private String noticeUrl;
 
     private String board_no;
-    private String major_code;
-    private TextView tvTitle, tvTime, tvCount, tvContent;
+    private TextView tvTitle, tvTime, tvCount, textViewToolbarTitle;
+    private ImageButton imageButtonToolbarBack, imageButtonOpenInBrowser;
     private WebView wvContent;
     private LinearLayout llFiles;
-    private androidx.appcompat.widget.Toolbar tb;
 
 
     @Override
@@ -65,16 +63,22 @@ public class NoticeDetailActivity extends AppCompatActivity {
         tvCount = findViewById(R.id.tvNoticeDetailCount);
         llFiles = findViewById(R.id.llNoticeFile);
         wvContent = findViewById(R.id.wvNoticeDetailContent);
-        tb = findViewById(R.id.toolbarNoticeDetail);
+        textViewToolbarTitle = findViewById(R.id.textView_noticeDetail_toolbarTitle);
+        imageButtonToolbarBack = findViewById(R.id.imageButton_noticeDetail_toolbarBack);
+        imageButtonOpenInBrowser = findViewById(R.id.imageButton_noticeDetail_openInBrowser);
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbarNoticeDetail);
 
 
         prefs = context.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = prefs.getString("department", null);
 
-        setSupportActionBar(tb);
-        getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+        setSupportActionBar(toolbar);
+//        getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + "</b>", 0));
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+        textViewToolbarTitle.setText(dept);
+        imageButtonToolbarBack.setOnClickListener(this);
+        imageButtonOpenInBrowser.setOnClickListener(this);
 
         Intent intent = getIntent();
         board_no = intent.getStringExtra("board_no");
@@ -95,6 +99,7 @@ public class NoticeDetailActivity extends AppCompatActivity {
 //            }
 //        });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -240,33 +245,20 @@ public class NoticeDetailActivity extends AppCompatActivity {
 
     }
 
-//    private void bottomNavPressed(int itemId) {
-//        if(itemId == R.id.bottomNavigationNotice) {
-//            onBackPressed();
-//        } else {
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            intent.putExtra("flag", true);
-//            switch (itemId) {
-//                case R.id.bottomNavigationTimeTable :
-//                    intent.putExtra("itemName", "timetable");
-//                    break;
-//                case R.id.bottomNavigationBoard :
-//                    intent.putExtra("itemName", "board");
-//                    break;
-//                case R.id.bottomNavigationMyPage :
-//                    intent.putExtra("itemName", "mypage");
-//                    break;
-//            }
-////            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-//            startActivity(intent);
-////            finish();
-////            overridePendingTransition(R.anim.fadeout, R.anim.fadein);
-////            overridePendingTransition(, R.anim.fadein);
-//        }
-//    }
 
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imageButton_noticeDetail_toolbarBack:
+                onBackPressed();
+                break;
+            case R.id.imageButton_noticeDetail_openInBrowser:
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(noticeUrl));
+                startActivity(intent);
+                break;
+        }
+    }
 
     public void initWebView(WebView wView) {
         // 1. 웹뷰클라이언트 연결 (로딩 시작/끝 받아오기)
@@ -285,27 +277,27 @@ public class NoticeDetailActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_open_in_browser, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_toolbar_open_in_browser, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case android.R.id.home :
-                onBackPressed();
-                return true;
-            case R.id.action_open_in_browser :
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(noticeUrl));
-                startActivity(intent);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case android.R.id.home :
+//                onBackPressed();
+//                return true;
+//            case R.id.action_open_in_browser :
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setData(Uri.parse(noticeUrl));
+//                startActivity(intent);
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void getNoticeUrl() {
 //        String url = Component.default_url + "/notice/url/" + dept + "/" + board_no;

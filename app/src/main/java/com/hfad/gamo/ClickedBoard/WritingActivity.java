@@ -30,18 +30,22 @@ import org.json.JSONObject;
 
 public class WritingActivity extends AppCompatActivity {
 
+    public static final int completeCode = 10;
     private static VolleyForHttpMethod volley;
-    private static JSONObject requestJSONObject = new JSONObject();
+    private static final JSONObject requestJSONObject = new JSONObject();
     Intent intent;
     EditText title_edit;
     EditText contents_edit;
     ImageView btn_cancel;
     Button btn_complete;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("WritingActivityLog", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
+
 
         // 제목
         title_edit = findViewById(R.id.board_write_title_edit);
@@ -132,10 +136,41 @@ public class WritingActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d("POST RESPONSE", response);
+                Log.i("WritingActivityLog", "onResponse");
+                setResult(completeCode);
                 finish();
             }
         }, null);
     }
 
+    @Override
+    protected void onStart() {
+        Log.i("WritingActivityLog", "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i("WritingActivityLog", "onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i("WritingActivityLog", "onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i("WritingActivityLog", "onStop");
+        super.onStop();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        Log.i("WritingActivityLog", "onDestroy");
+        super.onDestroy();
+    }
 }

@@ -127,7 +127,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         }
 
         if(usingLocation.equals("ClickedPostingActivity")) {
-            saveDataForWritingNestedReplyActivity(holder.replyForData, depth, bundle_id);
+            saveDataForWritingNestedReplyActivity(holder.replyForData, depth, reply_no, bundle_id);
         }
 
         if(is_deleted.equals(TRUE)) {
@@ -208,12 +208,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         return (int)(dp * density);
     }
 
-    private void saveDataForWritingNestedReplyActivity(JSONObject reply_data, int depth, int bundle_id) {
+    private void saveDataForWritingNestedReplyActivity(JSONObject reply_data, int depth,int reply_no, int bundle_id) {
 
         if(depth == 0) {
             JSONArray data = new JSONArray();
             data.put(reply_data);
-            toWritingNestedReplyActivity.put(bundle_id, data);
+            toWritingNestedReplyActivity.put(reply_no, data);
         } else {
             JSONArray data = toWritingNestedReplyActivity.get(bundle_id);
             data.put(reply_data);
@@ -261,6 +261,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         else
             holder.item_replies_is_writer.setVisibility(View.GONE);
 
+
         final int bundle_id = holder.replyForData.getInt("bundle_id");
         final int reply_no = holder.replyForData.getInt("reply_no");
 
@@ -294,7 +295,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                         public void onClick(View v) {
                             ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
                             try {
-                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(bundle_id));
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(reply_no));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -313,7 +314,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                         public void onClick(View v) {
                             ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
                             try {
-                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(bundle_id));
+                                dataUsedInWritingNestedReplyActivity = transformData(toWritingNestedReplyActivity.get(reply_no));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
