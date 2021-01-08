@@ -112,7 +112,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
 
         postReply_iv.setOnClickListener(this);
-
         post_like_img.setOnClickListener(this);
 
         inquireReplies();
@@ -353,7 +352,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         contents = findViewById(R.id.activity_clicked_posting_contents);
         reply_cnt = findViewById(R.id.activity_clicked_posting_reply_cnt);
         post_like_text = findViewById(R.id.activity_clicked_posting_post_like_text);
-
         post_like_img = findViewById(R.id.activity_clicked_posting_post_like_iv);
         postReply_et = findViewById(R.id.activity_clicked_posting_post_reply_et);
         postReply_iv = findViewById(R.id.activity_clicked_posting_post_reply_iv);

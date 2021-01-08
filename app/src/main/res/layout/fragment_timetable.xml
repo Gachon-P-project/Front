@@ -22,14 +22,15 @@
             android:textColor="@color/toolbarTitle"
             android:text="0학기"
             android:textStyle="bold"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            />
 
         <TextView
             android:id="@+id/tv_timetable_fragment_toolbar_year"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingTop="7dp"
-            android:paddingStart="2dp"
+            android:paddingStart="7dp"
             android:gravity="center"
             android:textColor="@color/toolbarTitle"
             android:text="0000년"

@@ -302,22 +302,22 @@
 
 
 
-        <LinearLayout
-            android:id="@+id/information_use"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/bg_round_corner_grey"
-            android:gravity="center_vertical">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/information_use"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginTop="6dp"-->
+<!--            android:background="@drawable/bg_round_corner_grey"-->
+<!--            android:gravity="center_vertical">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="이용 안내"
-                android:textColor="@color/text1"
-                android:textSize="18sp" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:text="이용 안내"-->
+<!--                android:textColor="@color/text1"-->
+<!--                android:textSize="18sp" />-->
+<!--        </LinearLayout>-->
 
 <!--        <LinearLayout-->
 <!--            android:id="@+id/logout"-->

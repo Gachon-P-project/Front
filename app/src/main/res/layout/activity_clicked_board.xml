@@ -53,7 +53,7 @@
                 android:id="@+id/imageButton_clickedBoard_newWriting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_pencil"
+                android:src="@drawable/ic_edit"
                 android:background="@android:color/transparent"
                 android:paddingRight="20dp"
                 android:paddingLeft="10dp"
