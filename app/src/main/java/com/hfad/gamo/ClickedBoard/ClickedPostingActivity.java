@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private ImageView postReply_iv = null;
     private ImageView post_like_img = null;
     private TextView post_like_text = null;
+    private TextView tvToolbarTitle = null;
+    private ImageButton imgBtnToolbarBack =  null;
     TextView title = null;
     TextView nickName = null;
     TextView date = null;
@@ -176,42 +179,48 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.activity_clicked_posting_post_reply_iv) {
-            if(isReplyNoneText()) {
-                Toast.makeText(this, "댓글이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
-            } else {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                postReply_iv.setEnabled(false);
-                putReplyIntoJSONObject();
-                postReply();
-                postReply_et.setText(null);
-                postReply_et.clearFocus();
-                inputMethodManager.hideSoftInputFromWindow(postReply_et.getWindowToken(), 0);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        postReply_iv.setEnabled(true);
-                    }
-                }, 1000);
-            }
-        } else if (v.getId() == R.id.activity_clicked_posting_post_like_iv) {
-            post_like_img.setEnabled(false);
-            Log.i("postLike", "postLike");
-            volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    if(isLiked) {
-                        isLiked = false;
-                        post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
-                        post_like_text.setText(String.valueOf(--like_cnt));
-                    } else {
-                        isLiked = true;
-                        post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
-                        post_like_text.setText(String.valueOf(++like_cnt));
-                    }
+        switch (v.getId()){
+            case R.id.activity_clicked_posting_post_reply_iv:
+                if(isReplyNoneText()) {
+                    Toast.makeText(this, "댓글이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
+                } else {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    postReply_iv.setEnabled(false);
+                    putReplyIntoJSONObject();
+                    postReply();
+                    postReply_et.setText(null);
+                    postReply_et.clearFocus();
+                    inputMethodManager.hideSoftInputFromWindow(postReply_et.getWindowToken(), 0);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            postReply_iv.setEnabled(true);
+                        }
+                    }, 1000);
                 }
-            }, null);
-            post_like_img.setEnabled(true);
+                break;
+            case R.id.activity_clicked_posting_post_like_iv:
+                post_like_img.setEnabled(false);
+                Log.i("postLike", "postLike");
+                volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(isLiked) {
+                            isLiked = false;
+                            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
+                            post_like_text.setText(String.valueOf(--like_cnt));
+                        } else {
+                            isLiked = true;
+                            post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
+                            post_like_text.setText(String.valueOf(++like_cnt));
+                        }
+                    }
+                }, null);
+                post_like_img.setEnabled(true);
+                break;
+            case R.id.imgBtnToolbarBackClickedPosting:
+                onBackPressed();
+                break;
         }
     }
 
@@ -319,10 +328,16 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     private void initToolBar() {
         Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
+        tvToolbarTitle = findViewById(R.id.tvToolbarTitleClickedPosting);
+        imgBtnToolbarBack = findViewById(R.id.imgBtnToolbarBackClickedPosting);
+        tvToolbarTitle.setText(toClickedPosting.getBoard_title());
         setSupportActionBar(tb);
-        getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+
+        imgBtnToolbarBack.setOnClickListener(this);
     }
 
     private void initView() {

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ClickedBoardActivity extends AppCompatActivity {
+public class ClickedBoardActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "ClickedBoardActivity";
     private JSONObject responseJSONObject = new JSONObject();
@@ -42,7 +43,8 @@ public class ClickedBoardActivity extends AppCompatActivity {
     private String professor, user_no, department;
     private SwipeRefreshLayout swipe_clicked_board;
     private ConstraintLayout activity_clicked_board_sleep_layout;
-    private TextView activity_clicked_board_sleep_tv;
+    private TextView activity_clicked_board_sleep_tv, textViewToolbarTitle;
+    private ImageButton imageButtonToolbarBack, imageButtonSearch, imageButtonNewWriting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,14 @@ public class ClickedBoardActivity extends AppCompatActivity {
         swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
         activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
         activity_clicked_board_sleep_tv = findViewById(R.id.activity_clicked_board_sleep_tv);
+        textViewToolbarTitle = findViewById(R.id.textView_clickedBoard_toolbarTitle);
+        imageButtonToolbarBack = findViewById(R.id.imageButton_clickedBoard_toolbarBack);
+        imageButtonSearch = findViewById(R.id.imageButton_clickedBoard_search);
+        imageButtonNewWriting = findViewById(R.id.imageButton_clickedBoard_newWriting);
+
+        imageButtonToolbarBack.setOnClickListener(this);
+        imageButtonSearch.setOnClickListener(this);
+        imageButtonNewWriting.setOnClickListener(this);
 
         SharedPreferences sharedPreferences = Component.sharedPreferences;
 
@@ -102,9 +112,10 @@ public class ClickedBoardActivity extends AppCompatActivity {
 
         Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_board_toolbar);
         setSupportActionBar(tb);
-        getSupportActionBar().setTitle(board_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+//        getSupportActionBar().setTitle(board_title);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+        textViewToolbarTitle.setText(board_title);
 
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
@@ -140,40 +151,61 @@ public class ClickedBoardActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_clicked_board, menu) ;
-        return true ;
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void onClick(View v) {
         Intent intent;
-
-        switch (item.getItemId()) {
-            case android.R.id.home :
-                finish();
-                return true;
-            case R.id.action_search :
+        switch (v.getId()){
+            case R.id.imageButton_clickedBoard_toolbarBack:
+                onBackPressed();
+                break;
+            case R.id.imageButton_clickedBoard_search:
                 intent = new Intent(getBaseContext(), SearchActivity.class);
                 intent.putExtra("professor", professor);
                 intent.putExtra("board_title", board_title);
                 intent.putExtra("user_no", user_no);
                 startActivity(intent);
-                return true;
-            case R.id.action_add :
+                break;
+            case R.id.imageButton_clickedBoard_newWriting:
                 intent = new Intent(getBaseContext(), WritingActivity.class);
                 intent.putExtra("major", department);
                 intent.putExtra("subject", board_title);
                 intent.putExtra("professor", professor);
                 intent.putExtra("user_no", user_no);
                 startActivity(intent);
-                return true;
-            default :
-                return super.onOptionsItemSelected(item) ;
+                break;
         }
     }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_toolbar_clicked_board, menu) ;
+//        return true ;
+//    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        Intent intent;
+//
+//        switch (item.getItemId()) {
+//            case android.R.id.home :
+//                finish();
+//                return true;
+//            case R.id.action_search :
+//                intent = new Intent(getBaseContext(), SearchActivity.class);
+//                intent.putExtra("professor", professor);
+//                intent.putExtra("board_title", board_title);
+//                intent.putExtra("user_no", user_no);
+//                startActivity(intent);
+//                return true;
+//            case R.id.action_add :
+//                intent = new Intent(getBaseContext(), WritingActivity.class);
+//                intent.putExtra("major", department);
+//                intent.putExtra("subject", board_title);
+//                intent.putExtra("professor", professor);
+//                intent.putExtra("user_no", user_no);
+//                startActivity(intent);
+//                return true;
+//            default :
+//                return super.onOptionsItemSelected(item) ;
+//        }
+//    }
 
     @Override
     protected void onResume() {
