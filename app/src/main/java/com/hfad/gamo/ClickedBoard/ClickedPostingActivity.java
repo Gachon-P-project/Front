@@ -104,7 +104,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         initRecyclerViewForReply();
         initUrl();
         initView();
-        initPostLikeUsingUserValue();
+        //initPostLikeUsingUserValue();
 
 
         postReply_iv.setOnClickListener(this);
@@ -354,8 +354,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
 
-    private void initPostLikeUsingUserValue() {
-        if(toClickedPosting.getLike_user().equals("0")) {
+    private void initPostLikeUsingUserValue(int like_user) {
+        if(like_user == 0) {
             isLiked = false;
             post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
         } else {
@@ -456,12 +456,12 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     private void onResponseInquirePostingsOfBoard(JSONArray response) {
         dataForUpdatePosting = findUpdatedPosting(response);
-
         String titleText = null;
         String contentsText = null;
         String replyCntText = null;
         String postLikeText = null;
         String wrt_date = null;
+        int like_user = -1;
 
         if(dataForUpdatePosting != null) {
 
@@ -471,6 +471,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 contentsText = dataForUpdatePosting.getString("post_contents");
                 replyCntText = dataForUpdatePosting.getString("reply_cnt");
                 postLikeText = dataForUpdatePosting.getString("like_cnt");
+                like_user = dataForUpdatePosting.getInt("like_user");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -479,6 +480,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         } else {
             setViewText("존재하지 않는 게시물 입니다.", "방금","","0", "0" );
         }
+
+        initPostLikeUsingUserValue(like_user);
 
 
         //updateToClickedPosting(titleText, contentsText);
