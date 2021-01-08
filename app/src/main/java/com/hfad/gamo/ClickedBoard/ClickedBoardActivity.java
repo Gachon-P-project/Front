@@ -179,9 +179,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     private void initToolbar() {
         Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_board_toolbar);
         setSupportActionBar(tb);
-        getSupportActionBar().setTitle(board_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+        textViewToolbarTitle.setText(board_title);
     }
 
     private void initVolley() {

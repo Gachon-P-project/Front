@@ -62,6 +62,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private TextView post_like_text = null;
     private TextView tvToolbarTitle = null;
     private ImageButton imgBtnToolbarBack =  null;
+    private MenuItem menu_toolbar_clicked_posting_three_dots = null;
     TextView title = null;
     TextView nickName = null;
     TextView date = null;
@@ -139,10 +140,10 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_clicked_posting, menu);
+        menu_toolbar_clicked_posting_three_dots = menu.findItem(R.id.menu_toolbar_clicked_posting_three_dots);
 
         if (!writer_number.equals(user_number)) {
-            MenuItem item = menu.findItem(R.id.menu_toolbar_clicked_posting_three_dots);
-            item.setVisible(false);
+            menu_toolbar_clicked_posting_three_dots.setVisible(false);
 
             return true;
         }
@@ -492,11 +493,16 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             }
             wrt_date = processServerDateToAndroidDate(wrt_date);
             setViewText(titleText, wrt_date, contentsText, replyCntText, postLikeText );
+            initPostLikeUsingUserValue(like_user);
         } else {
             setViewText("존재하지 않는 게시물 입니다.", "방금","","0", "0" );
+            post_like_img.setEnabled(false);
+            postReply_et.setEnabled(false);
+            postReply_iv.setEnabled(false);
+            menu_toolbar_clicked_posting_three_dots.setEnabled(false);
         }
 
-        initPostLikeUsingUserValue(like_user);
+
 
 
         //updateToClickedPosting(titleText, contentsText);
