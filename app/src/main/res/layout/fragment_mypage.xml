@@ -206,6 +206,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="15dp"
+            android:paddingRight="100dp"
             android:background="@drawable/bg_round_corner_grey">
             <TextView
                 android:layout_marginTop="25dp"
@@ -220,26 +221,32 @@
                 android:id="@+id/logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="로그아웃"
                 android:textColor="@color/text1"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/change_nickname"
-                android:layout_marginTop="25dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="닉네임 변경"
                 android:textColor="@color/text1"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/notification_settings"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:text="알림"
                 android:textColor="@color/text1"
                 android:textSize="14sp"/>
@@ -252,6 +259,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="15dp"
+            android:paddingRight="100dp"
             android:background="@drawable/bg_round_corner_grey">
             <TextView
                 android:layout_marginTop="25dp"
@@ -264,38 +272,46 @@
 
             <TextView
                 android:id="@+id/app_version"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="앱 버전"
                 android:textColor="@color/text1"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/inquiry"
-                android:layout_marginTop="25dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="문의하기"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:textColor="@color/text1"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/service_info"
-                android:layout_marginTop="25dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="서비스 이용약관"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:textColor="@color/text1"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/open_source"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="오픈소스 라이선스"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:textColor="@color/text1"
                 android:textSize="14sp"/>
         </LinearLayout>

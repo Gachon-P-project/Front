@@ -3,6 +3,8 @@ package com.hfad.gamo
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -13,6 +15,7 @@ import android.widget.Toast
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
+import java.util.*
 
 class NickNameDialog(baseLoginActivity: Activity) {
     private val TAG = "NickNameDialog"
@@ -69,7 +72,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
                     userJsonObject.put("nickname", getSharedItem<String>("nickname"))
                     userJsonObject.put("user_major", getSharedItem<String>("department"))
 
-                    volley!!.postJSONObjectString(userJsonObject,urlRegisterUser, { response ->
+                    volley!!.postJSONObjectString(userJsonObject, urlRegisterUser, { response ->
                         Log.i("response", response)
                         val nextIntent = Intent(baseActivity, StartGuideActivity::class.java)
                         baseActivity.startActivity(nextIntent, null)
@@ -96,7 +99,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
 
 
     interface MyDialogOKClickedListener {
-        fun onOKClicked(content : String)
+        fun onOKClicked(content: String)
     }
     
     fun initDialog(deviceWidth: Int) {
@@ -119,10 +122,11 @@ class NickNameDialog(baseLoginActivity: Activity) {
         val params: ViewGroup.LayoutParams? = dlg?.window?.attributes
         params?.width = (deviceWidth * 0.95).toInt()
         dlg?.window?.attributes = params as WindowManager.LayoutParams
+        dlg?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         nicknameEditText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             var handled = false
-            if(keyCode == KeyEvent.KEYCODE_ENTER || keyCode == EditorInfo.IME_ACTION_DONE) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == EditorInfo.IME_ACTION_DONE) {
                 nicknameActionButton.performClick()
                 handled = true
             }

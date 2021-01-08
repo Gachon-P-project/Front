@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -21,11 +23,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.net.URL;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
@@ -109,14 +110,6 @@ public class MyPageFragment extends Fragment {
                 notificationSettingDialog.show();
             }
         });
-
-//        llAppInfo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), InformationActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,23 +200,26 @@ public class MyPageFragment extends Fragment {
 
         TextView tvInfo;
         Context context;
+//        TextView btnDialogPositive;
         Button btnDialogPositive;
 
         public InfoDialog(@NonNull Context context, int deviceWidth) {
             super(context);
             this.context = context;
             setContentView(R.layout.dialog_info);
+
+            Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
             tvInfo = findViewById(R.id.tvDialogInfo);
-            btnDialogPositive = findViewById(R.id.btnDialogPositive);
-
-
+//            btnDialogPositive = findViewById(R.id.tvButtonDialogPositive);
+            btnDialogPositive = findViewById(R.id.buttonDialogPositive);
+            btnDialogPositive.setClickable(true);
             btnDialogPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dismiss();
                 }
             });
-
 
             WindowManager.LayoutParams params = this.getWindow().getAttributes();
             params.width = (int) (deviceWidth * 0.95);
@@ -256,6 +252,7 @@ public class MyPageFragment extends Fragment {
             super(context);
             this.context = context;
             setContentView(R.layout.dialog_notification_setting);
+            Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             schSettingNotice = findViewById(R.id.schNotificationSettingNotice);
             btnDialogPositive = findViewById(R.id.btnNotificationSettingExit);
 
