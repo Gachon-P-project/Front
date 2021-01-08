@@ -1,5 +1,6 @@
 package com.hfad.gamo.ClickedBoard;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -28,30 +29,27 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ClickedBoardActivity extends AppCompatActivity {
+public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
+    private static final int requestCodeToWritingActivity = 0;
     private static final String TAG = "ClickedBoardActivity";
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
     private ClickedBoard_RecyclerAdapter adapter;
     private JSONArray responseJSONArray = new JSONArray();
-    private SwipeRefreshLayout swipeContainer;
+    private SwipeRefreshLayout swipe_clicked_board;
     private ArrayList<String> a = new ArrayList<>();
-    private String url;
+    private String urlForInquirePostingsOfBoard;
     private String board_title;
     private String professor, user_no, department;
-    private SwipeRefreshLayout swipe_clicked_board;
     private ConstraintLayout activity_clicked_board_sleep_layout;
-    private TextView activity_clicked_board_sleep_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_board);
 
-        swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
         activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
-        activity_clicked_board_sleep_tv = findViewById(R.id.activity_clicked_board_sleep_tv);
 
         SharedPreferences sharedPreferences = Component.sharedPreferences;
 
@@ -62,81 +60,38 @@ public class ClickedBoardActivity extends AppCompatActivity {
         department = sharedPreferences.getString("department", "");
         Log.d(TAG, "onCreate: title : " + board_title + ", professor : " + professor);
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeContainer.setEnabled(false);
-                int original_length = responseJSONArray.length();
-                int current_length = original_length;
-                for(int i = 0; i < original_length; i++) {
-                    responseJSONArray.remove(--current_length);
-                }
+        initUrl();
 
-                volley.getJSONArray(url, new Response.Listener<JSONArray>() {
+        swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
+        swipe_clicked_board.setOnRefreshListener(this);
+
+        swipe_clicked_board.setColorSchemeResources(R.color.indigo500);
+
+        initToolbar();
+        initVolley();
+        initRecyclerView();
+
+        inquirePostingsOfBoard();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == requestCodeToWritingActivity) {
+            if(resultCode == WritingActivity.completeCode) {
+                swipe_clicked_board.setEnabled(false);
+                new Handler().postDelayed(new Runnable() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                responseJSONObject = response.getJSONObject(i);
-                                responseJSONArray.put(responseJSONObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        changeViewIfDoNotHaveData();
-                        adapter.notifyDataSetChanged();
-                        swipeContainer.setRefreshing(false);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                swipeContainer.setEnabled(true);
-                            }
-                        }, 1000);
+                    public void run() {
+                        swipe_clicked_board.setEnabled(true);
                     }
-                });
+                }, 1000);
+                clearRecyclerData();
+                inquirePostingsOfBoard();
             }
-        });
-
-        swipeContainer.setColorSchemeResources(R.color.indigo500);
-
-        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_board_toolbar);
-        setSupportActionBar(tb);
-        getSupportActionBar().setTitle(board_title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
-
-
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
-
-        RecyclerView recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        /*String subject = "컴퓨터구조";
-        String professor = "이상순";*/
-        url = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,board_title, professor, user_no));
-
-        final long startTime = System.currentTimeMillis();
-        volley.getJSONArray(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                long endTime = System.currentTimeMillis();
-                Log.i("boardTime", String.valueOf(endTime - startTime));
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        responseJSONObject = response.getJSONObject(i);
-                        responseJSONArray.put(responseJSONObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                changeViewIfDoNotHaveData();
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title);
-        recyclerView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -144,8 +99,6 @@ public class ClickedBoardActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_toolbar_clicked_board, menu) ;
         return true ;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -168,7 +121,7 @@ public class ClickedBoardActivity extends AppCompatActivity {
                 intent.putExtra("subject", board_title);
                 intent.putExtra("professor", professor);
                 intent.putExtra("user_no", user_no);
-                startActivity(intent);
+                startActivityForResult(intent,requestCodeToWritingActivity);
                 return true;
             default :
                 return super.onOptionsItemSelected(item) ;
@@ -176,19 +129,36 @@ public class ClickedBoardActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    public void onRefresh() {
+        swipe_clicked_board.setEnabled(false);
+        clearRecyclerData();
 
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-        finish();
+        volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        responseJSONObject = response.getJSONObject(i);
+                        responseJSONArray.put(responseJSONObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                changeViewIfDoNotHaveData();
+                adapter.notifyDataSetChanged();
+                swipe_clicked_board.setRefreshing(false);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipe_clicked_board.setEnabled(true);
+                    }
+                }, 1000);
+            }
+        });
     }
 
     private void changeViewIfDoNotHaveData() {
-        if(doDataExist()) {
-        } else {
+        if(!doDataExist()) {
             swipe_clicked_board.setVisibility(View.GONE);
             activity_clicked_board_sleep_layout.setVisibility(View.VISIBLE);
         }
@@ -196,10 +166,57 @@ public class ClickedBoardActivity extends AppCompatActivity {
     }
 
     private boolean doDataExist() {
-        if(responseJSONArray.length() == 0)
-            return false;
-        else
-            return true;
+        return responseJSONArray.length() != 0;
     }
+
+    private void initUrl() {
+        urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,board_title, professor, user_no));
+    }
+
+    private void initToolbar() {
+        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_board_toolbar);
+        setSupportActionBar(tb);
+        getSupportActionBar().setTitle(board_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
+    }
+
+    private void initVolley() {
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+    }
+
+    private void initRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void inquirePostingsOfBoard() {
+        volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        responseJSONObject = response.getJSONObject(i);
+                        responseJSONArray.put(responseJSONObject);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                changeViewIfDoNotHaveData();
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void clearRecyclerData() {
+        int original_length = responseJSONArray.length();
+        int current_length = original_length;
+        for(int i = 0; i < original_length; i++) {
+            responseJSONArray.remove(--current_length);
+        }
+    }
+
 
 }
