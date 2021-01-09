@@ -24,6 +24,7 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
     private toClickedPosting PostingData;
     private String forUpdatePosting;
     private JSONObject realTimeDataForUpdatePosting;
+    private int boardType = -1;
 
     public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
 //    public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
@@ -60,6 +61,7 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
                 intentToWritingUpdateActivity.putExtra("PostingData", PostingData);
                 intentToWritingUpdateActivity.putExtra("forUpdatePosting", forUpdatePosting);
                 intentToWritingUpdateActivity.putExtra("realTimeDataForUpdatePosting", realTimeDataForUpdatePosting.toString());
+                intentToWritingUpdateActivity.putExtra("boardType", boardType);
                 clickedPostingActivity.startActivityForResult(intentToWritingUpdateActivity, ClickedPostingActivity.WritingUpdateActivityCode);
                 break;
             case R.id.dialog_clicked_posting_delete:
@@ -71,6 +73,7 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
         dismiss();
     }
 
-
-
+    public void setBoardType(int boardType) {
+        this.boardType = boardType;
+    }
 }

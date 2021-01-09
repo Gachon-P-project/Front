@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
@@ -86,6 +87,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private String forUpdatePosting = null;
     private JSONObject dataForUpdatePosting = null;
     private JSONObject realTimeDataForUpdatePosting = null;
+    private int boardType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         Intent intent = getIntent();
         toClickedPosting = intent.getParcelableExtra("toClickedPosting");
         forUpdatePosting = intent.getExtras().getString("forUpdatePosting");
+        boardType = intent.getIntExtra("boardType", -1);
         initDataForInquirePostingsOfBoard();
 
         post_no = toClickedPosting.getPost_no();
@@ -111,6 +114,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         initUrl();
         initView();
 
+        activity_clicked_posting_swipe.setColorSchemeResources(R.color.indigo500);
         activity_clicked_posting_swipe.setOnRefreshListener(this);
 
         postReply_iv.setOnClickListener(this);
@@ -161,6 +165,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             case R.id.menu_toolbar_clicked_posting_three_dots :
                 displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
                 ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this, toClickedPosting, forUpdatePosting, realTimeDataForUpdatePosting);
+                clickedPostingDialog.setBoardType(boardType);
                 clickedPostingDialog.show();
                 WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();
                 params.width = (int) (displayMetricsForDeviceSize.widthPixels * 0.8);
@@ -410,8 +415,18 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         urlForPostReply = Component.default_url.concat(getString(R.string.postReply,user_number,post_no));
         urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
         urlForPostLike = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
-        urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard, subject_name, professor_name, user_number));
-        urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePosting, post_no));
+        urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard, subject_name, professor_name, user_number));
+        switch (boardType){
+            case 0:         // 수업게시판
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard));
+                break;
+            case 1:         // 자유게시판
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard, post_no));
+                break;
+            case 2:         // 학과게시판
+                break;
+
+        }
     }
 
     private void initDataForInquirePostingsOfBoard() {
@@ -447,12 +462,32 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void deletePosting() {
-        volley.delete(null, urlForDeletePosting, new Response.Listener<String>() {
+        JSONObject deleteJsonObj = null;
+        switch (boardType) {
+            case 0:
+                deleteJsonObj = new JSONObject();
+                try {
+                    deleteJsonObj.put("post_no", post_no);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+        volley.delete(deleteJsonObj, urlForDeletePosting, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 finish();
             }
-        }, null);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
     }
 
 

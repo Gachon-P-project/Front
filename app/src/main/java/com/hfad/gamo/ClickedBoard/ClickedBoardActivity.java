@@ -13,16 +13,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.hfad.gamo.Component;
-import com.hfad.gamo.DataIOKt;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 import org.json.JSONArray;
@@ -37,6 +35,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
 
     private static final int requestCodeToWritingActivity = 0;
     private static final String TAG = "ClickedBoardActivity";
+    private static int boardType;
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
     private ClickedBoard_RecyclerAdapter adapter;
@@ -44,11 +43,12 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     private SwipeRefreshLayout swipe_clicked_board;
     private ArrayList<String> a = new ArrayList<>();
     private String urlForInquirePostingsOfBoard;
-    private String board_title;
+    private String board_title, subject;
     private String professor, user_no, department;
     private ConstraintLayout activity_clicked_board_sleep_layout;
     private TextView activity_clicked_board_sleep_tv, textViewToolbarTitle;
     private ImageButton imageButtonToolbarBack, imageButtonSearch, imageButtonNewWriting;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +71,13 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         SharedPreferences sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
         Intent intent = getIntent();
+        boardType = intent.getIntExtra("boardType", -1);
         board_title = intent.getExtras().getString("title");
-        professor = intent.getExtras().getString("professor");
+        professor = intent.getExtras().getString("professor", "");
         user_no = sharedPreferences.getString("number", "");
         department = sharedPreferences.getString("department", "");
         Log.d(TAG, "onCreate: title : " + board_title + ", professor : " + professor);
-
+        initBoardType();
         initUrl();
 
         swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
@@ -121,16 +122,17 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
             case R.id.imageButton_clickedBoard_search:
                 intent = new Intent(getBaseContext(), SearchActivity.class);
                 intent.putExtra("professor", professor);
-                intent.putExtra("board_title", board_title);
+                intent.putExtra("subject", subject);
                 intent.putExtra("user_no", user_no);
                 startActivity(intent);
                 break;
             case R.id.imageButton_clickedBoard_newWriting:
                 intent = new Intent(getBaseContext(), WritingActivity.class);
                 intent.putExtra("major", department);
-                intent.putExtra("subject", board_title);
+                intent.putExtra("subject", subject);
                 intent.putExtra("professor", professor);
                 intent.putExtra("user_no", user_no);
+                intent.putExtra("boardType", boardType);
                 startActivityForResult(intent,requestCodeToWritingActivity);
                 break;
         }
@@ -179,8 +181,36 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         return responseJSONArray.length() != 0;
     }
 
+    private void initBoardType() {
+        switch (boardType) {
+            case 0:         // 수업게시판
+                subject = board_title;
+                break;
+            case 1:         // 자유게시판
+                subject = "1";
+                break;
+            case 2:         // 학과게시판
+                subject = "0";
+                break;
+            default:        // ERROR
+                Toast.makeText(this, "BOARD ERROR!", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+                break;
+        }
+    }
+
     private void initUrl() {
-        urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfBoard,board_title, professor, user_no));
+        switch(boardType) {
+            case 0:          // 수업게시판
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject, professor, user_no));
+                Log.d(TAG, "initUrl: url : " + urlForInquirePostingsOfBoard);
+                break;
+            case 1:         // 자유게시판
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no));
+                break;
+            case 2:         // 학과게시판
+                break;
+        }
     }
 
     private void initToolbar() {
@@ -196,7 +226,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title);
+        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title, boardType);
         recyclerView.setAdapter(adapter);
     }
 

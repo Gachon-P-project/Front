@@ -24,7 +24,6 @@ import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import static android.view.KeyEvent.KEYCODE_ENTER;
@@ -35,6 +34,7 @@ public class SearchActivity extends AppCompatActivity {
     private static VolleyForHttpMethod volley;
     private static JSONArray requestJSONArray = new JSONArray();
     private static ClickedBoard_RecyclerAdapter adapter;
+    private int boardType;
     private String user_no, professor, subject;
     private LinearLayout llSearchDescription, llSearchNoResult;
     private TextView tvSearchBoardDescription;
@@ -52,8 +52,9 @@ public class SearchActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         professor = intent.getStringExtra("professor");
-        subject = intent.getStringExtra("board_title");
+        subject = intent.getStringExtra("subject");
         user_no = intent.getStringExtra("user_no");
+        boardType = intent.getIntExtra("boardType", -1);
 
         loadingDialog = new LoadingDialog();
         llSearchDescription = findViewById(R.id.llSearchBoardDescription);
@@ -62,7 +63,7 @@ public class SearchActivity extends AppCompatActivity {
         String description = subject + tvSearchBoardDescription.getText().toString().substring(3);
         tvSearchBoardDescription.setText(description);
 
-        ImageView back_btn = (ImageView) findViewById(R.id.btn_back);
+        ImageView back_btn = findViewById(R.id.btn_back);
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,17 +87,16 @@ public class SearchActivity extends AppCompatActivity {
                 if( i == EditorInfo.IME_ACTION_SEARCH || i == KEYCODE_ENTER) {
                         loadingDialog.start(SearchActivity.this);
                         String word = search_edit.getText().toString();
-                        url = Component.default_url.concat(getString(R.string.searchWantedPostingsOfBoard,subject, professor, user_no, word));
+                        initUrl(word);
                         Log.d(TAG, "onEditorAction: url : " + url);
                         search(new NoticeFragment.VolleyCallback() {
                             @Override
                             public void onSuccess() {
                                 adapter.notifyDataSetChanged();
                                 initRecyclerView();
-
                             }
                         });
-                        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, subject);
+                        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, subject, boardType);
                         recyclerView.setAdapter(adapter);
                 }
                 return true;
@@ -114,11 +114,24 @@ public class SearchActivity extends AppCompatActivity {
     private void initRecyclerView() {
 
         Log.d(TAG, "initRecyclerView: ");
-        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, subject);
+        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, subject, boardType);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
 
-
+    private void initUrl(String word) {
+        switch (boardType) {
+            case 0:
+                url = Component.default_url.concat(getString(R.string.searchPostingsOfSubjectBoard,subject, professor, user_no, word));
+                break;
+            case 1:
+                url = Component.default_url.concat(getString(R.string.searchPostingsOfFreeBoard,boardType, user_no, word));
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
     }
 
     private void search(final NoticeFragment.VolleyCallback callback) {

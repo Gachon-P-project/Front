@@ -1,16 +1,12 @@
 package com.hfad.gamo.ClickedBoard;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,8 +15,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
@@ -31,8 +25,11 @@ import org.json.JSONObject;
 public class WritingActivity extends AppCompatActivity {
 
     public static final int completeCode = 10;
+    private static final String TAG = "WritingActivity";
     private static VolleyForHttpMethod volley;
     private static final JSONObject requestJSONObject = new JSONObject();
+    private static int boardType;
+    private String url;
     Intent intent;
     EditText title_edit;
     EditText contents_edit;
@@ -56,6 +53,7 @@ public class WritingActivity extends AppCompatActivity {
         title_edit.addTextChangedListener(titleWatcher);
 
         intent = getIntent();// major, subject, professor, user_no
+        boardType = intent.getIntExtra("boardType", -1);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +73,11 @@ public class WritingActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if(boardType == -1) {
+            Toast.makeText(this, "BOARD ERROR!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     TextWatcher titleWatcher = new TextWatcher() {
@@ -111,16 +114,18 @@ public class WritingActivity extends AppCompatActivity {
 
 
     private void writingBtnClick() {
-        String url = Component.default_url.concat(getString(R.string.postWriting));
 
+        classifyBoard();
         try {
             requestJSONObject.put("post_title", title_edit.getText().toString());
             requestJSONObject.put("post_contents", contents_edit.getText().toString());
-            requestJSONObject.put("reply_yn", "1");
             requestJSONObject.put("major_name", intent.getExtras().getString("major"));
             requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
             requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
             requestJSONObject.put("user_no", intent.getExtras().getString("user_no"));
+            requestJSONObject.put("board_flag", boardType);
+            if(boardType == 1)
+                requestJSONObject.put("reply_yn", 1);
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -135,6 +140,19 @@ public class WritingActivity extends AppCompatActivity {
                 finish();
             }
         }, null);
+    }
+
+    private void classifyBoard() {
+        switch (boardType) {
+            case 0:         // 수업게시판
+                url = Component.default_url.concat(getString(R.string.postSubjectWriting, 1));
+                break;
+            case 1:         // 자유게시판
+                url = Component.default_url.concat(getString(R.string.postFreeWriting));
+                break;
+            case 2:         // 학과게시판
+                break;
+        }
     }
 
     @Override

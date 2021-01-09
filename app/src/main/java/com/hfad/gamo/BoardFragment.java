@@ -25,10 +25,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+import static com.hfad.gamo.DataIOKt.getSubjectSet;
 
 
 public class BoardFragment extends Fragment {
@@ -56,16 +58,19 @@ public class BoardFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = this.getContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        prefs = Objects.requireNonNull(this.getContext()).getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
         try {
-            subject_professorJSONObject = new JSONObject(prefs.getString("subject_professorJSONObject", null));
+//            subject_professorJSONObject = new JSONObject(prefs.getString("subject_professorJSONObject", null));
+            subject_professorJSONObject = new JSONObject(DataIOKt.getSubjectProfessorJSONObject());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        dept = prefs.getString("department", null);
-        subjectSet = prefs.getStringSet("subjectSet", noneSubject);
+//        dept = prefs.getString("department", null);
+//        subjectSet = prefs.getStringSet("subjectSet", noneSubject);
+        dept = DataIOKt.getDepartment();
+        subjectSet = getSubjectSet();
 
         if (dept_data.size() == 0) {
             dept_data.add(dept);
@@ -94,22 +99,26 @@ public class BoardFragment extends Fragment {
         } else {
             dept_recyclerView = view.findViewById(R.id.dept_recyclerView);
             dept_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            dept_adapter = new Board_RecyclerAdapter(dept_data, subject_professorJSONObject);
+            dept_adapter = new Board_RecyclerAdapter(dept_data);
+            dept_adapter.setBoardType(StateKt.BOARD_MAJOR);
             dept_recyclerView.setAdapter(dept_adapter);
         }
 
-        if(subjectSet == noneSubject) {
+//        if(subjectSet == noneSubject) {
+        if(subjectSet.equals(new HashSet<String>())) {
             subject_linearLayout.setVisibility(View.INVISIBLE);
         } else {
             subject_recyclerView = view.findViewById(R.id.subject_recyclerView);
             subject_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
             subject_adapter = new Board_RecyclerAdapter(subject_data, subject_professorJSONObject);
+            dept_adapter.setBoardType(StateKt.BOARD_SUBJECT);
             subject_recyclerView.setAdapter(subject_adapter);
         }
 
         community_recyclerView = view.findViewById(R.id.community_recyclerView);
         community_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        community_adapter = new Board_RecyclerAdapter(community_data, subject_professorJSONObject);
+        community_adapter = new Board_RecyclerAdapter(community_data);
+        dept_adapter.setBoardType(StateKt.BOARD_FREE);
         community_recyclerView.setAdapter(community_adapter);
 
         dept_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()) {

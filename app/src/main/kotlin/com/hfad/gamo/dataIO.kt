@@ -2,8 +2,6 @@
 
 package com.hfad.gamo
 
-import android.content.Context
-import android.util.Log
 import com.hfad.gamo.Component.sharedPreferences
 import com.hfad.gamo.Component.shared_notification_data
 import java.util.*
@@ -87,6 +85,14 @@ fun getUserNo(): String? {
 
 fun getNickname(): String? {
     return getSharedItem("nickname")
+}
+
+fun getSubjectProfessorJSONObject(): String {
+    return getSharedItem("subject_professorJSONObject", "")
+}
+
+fun getSubjectSet(): HashSet<String>{
+    return getSharedItem("subjectSet", java.util.HashSet<String>())
 }
 
 

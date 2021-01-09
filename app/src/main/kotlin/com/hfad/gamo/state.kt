@@ -19,3 +19,7 @@ const val CHANGE_PATTERN = 13421
 const val REMOVE_PATTERN = 1359
 
 const val MENU_ITEM_ID1 = 201735829
+
+const val BOARD_SUBJECT = 0
+const val BOARD_FREE = 1
+const val BOARD_MAJOR = 2

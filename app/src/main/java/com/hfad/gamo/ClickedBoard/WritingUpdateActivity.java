@@ -16,8 +16,6 @@ import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 
-import com.hfad.gamo.Component;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +37,7 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
     private String subject_name;
     private String professor_name;
     private String user_no;
+    private int boardType;
     private toClickedPosting toClickedPosting;
 
     //private toClickedPosting PostingData;
@@ -58,6 +57,7 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
 
         Intent intent = getIntent();
         toClickedPosting = intent.getExtras().getParcelable("PostingData");
+        boardType = intent.getIntExtra("boardType", -1);
         try {
             forUpdatePosting = new JSONObject(intent.getExtras().getString("forUpdatePosting"));
             realTimeDataForUpdatePosting = new JSONObject(intent.getExtras().getString("realTimeDataForUpdatePosting"));
@@ -100,7 +100,16 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initUrl() {
-        urlForUpdatePosting = Component.default_url.concat(getString(R.string.updatePosting, post_no));
+        switch (boardType) {
+            case 0:         // 수업
+                urlForUpdatePosting = Component.default_url.concat(getString(R.string.updatePostingOfSubjectBoard));
+                break;
+            case 1:         // 자유
+                urlForUpdatePosting = Component.default_url.concat(getString(R.string.updatePostingOfFreeBoard, post_no));
+                break;
+            case 2:         // 학과
+                break;
+        }
     }
 
     private void initVolley() {
@@ -150,13 +159,10 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
 
         JSONObject UpdatedData = new JSONObject();
         try {
+            if(boardType == 0)
+                UpdatedData.put("post_no", post_no);
             UpdatedData.put("post_title", title);
             UpdatedData.put("post_contents", contents);
-            UpdatedData.put("reply_yn", reply_yn);
-            UpdatedData.put("major_name", major_name);
-            UpdatedData.put("subject_name", subject_name);
-            UpdatedData.put("professor_name", professor_name);
-            UpdatedData.put("user_no", user_no);
         } catch (JSONException e) {
             e.printStackTrace();
         }

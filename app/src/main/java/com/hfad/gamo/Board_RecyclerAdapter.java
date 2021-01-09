@@ -2,6 +2,7 @@ package com.hfad.gamo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,14 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
 
     private ArrayList<String> data;
     private JSONObject subject_professorJSONObject;
+    private int boardType;
 
     Board_RecyclerAdapter(ArrayList<String> data, JSONObject jsonObject) {
         this.data = data;
         this.subject_professorJSONObject = jsonObject;
+    }
+    Board_RecyclerAdapter(ArrayList<String> data) {
+        this.data = data;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,11 +81,23 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
 
         final Intent intent = new Intent(context, ClickedBoardActivity.class);
         intent.putExtra("title", title);
-        try {
-            intent.putExtra("professor", subject_professorJSONObject.get(title).toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        intent.putExtra("boardType", boardType);
+        if(subject_professorJSONObject != null) {
+            try {
+                intent.putExtra("professor", subject_professorJSONObject.get(title).toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else
+            intent.putExtra("professor", boardType);
         context.startActivity(intent);
+    }
+
+    public void setSubject_professorJSONObject(JSONObject subject_professorJSONObject) {
+        this.subject_professorJSONObject = subject_professorJSONObject;
+    }
+
+    public void setBoardType(int boardType) {
+        this.boardType = boardType;
     }
 }

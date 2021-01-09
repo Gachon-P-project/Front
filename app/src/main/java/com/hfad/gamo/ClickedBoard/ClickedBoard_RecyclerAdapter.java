@@ -2,7 +2,6 @@ package com.hfad.gamo.ClickedBoard;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +30,13 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
 
     private JSONArray JSONArrayData = null;
     private final String board_title;
+    private final int boardType;
 
 
-    ClickedBoard_RecyclerAdapter(JSONArray list, String board_title) {
+    ClickedBoard_RecyclerAdapter(JSONArray list, String board_title, int boardType) {
         this.JSONArrayData = list;
         this.board_title = board_title;
+        this.boardType = boardType;
     }
 
 
@@ -118,6 +119,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
                 Intent intent = new Intent(v.getContext(), ClickedPostingActivity.class);
                 intent.putExtra("toClickedPosting", holder.toClickedPosting);
                 intent.putExtra("forUpdatePosting", holder.forUpdatePosting.toString());
+                intent.putExtra("boardType", boardType);
                 v.getContext().startActivity(intent);
             }
         });
