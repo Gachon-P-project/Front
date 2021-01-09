@@ -28,21 +28,33 @@
         android:id="@+id/dept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="100dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/bg_board_list"
+        android:background="@drawable/bg_round_corner_grey"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/subject"
         app:layout_constraintVertical_chainStyle="packed"
         android:orientation="vertical">
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="학과 게시판"
+            android:textColor="@color/text1"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dept_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            />
 
     </LinearLayout>
 
@@ -51,20 +63,32 @@
         android:id="@+id/subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="100dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/bg_board_list"
+        android:background="@drawable/bg_round_corner_grey"
         app:layout_constraintTop_toBottomOf="@id/dept"
         app:layout_constraintBottom_toTopOf="@id/community"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수업 게시판"
+            android:textColor="@color/text1"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/subject_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"/>
 
     </LinearLayout>
 
@@ -78,7 +102,7 @@
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/bg_board_list"
+        android:background="@drawable/bg_round_corner_grey"
         app:layout_constraintTop_toBottomOf="@id/subject"
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
