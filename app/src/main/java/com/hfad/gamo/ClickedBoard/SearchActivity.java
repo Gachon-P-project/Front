@@ -48,6 +48,8 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        Component.default_url = getString(R.string.defaultUrl);
+
         Intent intent = getIntent();
         professor = intent.getStringExtra("professor");
         subject = intent.getStringExtra("board_title");

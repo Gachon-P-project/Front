@@ -54,6 +54,8 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing_update);
 
+        Component.default_url = getString(R.string.defaultUrl);
+
         Intent intent = getIntent();
         toClickedPosting = intent.getExtras().getParcelable("PostingData");
         try {

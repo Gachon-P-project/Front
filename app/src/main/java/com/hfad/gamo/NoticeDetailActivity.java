@@ -56,6 +56,8 @@ public class NoticeDetailActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_detail);
 
+        Component.default_url = getString(R.string.defaultUrl);
+
         context = getApplicationContext();
 
         tvTitle = findViewById(R.id.tvNoticeDetailTitle);

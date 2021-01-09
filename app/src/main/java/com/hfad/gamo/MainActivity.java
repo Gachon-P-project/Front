@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        default_url = getString(R.string.defaultUrl);
         loadingDialog = new LoadingDialog();
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);

@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         Component.shared_notification_data = getSharedPreferences("notification_data", Context.MODE_PRIVATE);
         Component.sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
 
-        Component.default_url = "https://moga.club";
+        Component.default_url = getString(R.string.defaultUrl);
 
 
         Intent intent;

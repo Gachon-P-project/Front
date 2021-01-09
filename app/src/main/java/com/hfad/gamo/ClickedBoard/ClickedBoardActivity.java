@@ -55,6 +55,8 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_board);
 
+        Component.default_url = getString(R.string.defaultUrl);
+
         activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
         activity_clicked_board_sleep_tv = findViewById(R.id.activity_clicked_board_sleep_tv);
         textViewToolbarTitle = findViewById(R.id.textView_clickedBoard_toolbarTitle);
