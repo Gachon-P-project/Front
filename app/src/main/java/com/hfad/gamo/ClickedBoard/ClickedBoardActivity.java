@@ -165,6 +165,9 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         if(!doDataExist()) {
             swipe_clicked_board.setVisibility(View.GONE);
             activity_clicked_board_sleep_layout.setVisibility(View.VISIBLE);
+        } else {
+            swipe_clicked_board.setVisibility(View.VISIBLE);
+            activity_clicked_board_sleep_layout.setVisibility(View.GONE);
         }
     }
 
