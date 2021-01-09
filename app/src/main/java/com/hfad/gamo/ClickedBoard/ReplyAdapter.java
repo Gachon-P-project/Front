@@ -53,6 +53,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     private int reply_no = -1;
     private int post_no = -1;
     private int bundle_id = -1;
+    private String nickname = null;
 
     ReplyAdapter(JSONArray list, Activity activity, String usingLocation) {
         this.JSONArrayData = list;
@@ -241,6 +242,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         reply_no = data.getInt("reply_no");
         post_no = data.getInt("post_no");
         bundle_id = data.getInt("bundle_id");
+        nickname = data.getString("nickname");
     }
 
     private void setViewOfDeletedReply(ReplyAdapter.ViewHolder holder) {
@@ -255,6 +257,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     private void setViewOfUnDeletedReply(final ReplyAdapter.ViewHolder holder, String usingLocation) throws JSONException {
         holder.item_replies_content.setText(reply_contents);
         holder.item_replies_wrt_date.setText(wrt_date);
+        holder.item_replies_nickname.setText(nickname);
 
         if(writer_number.equals(reply_user_no))
             holder.item_replies_is_writer.setVisibility(View.VISIBLE);
