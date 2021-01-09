@@ -104,6 +104,13 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        requestJSONArray = new JSONArray();
+        initRecyclerView();
+        super.onBackPressed();
+    }
+
     private void initRecyclerView() {
 
         Log.d(TAG, "initRecyclerView: ");
