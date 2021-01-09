@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">모여라가천</string>
+    <string name="defaultUrl">"https://moga.club"</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">제목</string>
@@ -25,37 +26,8 @@
     <string name="notice_title">%s 공지사항</string>
     <string name="gachonBaseUrl">https://www.gachon.ac.kr</string>
     <string name="msg_token_fmt" translatable="false">토큰 : %s</string>
-    <string name="postSubjectWriting">/boards/subject?reply_yn=%d</string>
-    <string name="postFreeWriting">/boards/free/insert</string>
-    <string name="inquirePostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$s</string>
-    <string name="inquirePostingsOfFreeBoard">/boards/free/%1$d/%2$s</string>
-    <string name="searchPostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$s/%4$s</string>
-    <string name="searchPostingsOfFreeBoard">/boards/free/select/%1$d/%2$s/search/%3$s</string>
-    <string name="updatePostingOfSubjectBoard">/boards/subject</string>
-    <string name="updatePostingOfFreeBoard">/boards/free/update/%s</string>
-    <string name="deletePostingOfSubjectBoard">/boards/subject</string>
-    <string name="deletePostingOfFreeBoard">/boards/free/delete/%s</string>
-    <string name="postReply">/reply/insert/%1$s/%2$s</string>
-    <string name="postNestedReply">/reply/insert/rereply/%1$s/%2$s/%3$s</string>
-    <string name="inquireReplies">/reply/read/%1$s</string>
-    <string name="updateReply">/reply/update/%1$s</string>
-    <string name="updateNestedReply">/reply/update/rereply/$1$s</string>
-    <string name="deleteReply">/reply/delete/%1$s</string>
-    <string name="deleteNestedReply">/reply/delete/rereply/%1$s</string>
-    <string name="inquireNotification">/notice/read/%1$s/%2$s</string>
-    <string name="searchNotification">/notice/read/%1$s/%2$s/%3$s</string>
-    <string name="registerUser">/user/add</string>
-    <string name="inquireUser">/user/info</string>
-    <string name="inquireTimeTable">/user/timetable/%1$s/%2$s/%3$s</string>
-    <string name="checkNickName">/user/nickname_chk/%1$s</string>
-    <string name="nicknameUpdate">/user/nickname/update</string>
-    <string name="noticeDetail">/notice/posting/%1$s/%2$s</string>
-    <string name="noticeUrl">/notice/url/%1$s/%2$s</string>
-    <string name="noticeList">/notice/read/%1$d/%2$s</string>
-    <string name="noticeSearchedList">/notice/read/%1$d/%2$s/%3$s</string>
-    <string name="broadcastSaveMessage">com.hfad.gamo.saveMessage</string>
-    <string name="postLike">/like/insert/%1$s/%2$s</string>
-    <string name="defaultUrl">"https://moga.club"</string>
 
+
+    <string name="broadcastSaveMessage">com.hfad.gamo.saveMessage</string>
 
 </resources>
