@@ -217,7 +217,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             toWritingNestedReplyActivity.put(reply_no, data);
         } else {
             JSONArray data = toWritingNestedReplyActivity.get(bundle_id);
-            data.put(reply_data);
+             data.put(reply_data);
         }
     }
 

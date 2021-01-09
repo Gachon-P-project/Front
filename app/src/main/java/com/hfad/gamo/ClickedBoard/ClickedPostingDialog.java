@@ -26,6 +26,7 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
     private JSONObject realTimeDataForUpdatePosting;
 
     public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
+//    public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
         super(clickedPostingActivity);
 
         this.clickedPostingActivity = clickedPostingActivity;
