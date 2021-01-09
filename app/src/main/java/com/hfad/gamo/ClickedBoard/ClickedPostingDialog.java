@@ -23,14 +23,16 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
     private TextView deletePosting;
     private toClickedPosting PostingData;
     private String forUpdatePosting;
+    private JSONObject realTimeDataForUpdatePosting;
 
-    public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
+    public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
         super(clickedPostingActivity);
 
         this.clickedPostingActivity = clickedPostingActivity;
         this.clickedPostingDialogInterface = clickedPostingActivity;
         this.PostingData = PostingData;
         this.forUpdatePosting = forUpdatePosting;
+        this.realTimeDataForUpdatePosting = realTimeDataForUpdatePosting;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
                 Intent intentToWritingUpdateActivity = new Intent(clickedPostingActivity,WritingUpdateActivity.class);
                 intentToWritingUpdateActivity.putExtra("PostingData", PostingData);
                 intentToWritingUpdateActivity.putExtra("forUpdatePosting", forUpdatePosting);
+                intentToWritingUpdateActivity.putExtra("realTimeDataForUpdatePosting", realTimeDataForUpdatePosting.toString());
                 clickedPostingActivity.startActivityForResult(intentToWritingUpdateActivity, ClickedPostingActivity.WritingUpdateActivityCode);
                 break;
             case R.id.dialog_clicked_posting_delete:
