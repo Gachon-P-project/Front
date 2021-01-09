@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+
 public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
 
     private static final int requestCodeToWritingActivity = 0;
@@ -64,7 +66,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         imageButtonSearch.setOnClickListener(this);
         imageButtonNewWriting.setOnClickListener(this);
 
-        SharedPreferences sharedPreferences = Component.sharedPreferences;
+        SharedPreferences sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
         Intent intent = getIntent();
         board_title = intent.getExtras().getString("title");

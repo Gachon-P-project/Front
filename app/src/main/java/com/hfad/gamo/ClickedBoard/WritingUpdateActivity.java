@@ -43,6 +43,7 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
 
     //private toClickedPosting PostingData;
     private JSONObject forUpdatePosting;
+    private JSONObject realTimeDataForUpdatePosting;
 
     static public int getUpdateResponseCode() {
         return update;
@@ -57,9 +58,11 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         toClickedPosting = intent.getExtras().getParcelable("PostingData");
         try {
             forUpdatePosting = new JSONObject(intent.getExtras().getString("forUpdatePosting"));
+            realTimeDataForUpdatePosting = new JSONObject(intent.getExtras().getString("realTimeDataForUpdatePosting"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
 
         initPostingUserData();
         initView();
@@ -104,14 +107,14 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
 
     private void initPostingUserData() {
         try {
-            post_no = forUpdatePosting.getString("post_no");
-            post_title = toClickedPosting.getPost_title();
-            post_contents = toClickedPosting.getPost_contents();
-            reply_yn = forUpdatePosting.getString("reply_yn");
-            major_name = forUpdatePosting.getString("major_name");
-            subject_name = forUpdatePosting.getString("subject_name");
-            professor_name = forUpdatePosting.getString("professor_name");
-            user_no = forUpdatePosting.getString("user_no");
+            post_no = realTimeDataForUpdatePosting.getString("post_no");
+            post_title = realTimeDataForUpdatePosting.getString("post_title");
+            post_contents = realTimeDataForUpdatePosting.getString("post_contents");
+            reply_yn = realTimeDataForUpdatePosting.getString("reply_yn");
+            major_name = realTimeDataForUpdatePosting.getString("major_name");
+            subject_name = realTimeDataForUpdatePosting.getString("subject_name");
+            professor_name = realTimeDataForUpdatePosting.getString("professor_name");
+            user_no = realTimeDataForUpdatePosting.getString("user_no");
         } catch (JSONException e) {
             e.printStackTrace();
         }

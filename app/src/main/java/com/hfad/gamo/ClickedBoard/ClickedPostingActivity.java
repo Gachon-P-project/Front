@@ -82,14 +82,15 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private String writer_number;
     private String user_number;
     private boolean isLiked;
-    private int like_cnt;
     private String forUpdatePosting = null;
     private JSONObject dataForUpdatePosting = null;
+    private JSONObject realTimeDataForUpdatePosting = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_posting);
+
 
         Intent intent = getIntent();
         toClickedPosting = intent.getParcelableExtra("toClickedPosting");
@@ -98,7 +99,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
         post_no = toClickedPosting.getPost_no();
         writer_number = toClickedPosting.getUser_no();
-        like_cnt = Integer.parseInt(toClickedPosting.getLike_cnt());
 
         prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         user_number = prefs.getString("number", null);
@@ -140,11 +140,10 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_clicked_posting, menu);
         menu_toolbar_clicked_posting_three_dots = menu.findItem(R.id.menu_toolbar_clicked_posting_three_dots);
-
         if (!writer_number.equals(user_number)) {
             menu_toolbar_clicked_posting_three_dots.setVisible(false);
-
-            return true;
+        } else {
+            menu_toolbar_clicked_posting_three_dots.setEnabled(false);
         }
         return true;
     }
@@ -159,7 +158,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.menu_toolbar_clicked_posting_three_dots :
                 displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
-                ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this, toClickedPosting, forUpdatePosting);
+                ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this, toClickedPosting, forUpdatePosting, realTimeDataForUpdatePosting);
                 clickedPostingDialog.show();
                 WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();
                 params.width = (int) (displayMetricsForDeviceSize.widthPixels * 0.8);
@@ -205,14 +204,15 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        int currentPostLikeText =  Integer.parseInt(post_like_text.getText().toString());
                         if(isLiked) {
                             isLiked = false;
                             post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like, null));
-                            post_like_text.setText(String.valueOf(--like_cnt));
+                            post_like_text.setText(String.valueOf(--currentPostLikeText));
                         } else {
                             isLiked = true;
                             post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
-                            post_like_text.setText(String.valueOf(++like_cnt));
+                            post_like_text.setText(String.valueOf(++currentPostLikeText));
                         }
                     }
                 }, null);
@@ -469,7 +469,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void onResponseInquirePostingsOfBoard(JSONArray response) {
-        dataForUpdatePosting = findUpdatedPosting(response);
+        realTimeDataForUpdatePosting = findUpdatedPosting(response);
         String titleText = null;
         String contentsText = null;
         String replyCntText = null;
@@ -477,27 +477,27 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         String wrt_date = null;
         int like_user = -1;
 
-        if(dataForUpdatePosting != null) {
+        if(realTimeDataForUpdatePosting != null) {
 
             try {
-                titleText = dataForUpdatePosting.getString("post_title");
-                wrt_date = dataForUpdatePosting.getString("wrt_date");
-                contentsText = dataForUpdatePosting.getString("post_contents");
-                replyCntText = dataForUpdatePosting.getString("reply_cnt");
-                postLikeText = dataForUpdatePosting.getString("like_cnt");
-                like_user = dataForUpdatePosting.getInt("like_user");
+                titleText = realTimeDataForUpdatePosting.getString("post_title");
+                wrt_date = realTimeDataForUpdatePosting.getString("wrt_date");
+                contentsText = realTimeDataForUpdatePosting.getString("post_contents");
+                replyCntText = realTimeDataForUpdatePosting.getString("reply_cnt");
+                postLikeText = realTimeDataForUpdatePosting.getString("like_cnt");
+                like_user = realTimeDataForUpdatePosting.getInt("like_user");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             wrt_date = processServerDateToAndroidDate(wrt_date);
             setViewText(titleText, wrt_date, contentsText, replyCntText, postLikeText );
             initPostLikeUsingUserValue(like_user);
+            menu_toolbar_clicked_posting_three_dots.setEnabled(true);
         } else {
             setViewText("존재하지 않는 게시물 입니다.", "방금","","0", "0" );
             post_like_img.setEnabled(false);
             postReply_et.setEnabled(false);
             postReply_iv.setEnabled(false);
-            menu_toolbar_clicked_posting_three_dots.setEnabled(false);
         }
 
 

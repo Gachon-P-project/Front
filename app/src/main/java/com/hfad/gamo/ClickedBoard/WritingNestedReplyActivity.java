@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.hfad.gamo.Component.sharedPreferences;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class WritingNestedReplyActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
     private ReplyAdapter adapter;
     private JSONObject commentJSONObject = new JSONObject();
     private JSONArray receivedJSONArray = new JSONArray();
+    private SharedPreferences pref;
     private String reply_no;
     private String post_no;
     private String user_number;
@@ -40,7 +43,8 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nested_reply);
 
-        user_number = sharedPreferences.getString("number", null);
+        pref = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        user_number = pref.getString("number", null);
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
