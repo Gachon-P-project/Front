@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,10 +58,12 @@ public class NoticeFragment extends Fragment {
     private JSONObject loadingJsonObject;
     private ImageView cancel_button_notice;
     private EditText edtSearchNotice;
+    private TextView tvToolbarTitle;
 
     private RecyclerView recyclerView = null;
     private SwipeRefreshLayout swipeContainer;
     private ConstraintLayout clNoData;
+    private ImageButton imgBtnSetNotification;
     private VolleyForHttpMethod volley;
     private String url;
     private boolean isSearching = false;
@@ -76,7 +79,7 @@ public class NoticeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
 
         dept = DataIOKt.getDepartment();
 
@@ -112,7 +115,11 @@ public class NoticeFragment extends Fragment {
         cancel_button_notice = view.findViewById(R.id.cancel_button_notice);
         edtSearchNotice = view.findViewById(R.id.edtSearchNotice);
         recyclerView = view.findViewById(R.id.recycler_notice);
+        imgBtnSetNotification = view.findViewById(R.id.imgBtn_noticeFragment_setNotification);
+        tvToolbarTitle = view.findViewById(R.id.tv_notice_toolbarTitle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
+        tvToolbarTitle.setText(getString(R.string.notice_title, dept));
 
         adapter = new Notice_RecyclerAdapter(responseJSONArray, dept);
         adapter.setRecyclerView(recyclerView);
@@ -125,7 +132,6 @@ public class NoticeFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 Log.d("FRAGMENT ::", "onRefresh: Searching : " + isSearching);
                 adapter.setIsLoading(true);
                 page = 0;
@@ -152,6 +158,29 @@ public class NoticeFragment extends Fragment {
                     });
                 }
                 loadPost();
+            }
+        });
+
+        if (getNotificationSetting()) {
+            imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_active);
+        } else {
+//            Drawable icon_disable = getResources().getDrawable(R.drawable.ic_notifications_disabled);
+//            menu.getItem(0).setIcon(icon_disable);
+            imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_disabled);
+        }
+        imgBtnSetNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (getNotificationSetting()) {
+                    setNotificationSetting(false);
+                    imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_disabled);
+                    Toast.makeText(getContext(), "알림 비활성", Toast.LENGTH_SHORT).show();
+                } else {
+                    setNotificationSetting(true);
+                    imgBtnSetNotification.setImageResource(R.drawable.ic_notifications_active);
+                    Toast.makeText(getContext(), "알림 활성", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -237,9 +266,9 @@ public class NoticeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_notice);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + " 공지사항</b>", 0));
+//        Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar_notice);
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(tb);
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html.fromHtml("<b>" + dept + " 공지사항</b>", 0));
 
 
     }
@@ -443,37 +472,37 @@ public class NoticeFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-
-    @SuppressLint("ResourceAsColor")
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_toolbar_set_notification, menu);
-        if (getNotificationSetting()) {
-            Drawable icon_active = getResources().getDrawable(R.drawable.ic_notifications_active);
-            menu.getItem(0).setIcon(icon_active);
-        } else {
-            Drawable icon_disable = getResources().getDrawable(R.drawable.ic_notifications_disabled);
-            menu.getItem(0).setIcon(icon_disable);
-        }
-    }
-
-    @SuppressLint("ResourceAsColor")
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_set_notification) {
-            if (getNotificationSetting()) {
-                setNotificationSetting(false);
-                Drawable icon_disable = getResources().getDrawable(R.drawable.ic_notifications_disabled);
-                item.setIcon(icon_disable);
-                Toast.makeText(getContext(), "알림 비활성", Toast.LENGTH_SHORT).show();
-            } else {
-                setNotificationSetting(true);
-                Drawable icon_active = getResources().getDrawable(R.drawable.ic_notifications_active);
-                item.setIcon(icon_active);
-                Toast.makeText(getContext(), "알림 활성", Toast.LENGTH_SHORT).show();
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @SuppressLint("ResourceAsColor")
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.menu_toolbar_set_notification, menu);
+//        if (getNotificationSetting()) {
+//            Drawable icon_active = getResources().getDrawable(R.drawable.ic_notifications_active);
+//            menu.getItem(0).setIcon(icon_active);
+//        } else {
+//            Drawable icon_disable = getResources().getDrawable(R.drawable.ic_notifications_disabled);
+//            menu.getItem(0).setIcon(icon_disable);
+//        }
+//    }
+//
+//    @SuppressLint("ResourceAsColor")
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.action_set_notification) {
+//            if (getNotificationSetting()) {
+//                setNotificationSetting(false);
+//                Drawable icon_disable = getResources().getDrawable(R.drawable.ic_notifications_disabled);
+//                item.setIcon(icon_disable);
+//                Toast.makeText(getContext(), "알림 비활성", Toast.LENGTH_SHORT).show();
+//            } else {
+//                setNotificationSetting(true);
+//                Drawable icon_active = getResources().getDrawable(R.drawable.ic_notifications_active);
+//                item.setIcon(icon_active);
+//                Toast.makeText(getContext(), "알림 활성", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+//
 }

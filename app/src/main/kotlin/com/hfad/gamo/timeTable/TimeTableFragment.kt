@@ -45,7 +45,7 @@ class TimeTableFragment : TimeTableContract.View() {
     private lateinit var responseJSONObject: JSONObject
     private lateinit var tvToolbarSemester: TextView
     private lateinit var tvToolbarYear: TextView
-    private lateinit var swipeLayout: SwipeRefreshLayout
+//    private lateinit var swipeLayout: SwipeRefreshLayout
 
 
     @SuppressLint("SimpleDateFormat")
@@ -85,7 +85,7 @@ class TimeTableFragment : TimeTableContract.View() {
         myView = inflater.inflate(R.layout.fragment_timetable, container, false)
         tvToolbarSemester = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_semester)!!
         tvToolbarYear = myView?.findViewById(R.id.tv_timetable_fragment_toolbar_year)!!
-        swipeLayout = myView?.findViewById(R.id.swipeLayout_timetable_fragment)!!
+//        swipeLayout = myView?.findViewById(R.id.swipeLayout_timetable_fragment)!!
 
         tvToolbarYear.text = getSharedItem<String>("year")+"년"
         tvToolbarSemester.text = when(getSharedItem<String>("semester")) {
@@ -108,13 +108,13 @@ class TimeTableFragment : TimeTableContract.View() {
 //            saveDataForTimeTable()
 //        }
         //saveDataForTimeTable()
-
-        swipeLayout.setColorSchemeResources(R.color.indigo500)
-        swipeLayout.setOnRefreshListener {
-            saveDataForTimeTable()
-
-            swipeLayout.isRefreshing = false
-        }
+//          스와이프시 리프레시
+//        swipeLayout.setColorSchemeResources(R.color.indigo500)
+//        swipeLayout.setOnRefreshListener {
+//            saveDataForTimeTable()
+//
+//            swipeLayout.isRefreshing = false
+//        }
 
         return myView
     }

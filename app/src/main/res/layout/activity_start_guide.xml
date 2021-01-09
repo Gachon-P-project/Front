@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/imgStartGuide"
         android:text="시간표 사용 방법"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:layout_marginTop="40dp"

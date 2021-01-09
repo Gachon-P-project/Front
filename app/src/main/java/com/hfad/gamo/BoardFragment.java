@@ -112,6 +112,25 @@ public class BoardFragment extends Fragment {
         community_adapter = new Board_RecyclerAdapter(community_data, subject_professorJSONObject);
         community_recyclerView.setAdapter(community_adapter);
 
+        dept_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        subject_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        community_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+
         return view;
     }
 
