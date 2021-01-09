@@ -2,7 +2,6 @@ package com.hfad.gamo
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
@@ -13,7 +12,7 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
-
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.Component.default_url
@@ -23,7 +22,6 @@ import io.wiffy.extension.encrypt
 import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
-import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        default_url = getString(R.string.defaultUrl)
 
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this))
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         edtPassword.imeOptions = EditorInfo.IME_ACTION_DONE;
-        edtPassword.setOnEditorActionListener{v, keyCode, event ->
+        edtPassword.setOnEditorActionListener{ v, keyCode, event ->
             var handled = false
                 if(keyCode == EditorInfo.IME_ACTION_DONE || keyCode == KEYCODE_ENTER) {
                     login_button.performClick()
@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         loadingDialog?.finish()
-        Log.i("Destroy","destroy");
+        Log.i("Destroy", "destroy");
     }
 
 

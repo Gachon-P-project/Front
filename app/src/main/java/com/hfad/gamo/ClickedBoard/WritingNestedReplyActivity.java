@@ -43,6 +43,8 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nested_reply);
 
+        Component.default_url = getString(R.string.defaultUrl);
+
         pref = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         user_number = pref.getString("number", null);
 

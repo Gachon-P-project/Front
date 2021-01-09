@@ -49,6 +49,7 @@
     <string name="noticeSearchedList">/notice/read/%1$d/%2$s/%3$s</string>
     <string name="broadcastSaveMessage">com.hfad.gamo.saveMessage</string>
     <string name="postLike">/like/insert/%1$s/%2$s</string>
+    <string name="defaultUrl">"https://moga.club"</string>
 
 
 </resources>

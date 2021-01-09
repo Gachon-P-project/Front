@@ -91,6 +91,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_posting);
 
+        Component.default_url = getString(R.string.defaultUrl);
 
         Intent intent = getIntent();
         toClickedPosting = intent.getParcelableExtra("toClickedPosting");

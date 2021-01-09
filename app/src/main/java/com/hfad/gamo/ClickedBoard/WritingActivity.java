@@ -46,7 +46,7 @@ public class WritingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
 
-
+        Component.default_url = getString(R.string.defaultUrl);
         // 제목
         title_edit = findViewById(R.id.board_write_title_edit);
         contents_edit = findViewById(R.id.board_write_contents_edit);
