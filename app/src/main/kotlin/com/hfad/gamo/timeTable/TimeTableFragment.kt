@@ -57,7 +57,8 @@ class TimeTableFragment : TimeTableContract.View() {
     private var year = nowDate.format(DateTimeFormatter.ofPattern("yyyy"))
     private val month = nowDate.format(DateTimeFormatter.ofPattern("MM"))
     private val day = nowDate.format(DateTimeFormatter.ofPattern("dd"))
-    private val lastDaySaved = getSharedItem("lastDaySavingTimeTable", "")
+    private lateinit var lastDaySaved: String
+    private lateinit var userNo: String
     private var semester = when (month.toInt()) {
         3, 4, 5, 6 -> "10"      // 1학기
         9, 10, 11, 12 -> "20"   // 2학기
@@ -66,7 +67,6 @@ class TimeTableFragment : TimeTableContract.View() {
         else -> "00"            // 에러
     }
 
-    private val userNo = getSharedItem<String>("number")
     private val yearOfAdmission = userNo.substring(0, 4);
 
 
@@ -75,6 +75,8 @@ class TimeTableFragment : TimeTableContract.View() {
         super.onCreate(savedInstanceState)
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this.context))
         sharedPreferences = this.context?.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)!!
+        lastDaySaved = getSharedItem("lastDaySavingTimeTable", "")
+        userNo = getSharedItem<String>("number")
     }
 
     override fun onCreateView(
