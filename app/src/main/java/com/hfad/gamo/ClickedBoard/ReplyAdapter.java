@@ -120,6 +120,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
         Log.i("recycler!!!" , "onBindViewHolder");
 
+        setViewInitialValue(holder);
+
         try {
             holder.replyForData = JSONArrayData.getJSONObject(position);
             initData(holder.replyForData);
@@ -270,7 +272,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
         if(usingLocation.equals("ClickedPostingActivity")) {
             if(depth == 1) {
-                holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),0, getPixel(10));
+                holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),getPixel(5), getPixel(10));
 
                 assert reply_user_no != null;
                 if(reply_user_no.equals(user_no)) {
@@ -337,6 +339,15 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             }
             holder.item_replies_three_dots.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void setViewInitialValue(ReplyAdapter.ViewHolder holder) {
+        holder.item_replies_reply_layout.setPadding(getPixel(5), getPixel(10),getPixel(5), getPixel(10));
+        holder.item_replies_user_img.setVisibility(View.VISIBLE);
+        holder.item_replies_wrt_date.setVisibility(View.VISIBLE);
+        holder.item_replies_three_dots.setVisibility(View.VISIBLE);
+        holder.item_replies_nickname.setVisibility(View.VISIBLE);
+        holder.item_replies_is_writer.setVisibility(View.VISIBLE);
     }
 
 }

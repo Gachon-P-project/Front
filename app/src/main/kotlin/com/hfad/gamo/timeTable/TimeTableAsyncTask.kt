@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.*
-import io.wiffy.extension.isNetworkConnected
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.util.EntityUtils
@@ -61,9 +60,9 @@ class TimeTableAsyncTask(private val mView: TimeTableContract.View, private val 
     }
 
     override fun doInBackground(vararg params: Void?): Int {
-        if (!isNetworkConnected(mView.sendContext()!!)) {
+        /*if (!isNetworkConnected(mView.sendContext()!!)) {
             return ACTION_FAILURE
-        }
+        }*/
         return try {
             val page = Jsoup.parseBodyFragment(
                 EntityUtils.toString(

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 /*import androidx.recyclerview.widget.DividerItemDecoration;*/
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,7 +45,7 @@ import java.util.TimeZone;
 
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
-public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface {
+public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
 
     public static int WritingNestedReplyActivityCode = 0;
     public static int WritingUpdateActivityCode = 1;
@@ -55,7 +56,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private ReplyAdapter replyAdapter = null;
     private JSONArray jsonArrayForReplyAdapter = new JSONArray();
     private JSONObject jsonObjectForPostReply = new JSONObject();
-    private JSONObject updatedPostingData;
+    private SwipeRefreshLayout activity_clicked_posting_swipe;
     private EditText postReply_et = null;
     private ImageView postReply_iv = null;
     private ImageView post_like_img = null;
@@ -109,8 +110,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         initRecyclerViewForReply();
         initUrl();
         initView();
-        //initPostLikeUsingUserValue();
 
+        activity_clicked_posting_swipe.setOnRefreshListener(this);
 
         postReply_iv.setOnClickListener(this);
         post_like_img.setOnClickListener(this);
@@ -173,7 +174,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
         finish();
     }
 
@@ -225,6 +225,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         }
     }
 
+
     @Override
     public void onDeleteReplyDialog(int depth, int reply_no) {
         if(depth == 0) {
@@ -258,6 +259,25 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         }
     }
 
+    @Override
+    public void onRefresh() {
+        activity_clicked_posting_swipe.setEnabled(false);
+        showUpdatedPosting();
+        showAllReplies();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                activity_clicked_posting_swipe.setRefreshing(false);
+            }
+        },500);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                activity_clicked_posting_swipe.setEnabled(true);
+            }
+        },1500);
+    }
+
     private void inquireReplies() {
         volley.getJSONArray(urlForInquireReplies, new Response.Listener<JSONArray>() {
             @Override
@@ -270,6 +290,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private void processReceivedReplies(JSONArray response) {
         if(response.length() == 0)
             return;
+
+
 
         for (int i = 0; i < response.length(); i++) {
             try {
@@ -356,6 +378,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         post_like_img = findViewById(R.id.activity_clicked_posting_post_like_iv);
         postReply_et = findViewById(R.id.activity_clicked_posting_post_reply_et);
         postReply_iv = findViewById(R.id.activity_clicked_posting_post_reply_iv);
+        activity_clicked_posting_swipe = findViewById(R.id.activity_clicked_posting_swipe);
     }
 
     private void setViewText(String titleText, String dateText, String contentsText, String replyCntText,

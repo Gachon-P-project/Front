@@ -17,9 +17,6 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.hfad.gamo.Component.default_url
 import com.hfad.gamo.Component.sharedPreferences
-import io.wiffy.extension.BuildConfig
-import io.wiffy.extension.encrypt
-import io.wiffy.extension.getMACAddress
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 
@@ -176,7 +173,7 @@ class LoginActivity : AppCompatActivity() {
         with(information) {
             setSharedItems(
                     Pair("id", id),
-                    Pair("password", encrypt(password!!, getMACAddress())),
+                    Pair("password", ""),
                     Pair("name", name),
                     Pair("number", number),
                     Pair("department", department),
