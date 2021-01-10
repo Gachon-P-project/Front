@@ -28,6 +28,11 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+import static com.hfad.gamo.DataIOKt.getSubjectSet;
+import static com.hfad.gamo.DataIOKt.getDepartment;
+import static com.hfad.gamo.Component.sharedPreferences;
 
 
 public class BoardFragment extends Fragment {
