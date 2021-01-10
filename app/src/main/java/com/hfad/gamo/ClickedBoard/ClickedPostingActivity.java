@@ -229,7 +229,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 }, null);
                 post_like_img.setEnabled(true);
                 break;
-            case R.id.imgBtnToolbarBackClickedPosting:
+            case R.id.img_btn_clicked_posting_toolbar_back:
                 onBackPressed();
                 break;
         }
@@ -362,8 +362,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     private void initToolBar() {
         Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
-        tvToolbarTitle = findViewById(R.id.tvToolbarTitleClickedPosting);
-        imgBtnToolbarBack = findViewById(R.id.imgBtnToolbarBackClickedPosting);
+        tvToolbarTitle = findViewById(R.id.tv_clicked_posting_toolbar_title);
+        imgBtnToolbarBack = findViewById(R.id.img_btn_clicked_posting_toolbar_back);
         tvToolbarTitle.setText(toClickedPosting.getBoard_title());
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

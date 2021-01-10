@@ -178,6 +178,7 @@ class TimeTableFragment : TimeTableContract.View() {
                     val intent = Intent(context, ClickedBoardActivity::class.java)
                     intent.putExtra("title", data.time.title.split("\n")[0])
                     intent.putExtra("professor", professor.toString())
+                    intent.putExtra("boardType", 0)
                     startActivity(intent)
                 }
                 it.setStartHour(9)

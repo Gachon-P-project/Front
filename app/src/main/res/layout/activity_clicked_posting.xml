@@ -15,7 +15,7 @@
         app:theme="@style/AppTheme.Toolbar"
         >
         <ImageButton
-            android:id="@+id/imgBtnToolbarBackClickedPosting"
+            android:id="@+id/img_btn_clicked_posting_toolbar_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_arrow_back"
@@ -23,7 +23,7 @@
             android:layout_marginRight="10dp"
             />
         <TextView
-            android:id="@+id/tvToolbarTitleClickedPosting"
+            android:id="@+id/tv_clicked_posting_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""

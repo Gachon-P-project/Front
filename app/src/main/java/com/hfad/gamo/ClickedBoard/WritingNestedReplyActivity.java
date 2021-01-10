@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.android.volley.Response;
@@ -42,6 +43,7 @@ public class WritingNestedReplyActivity extends AppCompatActivity implements Vie
     private String writer_number;
     private EditText edit_text_nested_reply;
     private ImageView post_nested_reply;
+    private ImageButton imgBtnToolbarBack;
     private RecyclerView recyclerView;
     private String urlPostNestedReply;
     private int boardType;
@@ -91,6 +93,7 @@ public class WritingNestedReplyActivity extends AppCompatActivity implements Vie
         recyclerView.setAdapter(adapter);
 
         post_nested_reply.setOnClickListener(this);
+        imgBtnToolbarBack.setOnClickListener(this);
     }
 
     private void doAllFindViewById() {
@@ -99,6 +102,7 @@ public class WritingNestedReplyActivity extends AppCompatActivity implements Vie
         recyclerView = findViewById(R.id.activity_nested_reply_recycler);
         post_nested_reply = findViewById(R.id.activity_nested_reply_post_button);
         edit_text_nested_reply = findViewById(R.id.activity_nested_reply_edit);
+        imgBtnToolbarBack = findViewById(R.id.img_btn_nested_reply_toolbar_back);
     }
 
     private void initDefaultUrlOfComponent() {
@@ -148,13 +152,20 @@ public class WritingNestedReplyActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onClick(View v) {
-        setRequestValue();
-        volley.postJSONObjectString(commentJSONObject, urlPostNestedReply, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                setResult(RESULT_OK);
+        switch (v.getId()) {
+            case R.id.activity_nested_reply_post_button:
+                setRequestValue();
+                volley.postJSONObjectString(commentJSONObject, urlPostNestedReply, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }, null);
+                break;
+            case R.id.img_btn_nested_reply_toolbar_back:
                 finish();
-            }
-        }, null);
+                break;
+        }
     }
 }

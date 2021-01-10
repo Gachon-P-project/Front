@@ -11,12 +11,28 @@
         android:id="@+id/activity_nested_reply_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
         android:theme="@style/AppTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        >
+
+        <ImageButton
+            android:id="@+id/img_btn_nested_reply_toolbar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_back"
+            android:background="@android:color/transparent"
+            android:layout_marginRight="10dp"
+            />
+        <TextView
+            android:id="@+id/tv_btn_nested_reply_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="답글 쓰기"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
