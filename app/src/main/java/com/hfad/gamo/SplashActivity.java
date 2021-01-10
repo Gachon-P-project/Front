@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         if(Component.sharedPreferences.getBoolean("login", false)) {
             intent = new Intent(this, MainActivity.class);
         }  else {
-            intent = new Intent(this, LoginActivity.class);
+            intent = new Intent(this, AgreementTermsActivity.class);
         }
         startActivity(intent);
         finish();
