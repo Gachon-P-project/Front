@@ -49,9 +49,9 @@
 
     <!-- notification -->
     <string name="noticeDetail">/notice/posting/%1$s/%2$s</string>
-    <string name="noticeUrl">/notice/url/%1$s/%2$s</string>
-    <string name="noticeList">/notice/read/%1$d/%2$s</string>
-    <string name="noticeSearchedList">/notice/read/%1$d/%2$s/%3$s</string>
+    <string name="noticeUrl">/notice/posting/url/%1$s/%2$s</string>
+    <string name="noticeList">/notice/list/%1$d/%2$s</string>
+    <string name="noticeSearchedList">/notice/list/%1$d/%2$s/%3$s</string>
 
     <!-- like -->
     <string name="postLike">/likes</string>
