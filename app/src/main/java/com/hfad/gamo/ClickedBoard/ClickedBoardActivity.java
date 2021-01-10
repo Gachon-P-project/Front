@@ -193,6 +193,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no));
                 break;
             case 2:         // 학과게시판
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfDeptBoard,boardType, user_no));
                 break;
         }
     }
