@@ -4,38 +4,38 @@
     <!--Board-->
     <string name="postSubjectWriting">/boards/subject?reply_yn=%d</string>
     <string name="postFreeWriting">/boards/free?reply_yn=%d</string>
-    <string name="postDeptWriting">/boards/major?reply_yn=%d</string>
+    <string name="postMajorWriting">/boards/major?reply_yn=%d</string>
     <string name="inquirePostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$s</string>
     <string name="inquirePostingsOfFreeBoard">/boards/free/%1$d/%2$s</string>
-    <string name="inquirePostingsOfDeptBoard">/boards/major/%1$d/%2$s</string>
+    <string name="inquirePostingsOfMajorBoard">/boards/major/%1$d/%2$s</string>
     <string name="searchPostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$s/%4$s</string>
     <string name="searchPostingsOfFreeBoard">/boards/free/%1$d/%2$s/%3$s</string>
-    <string name="searchPostingsOfDeptBoard">/boards/major/%1$d/%2$s/%3$s</string>
+    <string name="searchPostingsOfMajorBoard">/boards/major/%1$d/%2$s/%3$s</string>
     <string name="updatePostingOfSubjectBoard">/boards/subject</string>
     <string name="updatePostingOfFreeBoard">/boards/free</string>
-    <string name="updatePostingOfDeptBoard">/boards/major</string>
+    <string name="updatePostingOfMajorBoard">/boards/major</string>
     <string name="deletePostingOfSubjectBoard">/boards/subject</string>
     <string name="deletePostingOfFreeBoard">/boards/free</string>
-    <string name="deletePostingOfDeptBoard">/boards/major</string>
+    <string name="deletePostingOfMajorBoard">/boards/major</string>
 
     <!-- Reply-->
     <string name="postReplyOfSubjectBoard">/replies/subject</string>
     <string name="postReplyOfFreeBoard">/replies/free</string>
-    <string name="postReplyOfDeptBoard">/replies/major</string>
+    <string name="postReplyOfMajorBoard">/replies/major</string>
     <string name="postNestedReplyOfSubjectBoard">/replies/subject/rereply</string>
     <string name="postNestedReplyOfFreeBoard">/replies/free/rereply</string>
-    <string name="postNestedReplyOfDeptBoard">/replies/major/rereply</string>
+    <string name="postNestedReplyOfMajorBoard">/replies/major/rereply</string>
     <string name="inquireRepliesOfSubjectBoard">/replies/subject/%1$s</string>
     <string name="inquireRepliesOfFreeBoard">/replies/free/%1$s</string>
-    <string name="inquireRepliesOfDeptBoard">/replies/major/%1$s</string>
+    <string name="inquireRepliesOfMajorBoard">/replies/major/%1$s</string>
     <!--<string name="updateReply">/replies/update/%1$s</string>-->
     <!--<string name="updateNestedReply">/replies/update/rereply/$1$s</string>-->
     <string name="deleteReplyOfSubjectBoard">/replies/subject</string>
     <string name="deleteReplyOfFreeBoard">/replies/free</string>
-    <string name="deleteReplyOfDeptBoard">/replies/major</string>
+    <string name="deleteReplyOfMajorBoard">/replies/major</string>
     <string name="deleteNestedReplyOfSubjectBoard">/replies/subject/rereply</string>
     <string name="deleteNestedReplyOfFreeBoard">/replies/free/rereply</string>
-    <string name="deleteNestedReplyOfDeptBoard">/replies/major/rereply</string>
+    <string name="deleteNestedReplyOfMajorBoard">/replies/major/rereply</string>
 
     <string name="inquireNotification">/notice/read/%1$s/%2$s</string>
     <string name="searchNotification">/notice/read/%1$s/%2$s/%3$s</string>

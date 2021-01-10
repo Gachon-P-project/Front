@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -29,9 +28,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
-import static com.hfad.gamo.DataIOKt.getSubjectSet;
 import static com.hfad.gamo.DataIOKt.getDepartment;
 import static com.hfad.gamo.Component.sharedPreferences;
 import static com.hfad.gamo.DataIOKt.getUserNo;
@@ -41,6 +38,9 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
 
     private static final int requestCodeToWritingActivity = 0;
     private static final String TAG = "ClickedBoardActivity";
+    private static final int subjectBoard = 0;
+    private static final int freeBoard = 1;
+    private static final int majorBoard = 2;
     private static int boardType;
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
@@ -167,14 +167,12 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
 
     private void initBoardType() {
         switch (boardType) {
-            case 0:         // 수업게시판
+            case subjectBoard:
                 subject = board_title;
                 break;
-            case 1:         // 자유게시판
-                subject = "1";
-                break;
-            case 2:         // 학과게시판
-                subject = "0";
+            case freeBoard:
+            case majorBoard:
+                subject = null;
                 break;
             default:        // ERROR
                 Toast.makeText(this, "BOARD ERROR!", Toast.LENGTH_SHORT).show();
@@ -193,7 +191,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no));
                 break;
             case 2:         // 학과게시판
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfDeptBoard,boardType, user_no));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no));
                 break;
         }
     }

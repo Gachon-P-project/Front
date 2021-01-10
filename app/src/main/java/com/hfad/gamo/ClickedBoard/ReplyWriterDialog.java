@@ -101,18 +101,14 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.dialogReplyWriter_postRereply:
-                Intent WritingNestedReplyIntent = new Intent(clickedPostingActivity, WritingNestedReplyActivity.class);
-                WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
-                WritingNestedReplyIntent.putExtra("writerNumber", writer_number);
-                clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivityCode);
-                break;
-            case R.id.dialogReplyWriter_deleteReply:
+        if(v.getId() == R.id.dialogReplyWriter_postRereply) {
+            Intent WritingNestedReplyIntent = new Intent(clickedPostingActivity, WritingNestedReplyActivity.class);
+            WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
+            WritingNestedReplyIntent.putExtra("writerNumber", writer_number);
+            WritingNestedReplyIntent.putExtra("boardType",clickedPostingActivity.getBoardType());
+            clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivityCode);
+        } else if (v.getId() == R.id.dialogReplyWriter_deleteReply) {
                 replyDialogInterface.onDeleteReplyDialog(depth, reply_no);
-                break;
-            default:
-                break;
         }
         dismiss();
     }

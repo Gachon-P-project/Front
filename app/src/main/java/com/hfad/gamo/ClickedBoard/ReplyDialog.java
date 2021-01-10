@@ -61,6 +61,7 @@ public class ReplyDialog extends Dialog implements View.OnClickListener {
                 Intent WritingNestedReplyIntent = new Intent(context, WritingNestedReplyActivity.class);
                 WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
                 WritingNestedReplyIntent.putExtra("writerNumber", writer_number);
+                WritingNestedReplyIntent.putExtra("boardType",clickedPostingActivity.getBoardType());
                 clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivityCode);
 
                 break;

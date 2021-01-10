@@ -34,6 +34,7 @@ import java.util.TimeZone;
 import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
+
     private JSONArray JSONArrayData = null;
     private ClickedPostingActivity clickedPostingActivity = null;
     private HashMap<Integer, JSONArray> toWritingNestedReplyActivity = null;
@@ -67,7 +68,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         if(usingLocation.equals("ClickedPostingActivity")) {
             this.toWritingNestedReplyActivity = new HashMap<>();
             this.clickedPostingActivity = (ClickedPostingActivity) activity;
-            this.writer_number = ((ClickedPostingActivity) activity).getWriter_number();
+            this.writer_number = clickedPostingActivity.getWriter_number();
         } else {
             this.writer_number = ((WritingNestedReplyActivity) activity).getWriter_number();
         }

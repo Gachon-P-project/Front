@@ -79,6 +79,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private String urlForInquirePostingsOfBoard;
     private String urlForDeletePosting;
     private String urlDeleteReply;
+    private String urlDeleteNestedReply;
     private String subject_name;
     private String professor_name;
     private String post_no;
@@ -297,8 +298,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         if(response.length() == 0)
             return;
 
-
-
         for (int i = 0; i < response.length(); i++) {
             try {
                 JSONObject responseJSONObject = response.getJSONObject(i);
@@ -420,18 +419,21 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfSubjectBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfSubjectBoard,post_no));
                 urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfSubjectBoard));
+                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfSubjectBoard));
                 break;
             case 1:         // 자유게시판
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfFreeBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfFreeBoard,post_no));
                 urlDeleteReply = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
+                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfFreeBoard));
                 break;
             case 2:         // 학과게시판
-                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfDeptBoard));
-                urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfDeptBoard));
-                urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfDeptBoard,post_no));
-                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfDeptBoard));
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard));
+                urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfMajorBoard));
+                urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard,post_no));
+                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
+                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
                 break;
 
         }
@@ -467,7 +469,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void deleteNestedReply(int reply_no) {
-        final String urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReply, String.valueOf(reply_no)));
         volley.delete(null, urlDeleteNestedReply, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -641,6 +642,11 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     public String getWriter_number() {
         return writer_number;
     }
+
+    public int getBoardType() {
+        return boardType;
+    }
+
 
 }
 

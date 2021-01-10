@@ -22,6 +22,9 @@ import org.json.JSONObject;
 public class WritingUpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final static int update = 10;
+    private static final int subjectBoard = 0;
+    private static final int freeBoard = 1;
+    private static final int majorBoard = 2;
 
     private ImageView activity_writing_update_cancel_iv;
     private Button activity_writing_update_complete_bt;
@@ -53,7 +56,7 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing_update);
 
-        Component.default_url = getString(R.string.defaultUrl);
+        initDefaultUrlOfComponent();
 
         Intent intent = getIntent();
         toClickedPosting = intent.getExtras().getParcelable("PostingData");
@@ -89,6 +92,10 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    private void initDefaultUrlOfComponent() {
+        Component.default_url = getString(R.string.defaultUrl);
+    }
+
     private void initView() {
         activity_writing_update_cancel_iv = findViewById(R.id.activity_writing_update_cancel_iv);
         activity_writing_update_complete_bt = findViewById(R.id.activity_writing_update_complete_bt);
@@ -101,13 +108,16 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
 
     private void initUrl() {
         switch (boardType) {
-            case 0:         // 수업
+            case subjectBoard:
                 urlForUpdatePosting = Component.default_url.concat(getString(R.string.updatePostingOfSubjectBoard));
                 break;
-            case 1:         // 자유
-                urlForUpdatePosting = Component.default_url.concat(getString(R.string.updatePostingOfFreeBoard, post_no));
+            case freeBoard:
+                urlForUpdatePosting = Component.default_url.concat(getString(R.string.updatePostingOfFreeBoard));
                 break;
-            case 2:         // 학과
+            case majorBoard:
+                urlForUpdatePosting = Component.default_url.concat(getString(R.string.updatePostingOfMajorBoard));
+                break;
+            default:
                 break;
         }
     }
@@ -137,7 +147,6 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         activity_writing_update_complete_bt.setOnClickListener(this);
     }
 
-
     private void updatePosting() {
         volley.putJSONObjectString(getUpdatedData(), urlForUpdatePosting, new Response.Listener<String>() {
             @Override
@@ -152,23 +161,18 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         finish();
     }
 
-
     private JSONObject getUpdatedData() {
         String title = activity_writing_update_title_et.getText().toString();
         String contents = activity_writing_update_content_et.getText().toString();
 
         JSONObject UpdatedData = new JSONObject();
         try {
-            if(boardType == 0)
-                UpdatedData.put("post_no", post_no);
+            UpdatedData.put("post_no", post_no);
             UpdatedData.put("post_title", title);
             UpdatedData.put("post_contents", contents);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return UpdatedData;
     }
-
-
 }

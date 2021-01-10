@@ -26,8 +26,11 @@ import java.util.ArrayList;
 import static com.hfad.gamo.Component.sharedPreferences;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
-public class WritingNestedReplyActivity extends AppCompatActivity {
+public class WritingNestedReplyActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private static final int subjectBoard = 0;
+    private static final int freeBoard = 1;
+    private static final int majorBoard = 2;
     private VolleyForHttpMethod volley;
     private ReplyAdapter adapter;
     private JSONObject commentJSONObject = new JSONObject();
@@ -37,23 +40,32 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
     private String post_no;
     private String user_number;
     private String writer_number;
+    private EditText edit_text_nested_reply;
+    private ImageView post_nested_reply;
+    private RecyclerView recyclerView;
+    private String urlPostNestedReply;
+    private int boardType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nested_reply);
 
-        Component.default_url = getString(R.string.defaultUrl);
-
-        pref = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        initDefaultUrlOfComponent();
+        doAllFindViewById();
+        initVolley();
+        initSharedPreference();
+        
         user_number = pref.getString("number", null);
-
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         Intent receivedIntent = getIntent();
         ArrayList<String> receivedData = receivedIntent.getStringArrayListExtra("replyData");
         writer_number = receivedIntent.getExtras().getString("writerNumber");
-
+        boardType = receivedIntent.getExtras().getInt("boardType");
+        
+        // boardType 필요
+        initUrl();
+        
         for(int i = 0; i < receivedData.size(); i++) {
             try {
                 receivedJSONArray.put(new JSONObject(receivedData.get(i)));
@@ -70,7 +82,6 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
         }
 
 
-        RecyclerView recyclerView = findViewById(R.id.activity_nested_reply_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
                 R.drawable.line_divider);
@@ -79,34 +90,71 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
         adapter = new ReplyAdapter(receivedJSONArray, this, "WritingNestedReplyActivity");
         recyclerView.setAdapter(adapter);
 
-
-        ImageView post_nested_reply = findViewById(R.id.activity_nested_reply_post_button);
-        final EditText edit_text_nested_reply = findViewById(R.id.activity_nested_reply_edit);
-
-        post_nested_reply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                String urlPostNestedReply = Component.default_url.concat(getString(R.string.postNestedReply,user_number,post_no,reply_no));
-                String urlPostNestedReply = "";
-
-                try {
-                    commentJSONObject.put("reply_contents", edit_text_nested_reply.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                volley.postJSONObjectString(commentJSONObject, urlPostNestedReply, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                }, null);
-            }
-        });
+        post_nested_reply.setOnClickListener(this);
     }
+
+    private void doAllFindViewById() {
+        post_nested_reply = findViewById(R.id.activity_nested_reply_post_button);
+        edit_text_nested_reply = findViewById(R.id.activity_nested_reply_edit);
+        recyclerView = findViewById(R.id.activity_nested_reply_recycler);
+        post_nested_reply = findViewById(R.id.activity_nested_reply_post_button);
+        edit_text_nested_reply = findViewById(R.id.activity_nested_reply_edit);
+    }
+
+    private void initDefaultUrlOfComponent() {
+            Component.default_url = getString(R.string.defaultUrl);
+    }
+
+    private void initVolley() {
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+    }
+
+    private void initSharedPreference() {
+        pref = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+    }
+
+    private void initUrl() {
+        switch (boardType) {
+            case subjectBoard:
+                urlPostNestedReply = Component.default_url.concat(getString(R.string.postNestedReplyOfSubjectBoard));
+                break;
+            case freeBoard:
+                urlPostNestedReply = Component.default_url.concat(getString(R.string.postNestedReplyOfFreeBoard));
+                break;
+            case majorBoard:
+                urlPostNestedReply = Component.default_url.concat(getString(R.string.postNestedReplyOfMajorBoard));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setRequestValue() {
+        try {
+            commentJSONObject.put("user_no", user_number);
+            commentJSONObject.put("post_no", post_no);
+            commentJSONObject.put("reply_no", reply_no);
+            commentJSONObject.put("reply_contents", edit_text_nested_reply.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public String getWriter_number() {
         return writer_number;
+    }
+
+    @Override
+    public void onClick(View v) {
+        setRequestValue();
+        volley.postJSONObjectString(commentJSONObject, urlPostNestedReply, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        }, null);
     }
 }

@@ -26,15 +26,19 @@ public class WritingActivity extends AppCompatActivity {
 
     public static final int completeCode = 10;
     private static final String TAG = "WritingActivity";
-    private static VolleyForHttpMethod volley;
     private static final JSONObject requestJSONObject = new JSONObject();
+    private static final int subjectBoard = 0;
+    private static final int freeBoard = 1;
+    private static final int majorBoard = 2;
+    private static VolleyForHttpMethod volley;
     private static int boardType;
+
     private String url;
-    Intent intent;
-    EditText title_edit;
-    EditText contents_edit;
-    ImageView btn_cancel;
-    Button btn_complete;
+    private Intent intent;
+    private EditText title_edit;
+    private EditText contents_edit;
+    private ImageView btn_cancel;
+    private Button btn_complete;
 
 
     @Override
@@ -116,20 +120,7 @@ public class WritingActivity extends AppCompatActivity {
     private void writingBtnClick() {
 
         classifyBoard();
-        try {
-            requestJSONObject.put("post_title", title_edit.getText().toString());
-            requestJSONObject.put("post_contents", contents_edit.getText().toString());
-            requestJSONObject.put("major_name", intent.getExtras().getString("major"));
-            requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
-            requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
-            requestJSONObject.put("user_no", intent.getExtras().getString("user_no"));
-            requestJSONObject.put("board_flag", boardType);
-            if(boardType == 1)
-                requestJSONObject.put("reply_yn", 1);
-        } catch(JSONException e) {
-            e.printStackTrace();
-        }
-//        Log.d("tag", ""+requestJSONObject);
+        setRequestValue();
 
         volley.postJSONObjectString(requestJSONObject, url, new Response.Listener<String>() {
 
@@ -144,13 +135,14 @@ public class WritingActivity extends AppCompatActivity {
 
     private void classifyBoard() {
         switch (boardType) {
-            case 0:         // 수업게시판
+            case subjectBoard:
                 url = Component.default_url.concat(getString(R.string.postSubjectWriting, 1));
                 break;
-            case 1:         // 자유게시판
-                url = Component.default_url.concat(getString(R.string.postFreeWriting));
+            case freeBoard:
+                url = Component.default_url.concat(getString(R.string.postFreeWriting, 1));
                 break;
-            case 2:         // 학과게시판
+            case majorBoard:
+                url = Component.default_url.concat(getString(R.string.postMajorWriting,1));
                 break;
         }
     }
@@ -185,4 +177,37 @@ public class WritingActivity extends AppCompatActivity {
         Log.i("WritingActivityLog", "onDestroy");
         super.onDestroy();
     }
+
+    void setRequestValue() {
+        if(boardType == subjectBoard) {
+            setRequestValueOfSubject();
+        } else {
+            setRequestValueOfDeptBoardAndFreeBoard();
+        }
+    }
+
+    void setRequestValueOfSubject() {
+        try {
+            requestJSONObject.put("post_title", title_edit.getText().toString());
+            requestJSONObject.put("post_contents", contents_edit.getText().toString());
+            requestJSONObject.put("major_name", intent.getExtras().getString("major"));
+            requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
+            requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
+            requestJSONObject.put("user_no", intent.getExtras().getString("user_no"));
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void setRequestValueOfDeptBoardAndFreeBoard() {
+        try {
+            requestJSONObject.put("post_title", title_edit.getText().toString());
+            requestJSONObject.put("post_contents", contents_edit.getText().toString());
+            requestJSONObject.put("major_name", intent.getExtras().getString("major"));
+            requestJSONObject.put("user_no", intent.getExtras().getString("user_no"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
