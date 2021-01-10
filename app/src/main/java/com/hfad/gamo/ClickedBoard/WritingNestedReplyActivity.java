@@ -86,7 +86,8 @@ public class WritingNestedReplyActivity extends AppCompatActivity {
         post_nested_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String urlPostNestedReply = Component.default_url.concat(getString(R.string.postNestedReply,user_number,post_no,reply_no));
+//                String urlPostNestedReply = Component.default_url.concat(getString(R.string.postNestedReply,user_number,post_no,reply_no));
+                String urlPostNestedReply = "";
 
                 try {
                     commentJSONObject.put("reply_contents", edit_text_nested_reply.getText().toString());

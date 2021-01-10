@@ -78,6 +78,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private String urlForPostLike;
     private String urlForInquirePostingsOfBoard;
     private String urlForDeletePosting;
+    private String urlDeleteReply;
     private String subject_name;
     private String professor_name;
     private String post_no;
@@ -412,18 +413,25 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void initUrl() {
-        urlForPostReply = Component.default_url.concat(getString(R.string.postReply,user_number,post_no));
-        urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireReplies,post_no));
-        urlForPostLike = Component.default_url.concat(getString(R.string.postLike,post_no,user_number));
-        urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard, subject_name, professor_name, user_number));
+        urlForPostLike = Component.default_url.concat(getString(R.string.postLike));
         switch (boardType){
             case 0:         // 수업게시판
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard));
+                urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfSubjectBoard));
+                urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfSubjectBoard,post_no));
+                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfSubjectBoard));
                 break;
             case 1:         // 자유게시판
-                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard, post_no));
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
+                urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfFreeBoard));
+                urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfFreeBoard,post_no));
+                urlDeleteReply = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
                 break;
             case 2:         // 학과게시판
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfDeptBoard));
+                urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfDeptBoard));
+                urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfDeptBoard,post_no));
+                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfDeptBoard));
                 break;
 
         }
@@ -442,7 +450,14 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
 
     private void deleteReply(int reply_no) {
-        final String urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReply, String.valueOf(reply_no)));
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("bundle_id", reply_no);                  // 일단 확인 필요
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         volley.delete(null, urlDeleteReply, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

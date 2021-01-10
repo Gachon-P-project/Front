@@ -192,7 +192,7 @@ class TimeTableFragment : TimeTableContract.View() {
 
     private fun saveDataForTimeTable() {
 
-        urlInquireTimeTable = Component.default_url.plus(this.context?.getString(R.string.inquireTimeTable, sharedPreferences.getString("number", null), year, semester))
+        urlInquireTimeTable = Component.default_url.plus(this.context?.getString(R.string.inquireTimeTable, userNo, year, semester))
 
 
         volley.getString(urlInquireTimeTable) { response ->

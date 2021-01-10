@@ -32,7 +32,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
     private lateinit var nickname: String
     private lateinit var urlNickNameCheck: String
     private val urlRegisterUser = Component.default_url.plus(baseLoginActivity.getString(R.string.registerUser))
-    private val urlNicknameUpdate = Component.default_url.plus(baseActivity.getString(R.string.nicknameUpdate))
+    private val urlNicknameUpdate = Component.default_url.plus(baseActivity.getString(R.string.updateNickname))
 
 
     fun start() {
