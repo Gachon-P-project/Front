@@ -29,7 +29,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+import static com.hfad.gamo.DataIOKt.getSubjectSet;
+import static com.hfad.gamo.DataIOKt.getDepartment;
+import static com.hfad.gamo.Component.sharedPreferences;
+import static com.hfad.gamo.DataIOKt.getUserNo;
+
 
 public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
 
@@ -55,42 +61,24 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_board);
 
-        Component.default_url = getString(R.string.defaultUrl);
 
-        activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
-        activity_clicked_board_sleep_tv = findViewById(R.id.activity_clicked_board_sleep_tv);
-        textViewToolbarTitle = findViewById(R.id.textView_clickedBoard_toolbarTitle);
-        imageButtonToolbarBack = findViewById(R.id.imageButton_clickedBoard_toolbarBack);
-        imageButtonSearch = findViewById(R.id.imageButton_clickedBoard_search);
-        imageButtonNewWriting = findViewById(R.id.imageButton_clickedBoard_newWriting);
-
-        imageButtonToolbarBack.setOnClickListener(this);
-        imageButtonSearch.setOnClickListener(this);
-        imageButtonNewWriting.setOnClickListener(this);
-
-        SharedPreferences sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-
-        Intent intent = getIntent();
-        boardType = intent.getIntExtra("boardType", -1);
-        board_title = intent.getExtras().getString("title");
-        professor = intent.getExtras().getString("professor", "");
-        user_no = sharedPreferences.getString("number", "");
-        department = sharedPreferences.getString("department", "");
-        Log.d(TAG, "onCreate: title : " + board_title + ", professor : " + professor);
+        initDefaultUrlOfComponent();
+        initSharedPreferencesOfComponent();
+        doAllFindViewById();
+        initInitialValues();
         initBoardType();
         initUrl();
-
-        swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
-        swipe_clicked_board.setOnRefreshListener(this);
-
-        swipe_clicked_board.setColorSchemeResources(R.color.indigo500);
-
         initToolbar();
         initVolley();
         initRecyclerView();
 
-        inquirePostingsOfBoard();
+        setEvents();
 
+        Log.d(TAG, "onCreate: title : " + board_title + ", professor : " + professor);
+
+        swipe_clicked_board.setColorSchemeResources(R.color.indigo500);
+
+        inquirePostingsOfBoard();
     }
 
     @Override
@@ -167,18 +155,14 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         });
     }
 
-    private void changeViewIfDoNotHaveData() {
-        if(!doDataExist()) {
-            swipe_clicked_board.setVisibility(View.GONE);
-            activity_clicked_board_sleep_layout.setVisibility(View.VISIBLE);
-        } else {
-            swipe_clicked_board.setVisibility(View.VISIBLE);
-            activity_clicked_board_sleep_layout.setVisibility(View.GONE);
-        }
-    }
-
-    private boolean doDataExist() {
-        return responseJSONArray.length() != 0;
+    private void doAllFindViewById() {
+        activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
+        activity_clicked_board_sleep_tv = findViewById(R.id.activity_clicked_board_sleep_tv);
+        textViewToolbarTitle = findViewById(R.id.textView_clickedBoard_toolbarTitle);
+        imageButtonToolbarBack = findViewById(R.id.imageButton_clickedBoard_toolbarBack);
+        imageButtonSearch = findViewById(R.id.imageButton_clickedBoard_search);
+        imageButtonNewWriting = findViewById(R.id.imageButton_clickedBoard_newWriting);
+        swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
     }
 
     private void initBoardType() {
@@ -230,6 +214,39 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         recyclerView.setAdapter(adapter);
     }
 
+    private void initInitialValues() {
+        Intent intent = getIntent();
+
+        boardType = intent.getIntExtra("boardType", -1);
+        board_title = intent.getExtras().getString("title");
+        professor = intent.getExtras().getString("professor", "");
+        user_no = getUserNo();
+        department = getDepartment();
+    }
+
+    private void initSharedPreferencesOfComponent() {
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+    }
+
+    private void initDefaultUrlOfComponent() {
+        Component.default_url = getString(R.string.defaultUrl);
+    }
+
+
+    private void changeViewIfDoNotHaveData() {
+        if(!doDataExist()) {
+            swipe_clicked_board.setVisibility(View.GONE);
+            activity_clicked_board_sleep_layout.setVisibility(View.VISIBLE);
+        } else {
+            swipe_clicked_board.setVisibility(View.VISIBLE);
+            activity_clicked_board_sleep_layout.setVisibility(View.GONE);
+        }
+    }
+
+    private boolean doDataExist() {
+        return responseJSONArray.length() != 0;
+    }
+
     private void inquirePostingsOfBoard() {
         volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
             @Override
@@ -247,6 +264,14 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
             }
         });
     }
+
+    private void setEvents() {
+        imageButtonToolbarBack.setOnClickListener(this);
+        imageButtonSearch.setOnClickListener(this);
+        imageButtonNewWriting.setOnClickListener(this);
+        swipe_clicked_board.setOnRefreshListener(this);
+    }
+
 
     private void clearRecyclerData() {
         int original_length = responseJSONArray.length();

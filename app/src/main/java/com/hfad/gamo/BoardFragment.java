@@ -28,9 +28,6 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.hfad.gamo.DataIOKt.appConstantPreferences;
-import static com.hfad.gamo.DataIOKt.getSubjectSet;
 
 
 public class BoardFragment extends Fragment {
@@ -58,7 +55,7 @@ public class BoardFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = Objects.requireNonNull(this.getContext()).getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        sharedPreferences = Objects.requireNonNull(this.getContext()).getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
         try {
 //            subject_professorJSONObject = new JSONObject(prefs.getString("subject_professorJSONObject", null));
@@ -69,7 +66,7 @@ public class BoardFragment extends Fragment {
 
 //        dept = prefs.getString("department", null);
 //        subjectSet = prefs.getStringSet("subjectSet", noneSubject);
-        dept = DataIOKt.getDepartment();
+        dept = getDepartment();
         subjectSet = getSubjectSet();
 
         if (dept_data.size() == 0) {
