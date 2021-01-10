@@ -206,7 +206,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="100dp"
+            android:paddingRight="10dp"
             android:background="@drawable/bg_round_corner_grey">
             <TextView
                 android:layout_marginTop="25dp"
@@ -259,7 +259,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="100dp"
+            android:paddingRight="10dp"
             android:background="@drawable/bg_round_corner_grey">
             <TextView
                 android:layout_marginTop="25dp"
@@ -293,10 +293,21 @@
                 android:textSize="14sp"/>
 
             <TextView
-                android:id="@+id/service_info"
+                android:id="@+id/tv_mypage_terms_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="서비스 이용약관"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="@color/text1"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_mypage_terms_personal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="개인정보 처리방침"
                 android:layout_marginTop="5dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"

@@ -35,10 +35,11 @@ import static com.hfad.gamo.DataIOKt.resetSharedPreference;
 public class MyPageFragment extends Fragment {
     private SharedPreferences prefs;
 
+    private static int deviceWidth, deviceHeight;
     private NickNameDialog nickNameDialog;
     private NotificationSettingDialog notificationSettingDialog;
 //    private LinearLayout llAppInfo;
-    private TextView tvUsername, tvNickname, tvMajor, tvStudentId, tvChangeNickname, tvLogout, llNotificationSettings, tvAppVersion, tvInquiry, tvServiceInfo, tvOpenSource;
+    private TextView tvUsername, tvNickname, tvMajor, tvStudentId, tvChangeNickname, tvLogout, llNotificationSettings, tvAppVersion, tvInquiry, tvTermsServiceInfo, tvOpenSource, tvTermsPersonaInfo;
     private ImageView imgMyPhoto;
     private String username, major, nickname, studnetId, myPhotoUrl;
 
@@ -80,7 +81,8 @@ public class MyPageFragment extends Fragment {
         //
         tvAppVersion = view.findViewById(R.id.app_version);
         tvInquiry = view.findViewById(R.id.inquiry);
-        tvServiceInfo = view.findViewById(R.id.service_info);
+        tvTermsServiceInfo = view.findViewById(R.id.tv_mypage_terms_service);
+        tvTermsPersonaInfo = view.findViewById(R.id.tv_mypage_terms_personal);
         tvOpenSource = view.findViewById(R.id.open_source);
 
         imgMyPhoto = view.findViewById(R.id.iv_mypage_photo);
@@ -92,7 +94,8 @@ public class MyPageFragment extends Fragment {
         tvNickname.setText(nickname);
 
         DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
-        final int deviceWidth = dm.widthPixels;
+        deviceWidth = dm.widthPixels;
+        deviceHeight = dm.heightPixels;
 
         tvChangeNickname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +109,7 @@ public class MyPageFragment extends Fragment {
         llNotificationSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notificationSettingDialog = new NotificationSettingDialog(getActivity(), deviceWidth);
+                notificationSettingDialog = new NotificationSettingDialog(getActivity());
                 notificationSettingDialog.show();
             }
         });
@@ -124,8 +127,9 @@ public class MyPageFragment extends Fragment {
         tvAppVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
                 dialog.setTvInfo(getString(R.string.version));
+                dialog.setTvTitle("앱 버전");
                 dialog.show();
 
             }
@@ -134,17 +138,29 @@ public class MyPageFragment extends Fragment {
         tvInquiry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
                 dialog.setTvInfo(getString(R.string.inquiry));
+                dialog.setTvTitle("문의하기");
                 dialog.show();
             }
         });
 
-        tvServiceInfo.setOnClickListener(new View.OnClickListener() {
+        tvTermsServiceInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
-                dialog.setTvInfo("서비스 이용약관");
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
+                dialog.setTvInfo(getString(R.string.terms_service));
+                dialog.setTvTitle("서비스 이용약관");
+                dialog.show();
+            }
+        });
+
+        tvTermsPersonaInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
+                dialog.setTvInfo(getString(R.string.terms_personal));
+                dialog.setTvTitle("개인정보 처리방침");
                 dialog.show();
             }
         });
@@ -152,8 +168,9 @@ public class MyPageFragment extends Fragment {
         tvOpenSource.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity(), deviceWidth);
+                MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
                 dialog.setTvInfo("오픈소스 라이선스");
+                dialog.setTvTitle("오픈소스 라이선스");
                 dialog.show();
             }
         });
@@ -198,12 +215,12 @@ public class MyPageFragment extends Fragment {
 
     private class InfoDialog extends Dialog {
 
-        TextView tvInfo;
+        TextView tvInfo, tvTitle;
         Context context;
 //        TextView btnDialogPositive;
         Button btnDialogPositive;
 
-        public InfoDialog(@NonNull Context context, int deviceWidth) {
+        public InfoDialog(@NonNull Context context) {
             super(context);
             this.context = context;
             setContentView(R.layout.dialog_info);
@@ -211,6 +228,7 @@ public class MyPageFragment extends Fragment {
             Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             tvInfo = findViewById(R.id.tvDialogInfo);
+            tvTitle = findViewById(R.id.tv_dialog_info_title);
 //            btnDialogPositive = findViewById(R.id.tvButtonDialogPositive);
             btnDialogPositive = findViewById(R.id.buttonDialogPositive);
             btnDialogPositive.setClickable(true);
@@ -223,6 +241,7 @@ public class MyPageFragment extends Fragment {
 
             WindowManager.LayoutParams params = this.getWindow().getAttributes();
             params.width = (int) (deviceWidth * 0.95);
+            params.height = (int)(deviceHeight * 0.7);
             this.onWindowAttributesChanged(params);
         }
         @Override
@@ -237,6 +256,10 @@ public class MyPageFragment extends Fragment {
         public void setTvInfoTextSize(int size) {
             this.tvInfo.setTextSize(size);
         }
+
+        public void setTvTitle(String s) {
+            this.tvTitle.setText(s);
+        }
     }
 
 
@@ -248,7 +271,7 @@ public class MyPageFragment extends Fragment {
         Button btnDialogPositive;
         boolean settingNotice = DataIOKt.getNotificationSetting();
 
-        public NotificationSettingDialog(@NonNull Context context, int deviceWidth) {
+        public NotificationSettingDialog(@NonNull Context context) {
             super(context);
             this.context = context;
             setContentView(R.layout.dialog_notification_setting);
