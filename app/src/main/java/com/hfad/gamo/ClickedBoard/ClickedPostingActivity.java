@@ -45,6 +45,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+import static com.hfad.gamo.StateKt.BOARD_FREE;
+import static com.hfad.gamo.StateKt.BOARD_MAJOR;
+import static com.hfad.gamo.StateKt.BOARD_SUBJECT;
 
 public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
 
@@ -193,7 +196,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 } else {
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     postReply_iv.setEnabled(false);
-                    putReplyIntoJSONObject();
+                    setRequestDataOfPostReply();
                     postReply();
                     postReply_et.setText(null);
                     postReply_et.clearFocus();
@@ -319,13 +322,16 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         }, null);
     }
 
-    private void putReplyIntoJSONObject() {
+    private void setRequestDataOfPostReply() {
         try {
+            jsonObjectForPostReply.put("user_no", user_number);
+            jsonObjectForPostReply.put("post_no", post_no);
             jsonObjectForPostReply.put("reply_contents", postReply_et.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
 
     private void showAllReplies() {
         //Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
@@ -414,28 +420,30 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private void initUrl() {
         urlForPostLike = Component.default_url.concat(getString(R.string.postLike));
         switch (boardType){
-            case 0:         // 수업게시판
+            case BOARD_SUBJECT:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfSubjectBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfSubjectBoard,post_no));
                 urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfSubjectBoard));
                 urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfSubjectBoard));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject_name, professor_name,user_number));
                 break;
-            case 1:         // 자유게시판
+            case BOARD_FREE:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfFreeBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfFreeBoard,post_no));
                 urlDeleteReply = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
                 urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfFreeBoard));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard, BOARD_FREE, user_number));
                 break;
-            case 2:         // 학과게시판
+            case BOARD_MAJOR:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfMajorBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard,post_no));
                 urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
                 urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,BOARD_MAJOR, user_number));
                 break;
-
         }
     }
 
@@ -448,7 +456,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             e.printStackTrace();
         }
     }
-
 
 
     private void deleteReply(int reply_no) {
@@ -537,6 +544,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             }
         });
     }
+
+
 
     private void updateToClickedPosting(String title, String board) {
         toClickedPosting.setPost_title(title);

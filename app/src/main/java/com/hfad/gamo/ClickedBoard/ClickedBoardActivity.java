@@ -32,15 +32,15 @@ import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 import static com.hfad.gamo.DataIOKt.getDepartment;
 import static com.hfad.gamo.Component.sharedPreferences;
 import static com.hfad.gamo.DataIOKt.getUserNo;
+import static com.hfad.gamo.StateKt.BOARD_FREE;
+import static com.hfad.gamo.StateKt.BOARD_MAJOR;
+import static com.hfad.gamo.StateKt.BOARD_SUBJECT;
 
 
 public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
 
     private static final int requestCodeToWritingActivity = 0;
     private static final String TAG = "ClickedBoardActivity";
-    private static final int subjectBoard = 0;
-    private static final int freeBoard = 1;
-    private static final int majorBoard = 2;
     private static int boardType;
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
@@ -73,8 +73,6 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         initRecyclerView();
 
         setEvents();
-
-        Log.d(TAG, "onCreate: title : " + board_title + ", professor : " + professor);
 
         swipe_clicked_board.setColorSchemeResources(R.color.indigo500);
 
@@ -112,6 +110,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
                 intent.putExtra("professor", professor);
                 intent.putExtra("subject", subject);
                 intent.putExtra("user_no", user_no);
+                intent.putExtra("boardType", boardType);
                 startActivity(intent);
                 break;
             case R.id.imageButton_clickedBoard_newWriting:
@@ -167,11 +166,11 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
 
     private void initBoardType() {
         switch (boardType) {
-            case subjectBoard:
+            case BOARD_SUBJECT:
                 subject = board_title;
                 break;
-            case freeBoard:
-            case majorBoard:
+            case BOARD_FREE:
+            case BOARD_MAJOR:
                 subject = null;
                 break;
             default:        // ERROR
@@ -183,14 +182,13 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
 
     private void initUrl() {
         switch(boardType) {
-            case 0:          // 수업게시판
+            case BOARD_SUBJECT:
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject, professor, user_no));
-                Log.d(TAG, "initUrl: url : " + urlForInquirePostingsOfBoard);
                 break;
-            case 1:         // 자유게시판
+            case BOARD_FREE:
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no));
                 break;
-            case 2:         // 학과게시판
+            case BOARD_MAJOR:
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no));
                 break;
         }
@@ -230,7 +228,6 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     private void initDefaultUrlOfComponent() {
         Component.default_url = getString(R.string.defaultUrl);
     }
-
 
     private void changeViewIfDoNotHaveData() {
         if(!doDataExist()) {

@@ -88,8 +88,8 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else
-            intent.putExtra("professor", boardType);
+        } 
+
         context.startActivity(intent);
     }
 
