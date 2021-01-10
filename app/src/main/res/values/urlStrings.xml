@@ -47,11 +47,11 @@
     <string name="checkNickName">/users/nickname/check/%1$s</string>
     <string name="updateNickname">/user/nickname</string>
 
-    <!-- notification -->
-    <string name="noticeDetail">/notice/posting/%1$s/%2$s</string>
-    <string name="noticeUrl">/notice/posting/url/%1$s/%2$s</string>
-    <string name="noticeList">/notice/list/%1$d/%2$s</string>
-    <string name="noticeSearchedList">/notice/list/%1$d/%2$s/%3$s</string>
+    <!-- notice -->
+    <string name="noticeDetail">/notices/posting/%1$s/%2$s</string>
+    <string name="noticeUrl">/notices/posting/url/%1$s/%2$s</string>
+    <string name="noticeList">/notices/list/%1$d/%2$s</string>
+    <string name="noticeSearchedList">/notices/list/%1$d/%2$s/%3$s</string>
 
     <!-- like -->
     <string name="postLike">/likes</string>
