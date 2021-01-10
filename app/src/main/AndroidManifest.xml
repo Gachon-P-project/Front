@@ -12,10 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AgreementTermsActivity" />
         <activity android:name=".ClickedBoard.WritingUpdateActivity" />
         <activity android:name=".NoticeDetailActivity" />
         <activity android:name=".ClickedBoard.WritingNestedReplyActivity" />
-        <activity android:name=".StartGuideActivity"/>
+        <activity android:name=".StartGuideActivity" />
         <activity android:name=".ClickedBoard.ClickedPostingActivity" />
         <activity android:name=".ClickedBoard.SearchActivity" />
         <activity
