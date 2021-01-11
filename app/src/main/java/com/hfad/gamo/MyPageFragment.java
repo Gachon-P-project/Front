@@ -30,6 +30,7 @@ import java.net.URL;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.hfad.gamo.Component.sharedPreferences;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 import static com.hfad.gamo.DataIOKt.resetSharedPreference;
 
@@ -51,6 +52,7 @@ public class MyPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sharedPreferences = getActivity().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         prefs = getActivity().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         username = prefs.getString("name", null);
         major = prefs.getString("department", null);
