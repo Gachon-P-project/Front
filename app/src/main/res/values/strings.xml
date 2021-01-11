@@ -14,7 +14,6 @@
     <string name="version">beta-0.0.1</string>
     <string name="inquiry">Yet</string>
     <string name="donate">카카오뱅크\n3333-00-0000000\n팀 MOGA</string>
-    <string name="openSource">opensources</string>
 
     <string name="button_nickname_register">닉네임 등록</string>
     <string name="button_nickname_update">닉네임 변경</string>
@@ -93,4 +92,73 @@
 1. Amazon Web Service : 서비스 시스템 제공, 데이터 관리 및 보관\n
     </string>
 
+    <string name="opensource_license">
+        "androidx.appcompat:appcompat:1.2.0
+
+androidx.constraintlayout:constraintlayout:2.0.4
+
+androidx.cardview:cardview:1.0.0
+
+com.android.volley:volley:1.1.1
+
+androidx.legacy:legacy-support-v4:1.0.0
+
+org.jsoup:jsoup:1.12.1
+
+[https://jsoup.org/](https://jsoup.org/)
+
+© 2009 - 2021 Jonathan Hedley
+
+The MIT License
+
+com.google.android.material:material:1.2.0-alpha01
+
+[https://developer.android.com/topic/libraries/support-library](https://developer.android.com/topic/libraries/support-library)
+
+The Apache Software License, Version 2.0
+
+org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2
+
+[https://mvnrepository.com/artifact/org.jbundle.util.osgi.wrapped/org.jbundle.util.osgi.wrapped.org.apache.http.client/4.1.2](https://mvnrepository.com/artifact/org.jbundle.util.osgi.wrapped/org.jbundle.util.osgi.wrapped.org.apache.http.client/4.1.2)
+
+Apache License, Version 2.0
+
+androidx.swiperefreshlayout:swiperefreshlayout:1.1.0
+
+[https://developer.android.com/jetpack/androidx](https://developer.android.com/jetpack/androidx)
+
+The Apache Software License, Version 2.0
+
+org.jetbrains.kotlin:kotlin-stdlib:1.0.0
+
+[https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib/1.0.0](https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib/1.0.0)
+
+The Apache Software License, Version 2.0
+
+com.google.firebase:firebase-bom:25.12.0
+
+[https://maven.google.com/web/index.html?q=Firebase-bo#com.google.firebase:firebase-bom:25.12.0](https://maven.google.com/web/index.html?q=Firebase-bo#com.google.firebase:firebase-bom:25.12.0)
+
+The Apache Software License, Version 2.0
+
+com.google.firebase:firebase-messaging
+
+[https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/package-summary?hl=ko](https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/package-summary?hl=ko)
+
+Android Software Development Kit License
+
+com.google.firebase:firebase-analytics
+
+[https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/package-summary](https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/package-summary)
+
+Android Software Development Kit License
+
+group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+
+[https://jsoup.org/](https://jsoup.org/)
+
+Copyright © 2009 - 2021 Jonathan Hedley
+
+The MIT License"
+    </string>
 </resources>

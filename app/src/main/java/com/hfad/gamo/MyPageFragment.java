@@ -169,7 +169,7 @@ public class MyPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
-                dialog.setTvInfo("오픈소스 라이선스");
+                dialog.setTvInfo(getString(R.string.opensource_license));
                 dialog.setTvTitle("오픈소스 라이선스");
                 dialog.show();
             }

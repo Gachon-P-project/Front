@@ -214,13 +214,18 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     }
 
     private void saveDataForWritingNestedReplyActivity(JSONObject reply_data, int depth,int reply_no, int bundle_id) {
-        if(depth == 0) {
-            JSONArray data = new JSONArray();
-            data.put(reply_data);
-            toWritingNestedReplyActivity.put(reply_no, data);
-        } else {
-            JSONArray data = toWritingNestedReplyActivity.get(bundle_id);
-            data.put(reply_data);
+        try {
+            if (depth == 0) {
+                JSONArray data = new JSONArray();
+                data.put(reply_data);
+                toWritingNestedReplyActivity.put(reply_no, data);
+            } else {
+
+                JSONArray data = toWritingNestedReplyActivity.get(bundle_id);
+                data.put(reply_data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
