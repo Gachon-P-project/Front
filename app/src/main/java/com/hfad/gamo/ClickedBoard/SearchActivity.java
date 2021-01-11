@@ -118,7 +118,7 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
                 urlSearchPostings = Component.default_url.concat(getString(R.string.searchPostingsOfFreeBoard,boardType, user_no, word));
                 break;
             case majorBoard:
-                urlSearchPostings = Component.default_url.concat(getString(R.string.searchPostingsOfMajorBoard,boardType, user_no, word));
+                urlSearchPostings = Component.default_url.concat(getString(R.string.searchPostingsOfMajorBoard,boardType, user_no, department, word));
                 break;
             default:
                 break;

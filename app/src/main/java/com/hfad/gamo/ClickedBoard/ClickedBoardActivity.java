@@ -189,7 +189,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no));
                 break;
             case BOARD_MAJOR:
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no, department));
                 break;
         }
     }
