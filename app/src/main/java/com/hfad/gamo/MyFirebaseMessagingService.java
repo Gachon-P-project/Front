@@ -57,13 +57,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // 토큰이 없었거나, 기존 토큰과 다르다면 SharedPreferences 에 저장.
             // 서버에 number, token 값 전송
             if (!(pref_token.getString("token", "null").equals(token))) {
-                String tokenUrl = default_url + "/token/add";
+                String tokenUrl = default_url.concat(getString(R.string.postToken));
                 pref_token.edit().putString("token", token).apply();
 
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("number", sharedPreferences.getString("number", null));
                     jsonObject.put("token", token);
+                    jsonObject.put("user_no", sharedPreferences.getString("number", null));
                     jsonObject.put("user_major", sharedPreferences.getString("department", null));
                 } catch (JSONException e) {
                     e.printStackTrace();

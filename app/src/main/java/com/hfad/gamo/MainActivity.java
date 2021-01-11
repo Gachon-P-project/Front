@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -83,24 +84,31 @@ public class MainActivity extends AppCompatActivity {
                         // 서버에 number, token 값 전송
                         if (!(pref_token.getString("token", "null").equals(token))) {
                             Log.i("token!!", "if inner");
-                            String tokenUrl = default_url+"/token/add";
+                            String tokenUrl = default_url.concat(getString(R.string.postToken));
                             pref_token.edit().putString("token", token).apply();
 
                             JSONObject jsonObject = new JSONObject();
                             try {
-                                jsonObject.put("number", sharedPreferences.getString("number", null));
                                 jsonObject.put("token",token);
+                                jsonObject.put("user_no", sharedPreferences.getString("number", null));
                                 jsonObject.put("user_major", sharedPreferences.getString("department", null));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
+                            Log.i("token!!", jsonObject.toString());
                             volley.postJSONObjectString(jsonObject, tokenUrl, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
                                     Log.i("token!!!", "response");
                                 }
-                            }, null);
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.i("token!!!", "error".concat(error.toString()));
+                                }
+                            });
                         }
 
                         // Log and toast
@@ -112,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        Log.i("token!!!", " : before replaceFragment");
         replaceFragment("timetable");
 
 //        FragmentTransaction fragmentTransaction = fm.beginTransaction();
