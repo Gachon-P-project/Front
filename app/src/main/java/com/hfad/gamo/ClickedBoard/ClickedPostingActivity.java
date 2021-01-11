@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.hfad.gamo.Component;
+import com.hfad.gamo.DataIOKt;
 import com.hfad.gamo.R;
 import com.hfad.gamo.VolleyForHttpMethod;
 
@@ -93,6 +94,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private String forUpdatePosting = null;
     private JSONObject dataForUpdatePosting = null;
     private JSONObject realTimeDataForUpdatePosting = null;
+    private String major;
     private int boardType;
 
     @Override
@@ -112,7 +114,9 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         writer_number = toClickedPosting.getUser_no();
 
         prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-        user_number = prefs.getString("number", null);
+//        user_number = prefs.getString("number", null);
+        user_number = DataIOKt.getUserNo();
+        major = DataIOKt.getDepartment();
 
         initVolley();
         initToolBar();
@@ -440,7 +444,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard,post_no));
 //                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
 //                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,BOARD_MAJOR, user_number));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,BOARD_MAJOR, user_number, major));
                 break;
         }
     }
