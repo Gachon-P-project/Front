@@ -6,42 +6,41 @@
 
     <!--Board-->
     <string name="postSubjectWriting">/boards/subject?reply_yn=%d</string>
-    <string name="postFreeWriting">/boards/free?reply_yn=%d</string>
-    <string name="postMajorWriting">/boards/major?reply_yn=%d</string>
     <string name="inquirePostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$s</string>
-    <string name="inquirePostingsOfFreeBoard">/boards/free/%1$d/%2$s</string>
-    <string name="inquirePostingsOfMajorBoard">/boards/major/%1$d/%2$s/%3$s</string>
     <string name="searchPostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$s/%4$s</string>
-    <string name="searchPostingsOfFreeBoard">/boards/free/%1$d/%2$s/%3$s</string>
-    <string name="searchPostingsOfMajorBoard">/boards/major/%1$d/%2$s/%3$s/%4$s</string>
     <string name="updatePostingOfSubjectBoard">/boards/subject</string>
-    <string name="updatePostingOfFreeBoard">/boards/free</string>
-    <string name="updatePostingOfMajorBoard">/boards/major</string>
     <string name="deletePostingOfSubjectBoard">/boards/subject/%s</string>
+
+    <string name="postFreeWriting">/boards/free?reply_yn=%d</string>
+    <string name="inquirePostingsOfFreeBoard">/boards/free/%1$d/%2$s</string>
+    <string name="searchPostingsOfFreeBoard">/boards/free/%1$d/%2$s/%3$s</string>
+    <string name="updatePostingOfFreeBoard">/boards/free</string>
     <string name="deletePostingOfFreeBoard">/boards/free/%s</string>
+
+    <string name="postMajorWriting">/boards/major?reply_yn=%d</string>
+    <string name="inquirePostingsOfMajorBoard">/boards/major/%1$d/%2$s/%3$s</string>
+    <string name="searchPostingsOfMajorBoard">/boards/major/%1$d/%2$s/%3$s/%4$s</string>
+    <string name="updatePostingOfMajorBoard">/boards/major</string>
     <string name="deletePostingOfMajorBoard">/boards/major/%s</string>
 
     <!-- Reply-->
     <string name="postReplyOfSubjectBoard">/replies/subject</string>
-    <string name="postReplyOfFreeBoard">/replies/free</string>
-    <string name="postReplyOfMajorBoard">/replies/major</string>
     <string name="postNestedReplyOfSubjectBoard">/replies/subject/reply</string>
-    <string name="postNestedReplyOfFreeBoard">/replies/free/reply</string>
-    <string name="postNestedReplyOfMajorBoard">/replies/major/reply</string>
     <string name="inquireRepliesOfSubjectBoard">/replies/subject/%1$s</string>
-    <string name="inquireRepliesOfFreeBoard">/replies/free/%1$s</string>
-    <string name="inquireRepliesOfMajorBoard">/replies/major/%1$s</string>
-    <!--<string name="updateReply">/replies/update/%1$s</string>-->
-    <!--<string name="updateNestedReply">/replies/update/rereply/$1$s</string>-->
     <string name="deleteReplyOfSubjectBoard">/replies/subject/%d</string>
-    <string name="deleteReplyOfFreeBoard">/replies/free/%d</string>
-    <string name="deleteReplyOfMajorBoard">/replies/major/%d</string>
     <string name="deleteNestedReplyOfSubjectBoard">/replies/subject/reply/%d</string>
-    <string name="deleteNestedReplyOfFreeBoard">/replies/free/reply/%d</string>
-    <string name="deleteNestedReplyOfMajorBoard">/replies/major/reply/%d</string>
 
-    <string name="inquireNotification">/notice/read/%1$s/%2$s</string>
-    <string name="searchNotification">/notice/read/%1$s/%2$s/%3$s</string>
+    <string name="postReplyOfFreeBoard">/replies/free</string>
+    <string name="postNestedReplyOfFreeBoard">/replies/free/reply</string>
+    <string name="inquireRepliesOfFreeBoard">/replies/free/%1$s</string>
+    <string name="deleteReplyOfFreeBoard">/replies/free/%d</string>
+    <string name="deleteNestedReplyOfFreeBoard">/replies/free/reply/%d</string>
+
+    <string name="postReplyOfMajorBoard">/replies/major</string>
+    <string name="postNestedReplyOfMajorBoard">/replies/major/reply</string>
+    <string name="inquireRepliesOfMajorBoard">/replies/major/%1$s</string>
+    <string name="deleteReplyOfMajorBoard">/replies/major/%d</string>
+    <string name="deleteNestedReplyOfMajorBoard">/replies/major/reply/%d</string>
 
     <!-- user information -->
     <string name="registerUser">/users</string>
