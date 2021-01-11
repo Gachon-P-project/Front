@@ -106,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.05"
         android:text="작성된 게시물이 없습니다."
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/text2"
         />

@@ -91,7 +91,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.05"
         android:text="알림이 없습니다"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/text2"
         android:visibility="gone"

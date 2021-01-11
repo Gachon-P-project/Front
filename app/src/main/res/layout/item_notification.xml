@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="title"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="@color/text1"/>
             <TextView
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="content"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textColor="@color/text1"
                 android:lines="2"
                 />
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="date"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:textColor="@color/text2" />
 
 

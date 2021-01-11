@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
         android:text="@string/nickname"
-        android:textSize="17dp"/>
+        android:textSize="17sp"/>
 
     <EditText
         android:id="@+id/nickname_edit_text"
@@ -43,7 +43,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginStart="2dp"
         android:text="@string/existent_nickname"
-        android:textSize="10dp"
+        android:textSize="10sp"
         android:textColor="@color/light_blue"/>
 
     <androidx.appcompat.widget.AppCompatButton
