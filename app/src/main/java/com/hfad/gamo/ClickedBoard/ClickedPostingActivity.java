@@ -213,7 +213,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             case R.id.activity_clicked_posting_post_like_iv:
                 post_like_img.setEnabled(false);
                 Log.i("postLike", "postLike");
-                volley.postJSONObjectString(null,urlForPostLike, new Response.Listener<String>() {
+                volley.postJSONObjectString(getRequestValuePostLike(),urlForPostLike, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         int currentPostLikeText =  Integer.parseInt(post_like_text.getText().toString());
@@ -617,12 +617,22 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             postReply_et.setEnabled(false);
             postReply_iv.setEnabled(false);
         }
-
-
-
-
-        //updateToClickedPosting(titleText, contentsText);
     }
+
+    private JSONObject getRequestValuePostLike() {
+        JSONObject requestValue = new JSONObject();
+
+        try {
+            requestValue.put("post_no", post_no);
+            requestValue.put("user_no", user_number);
+            requestValue.put("board_flag", boardType);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return requestValue;
+    }
+
 
     private String processServerDateToAndroidDate(String serverDate) {
         long time;

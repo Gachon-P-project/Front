@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="defaultUrl">"https://moga.club"</string>
+
+
     <!--Board-->
     <string name="postSubjectWriting">/boards/subject?reply_yn=%d</string>
     <string name="postFreeWriting">/boards/free?reply_yn=%d</string>
