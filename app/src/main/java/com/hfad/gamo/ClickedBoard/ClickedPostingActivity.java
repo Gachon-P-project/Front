@@ -96,6 +96,10 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private JSONObject realTimeDataForUpdatePosting = null;
     private String major;
     private int boardType;
+    private boolean checkInitThreeDots = false;
+    private boolean checkCallInquirePostingsOfBoard = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,9 +160,12 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_clicked_posting, menu);
         menu_toolbar_clicked_posting_three_dots = menu.findItem(R.id.menu_toolbar_clicked_posting_three_dots);
+        checkInitThreeDots = true;
+
         if (!writer_number.equals(user_number)) {
             menu_toolbar_clicked_posting_three_dots.setVisible(false);
         } else {
+            if(!checkCallInquirePostingsOfBoard)
             menu_toolbar_clicked_posting_three_dots.setEnabled(false);
         }
         return true;
@@ -614,6 +621,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             wrt_date = processServerDateToAndroidDate(wrt_date);
             setViewText(titleText,nickName, wrt_date, contentsText, replyCntText, postLikeText );
             initPostLikeUsingUserValue(like_user);
+            checkCallInquirePostingsOfBoard = true;
+            if(checkInitThreeDots)
             menu_toolbar_clicked_posting_three_dots.setEnabled(true);
         } else {
             setViewText("존재하지 않는 게시물 입니다.","익명" , "방금","","0", "0" );
