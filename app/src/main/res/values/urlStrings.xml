@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="defaultUrl">"https://moga.club"</string>
+<!--    <string name="defaultUrl">"https://moga.club"</string>-->
 
 
     <!--Board-->
@@ -48,7 +48,7 @@
     <string name="inquireUser">/users/check</string>
     <string name="inquireTimeTable">/users/timetable/%1$s/%2$s/%3$s</string>
     <string name="checkNickName">/users/nickname/check/%1$s</string>
-    <string name="updateNickname">/user/nickname</string>
+    <string name="updateNickname">/users/nickname</string>
 
     <!-- notice -->
     <string name="noticeDetail">/notices/posting/%1$s/%2$s</string>

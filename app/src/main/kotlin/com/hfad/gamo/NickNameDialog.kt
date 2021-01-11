@@ -162,7 +162,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
                     } else {
                         val userJsonObject = JSONObject()
                         userJsonObject.put("nickname", nickname)
-                        userJsonObject.put("user_no", getSharedItem<String>("number"))
+                        userJsonObject.put("user_no", Integer.valueOf(getSharedItem<String>("number")))
 
                         volley!!.putJSONObjectString(userJsonObject, urlNicknameUpdate, { response: String ->
                             Log.i(TAG, "updateNickname: response : $response")
