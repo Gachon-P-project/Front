@@ -1,5 +1,6 @@
 package com.hfad.gamo;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,33 +8,26 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.Objects;
 
 public class NotificationFragment extends Fragment {
 
@@ -102,10 +96,13 @@ public class NotificationFragment extends Fragment {
         imgBtnClearNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataIOKt.setNotifications("");
-                DataIOKt.setUnread(0);
-                refresh();
-                setBadge(0);
+//                DataIOKt.setNotifications("");
+//                DataIOKt.setUnread(0);
+//                refresh();
+//                setBadge(0);
+
+                ClearNotificationDialog dialog = new ClearNotificationDialog(getActivity());
+                dialog.show();
             }
         });
         return view;
@@ -170,6 +167,55 @@ public class NotificationFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private class ClearNotificationDialog extends Dialog {
+        private TextView tvTitle, tvContents;
+        private Button btnPositive, btnNegative;
+        Context context;
+
+        public ClearNotificationDialog(@NonNull Context context) {
+            super(context);
+            this.context = context;
+            setContentView(R.layout.dialog_default);
+            tvTitle = findViewById(R.id.tv_dialog_default_title);
+            tvContents = findViewById(R.id.tv_dialog_default_contents);
+            btnPositive = findViewById(R.id.button_dialog_default_positive);
+            btnNegative = findViewById(R.id.button_dialog_default_negative);
+
+            tvTitle.setVisibility(View.GONE);
+            tvContents.setText("알림을 비우시겠습니까?");
+            tvContents.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            btnPositive.setText("비움");
+
+            DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
+            int deviceWidth = dm.widthPixels;
+            WindowManager.LayoutParams params = this.getWindow().getAttributes();
+            params.width = (int)(deviceWidth * 0.95);
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            this.onWindowAttributesChanged(params);
+
+            btnNegative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+            btnPositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DataIOKt.setNotifications("");
+                    DataIOKt.setUnread(0);
+                    refresh();
+                    setBadge(0);
+                }
+            });
+        }
+
+        @Override
+        public void create() {
+            super.create();
         }
     }
 

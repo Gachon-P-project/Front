@@ -83,6 +83,9 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_three_dots"
         android:layout_gravity="right|top"
-        android:paddingTop="5dp"/>
+        android:paddingTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingBottom="10dp"
+        />
 
 </FrameLayout>
