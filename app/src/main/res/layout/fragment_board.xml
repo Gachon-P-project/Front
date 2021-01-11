@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-
+            android:paddingTop="12dp"
             >
             <LinearLayout
                 android:id="@+id/dept"
@@ -132,11 +132,21 @@
                     android:textColor="@color/text1"
                     android:textStyle="bold"
                     android:textSize="16sp"/>-->
+                <TextView
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기타 게시판"
+                    android:textColor="@color/text1"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/community_recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"/>
 
 
             </LinearLayout>
