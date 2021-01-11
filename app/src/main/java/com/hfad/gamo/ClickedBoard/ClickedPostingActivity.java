@@ -448,10 +448,10 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
             case BOARD_MAJOR:
 //                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfMajorBoard));
-                urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard,post_no));
+                urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard, post_no));
 //                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
 //                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,BOARD_MAJOR, user_number, major));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard, BOARD_MAJOR, user_number, major));
                 break;
         }
     }
