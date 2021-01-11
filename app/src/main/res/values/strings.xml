@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">모여라가천</string>
-    <string name="defaultUrl">"https://moga.club"</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">제목</string>
