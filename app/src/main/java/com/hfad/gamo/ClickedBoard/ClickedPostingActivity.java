@@ -300,18 +300,16 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void processReceivedReplies(JSONArray response) {
-        if(response.length() == 0)
-            return;
-
-        for (int i = 0; i < response.length(); i++) {
-            try {
-                JSONObject responseJSONObject = response.getJSONObject(i);
-                jsonArrayForReplyAdapter.put(responseJSONObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if(response.length() != 0) {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject responseJSONObject = response.getJSONObject(i);
+                    jsonArrayForReplyAdapter.put(responseJSONObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
         replyAdapter.notifyDataSetChanged();
     }
 
