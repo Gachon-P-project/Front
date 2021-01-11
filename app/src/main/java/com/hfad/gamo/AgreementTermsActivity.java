@@ -85,7 +85,7 @@ public class AgreementTermsActivity extends AppCompatActivity implements Compoun
             case R.id.tv_agreement_terms_personal:
                 chkAgreePersonal.setChecked(!chkAgreePersonal.isChecked());
                 break;
-            case R.id.chk_agreement_terms_all:
+            case R.id.tv_agreement_terms_all:
                 chkAgreeAll.setChecked(!chkAgreeAll.isChecked());
                 break;
             case R.id.btn_agreement_terms_next:
