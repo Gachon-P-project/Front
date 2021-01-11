@@ -234,6 +234,7 @@ public class MyPageFragment extends Fragment {
             super(context);
             this.context = context;
             setContentView(R.layout.dialog_default);
+            Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             tvTitle = findViewById(R.id.tv_dialog_default_title);
             tvContents = findViewById(R.id.tv_dialog_default_contents);

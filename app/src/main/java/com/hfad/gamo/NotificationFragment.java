@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,8 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.Objects;
 
 public class NotificationFragment extends Fragment {
 
@@ -189,6 +193,7 @@ public class NotificationFragment extends Fragment {
             tvContents.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             btnPositive.setText("비움");
 
+            Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
             int deviceWidth = dm.widthPixels;
             WindowManager.LayoutParams params = this.getWindow().getAttributes();
