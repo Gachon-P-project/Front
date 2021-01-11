@@ -16,7 +16,7 @@
     <string name="donate">카카오뱅크\n3333-00-0000000\n팀 MOGA</string>
 
     <string name="button_nickname_register">닉네임 등록</string>
-    <string name="button_nickname_update">닉네임 변경</string>
+    <string name="button_nickname_update">변경</string>
     <string name="nickname">닉네임</string>
     <string name="existent_nickname">이미 등록된 닉네임 입니다.</string>
 
