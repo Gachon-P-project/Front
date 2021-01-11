@@ -46,7 +46,7 @@ public class NotificationFragment extends Fragment {
     private TextView tvNoData;
     private ImageView imgNoData;
     private ImageButton imgBtnClearNotifications;
-    private int unread = DataIOKt.getUnread();
+    private int unread;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -59,7 +59,8 @@ public class NotificationFragment extends Fragment {
         context = getContext();
 
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
-
+        Component.shared_notification_data = getActivity().getSharedPreferences("notification_data", Context.MODE_PRIVATE);
+        unread = DataIOKt.getUnread();
     }
 
     @Override

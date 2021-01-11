@@ -375,11 +375,11 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void initView() {
-        setFindViewById();
+        doAllFindViewById();
         showUpdatedPosting();
     }
 
-    private void setFindViewById() {
+    private void doAllFindViewById() {
         title = findViewById(R.id.activity_clicked_posting_title);
         nickName = findViewById(R.id.activity_clicked_posting_nickname);
         date = findViewById(R.id.activity_clicked_posting_wrt_date);

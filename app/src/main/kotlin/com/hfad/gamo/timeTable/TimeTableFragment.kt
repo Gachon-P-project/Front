@@ -268,8 +268,13 @@ class TimeTableFragment : TimeTableContract.View() {
                 val subjectSetIterator = subjectSet.iterator()
                 val professorSetIterator = professorSet.iterator()
 
-                for (i in 0 until subjectSet.count()) {
+                /*for (i in 0 until subjectSet.count()) {
                     jsonObject.put(subjectSetIterator.next(), professorSetIterator.next())
+                }*/
+
+                for (i in 0 until subjectSet.count()) {
+                    val subject: String = subjectSetIterator.next()
+                    jsonObject.put(subject, professorMap[subject])
                 }
 
                 setSharedItem("tableSet", set)
