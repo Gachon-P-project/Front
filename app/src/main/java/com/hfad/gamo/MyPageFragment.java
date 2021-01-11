@@ -224,6 +224,7 @@ public class MyPageFragment extends Fragment {
             super.onProgressUpdate(values);
         }
     }
+
     private class LogoutDialog extends Dialog {
 
         private TextView tvTitle, tvContents;
@@ -242,7 +243,7 @@ public class MyPageFragment extends Fragment {
             btnNegative = findViewById(R.id.button_dialog_default_negative);
 
             WindowManager.LayoutParams params = this.getWindow().getAttributes();
-            params.width = (int) (deviceWidth * 0.95);
+            params.width = (int) (deviceWidth * 0.8);
             params.height = WindowManager.LayoutParams.WRAP_CONTENT;
             this.onWindowAttributesChanged(params);
 
@@ -261,8 +262,6 @@ public class MyPageFragment extends Fragment {
                     dismiss();
                 }
             });
-
-
         }
 
         @Override
@@ -319,7 +318,7 @@ public class MyPageFragment extends Fragment {
                 }
             });
 
-            params.width = (int) (deviceWidth * 0.95);
+            params.width = (int) (deviceWidth * 0.8);
             params.height = (int)(deviceHeight * 0.7);
             this.onWindowAttributesChanged(params);
         }
@@ -386,7 +385,7 @@ public class MyPageFragment extends Fragment {
 
 
             WindowManager.LayoutParams params = this.getWindow().getAttributes();
-            params.width = (int)(deviceWidth * 0.95);
+            params.width = (int)(deviceWidth * 0.8);
             params.height = WindowManager.LayoutParams.WRAP_CONTENT;
             this.onWindowAttributesChanged(params);
 

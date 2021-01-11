@@ -120,7 +120,7 @@ class NickNameDialog(baseLoginActivity: Activity) {
 
 //        다이얼로그 창 크기 조절
         val params: ViewGroup.LayoutParams? = dlg?.window?.attributes
-        params?.width = (deviceWidth * 0.95).toInt()
+        params?.width = (deviceWidth * 0.80).toInt()
         dlg?.window?.attributes = params as WindowManager.LayoutParams
         dlg?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
