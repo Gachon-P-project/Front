@@ -90,7 +90,7 @@
         android:textSize="15sp"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:background="@drawable/dialog_button_red"
+        android:background="@drawable/dialog_button_lightgray"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintWidth_percent="0.42"
         android:visibility="gone"
