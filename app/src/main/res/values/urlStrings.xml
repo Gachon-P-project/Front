@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    <string name="defaultUrl">"https://moga.club"</string>-->
-    <string name="defaultUrl">"http://192.168.50.146:17394"</string>
+    <string name="defaultUrl">"https://moga.club"</string>
 
 
     <!--Board-->
