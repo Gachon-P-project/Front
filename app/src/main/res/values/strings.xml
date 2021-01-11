@@ -16,7 +16,7 @@
     <string name="donate">카카오뱅크\n3333-00-0000000\n팀 MOGA</string>
 
     <string name="button_nickname_register">닉네임 등록</string>
-    <string name="button_nickname_update">닉네임 변경</string>
+    <string name="button_nickname_update">변경</string>
     <string name="nickname">닉네임</string>
     <string name="existent_nickname">이미 등록된 닉네임 입니다.</string>
 
@@ -95,13 +95,31 @@
     <string name="opensource_license">
         "androidx.appcompat:appcompat:1.2.0
 
+[https://developer.android.com/jetpack/androidx](https://developer.android.com/jetpack/androidx)
+
+The Apache Software License, Version 2.0
+
 androidx.constraintlayout:constraintlayout:2.0.4
+
+[http://tools.android.com](http://tools.android.com/)
+
+The Apache Software License, Version 2.0
 
 androidx.cardview:cardview:1.0.0
 
+[https://developer.android.com/topic/libraries/support-library](https://developer.android.com/topic/libraries/support-library)
+
+The Apache Software License, Version 2.0
+
 com.android.volley:volley:1.1.1
 
+[https://developer.android.com/training/volley/index.html](https://developer.android.com/training/volley/index.html)
+
+The Apache Software License, Version 2.0
+
 androidx.legacy:legacy-support-v4:1.0.0
+
+[https://developer.android.com/topic/libraries/support-library](https://developer.android.com/topic/libraries/support-library)
 
 org.jsoup:jsoup:1.12.1
 
@@ -159,6 +177,16 @@ group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 
 Copyright © 2009 - 2021 Jonathan Hedley
 
-The MIT License"
+The MIT License
+
+com.github.eunsiljo:timetable:1.0
+
+[https://github.com/EunsilJo/TimeTable](https://github.com/EunsilJo/TimeTable)
+
+GachonNoti-Introduction
+
+[https://github.com/wiffy-io/GachonNoti-Introduction](https://github.com/wiffy-io/GachonNoti-Introduction)
+
+Apache License 2.0"
     </string>
 </resources>

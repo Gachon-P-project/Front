@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
@@ -117,10 +118,17 @@ public class MyPageFragment extends Fragment {
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                resetSharedPreference();
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                resetSharedPreference();
+//                startActivity(intent);
+                LogoutDialog dialog = new LogoutDialog(Objects.requireNonNull(getActivity()));
+                dialog.setTitle("");
+                dialog.setContents("로그아웃을 하시겠습니까?");
+                dialog.setPositiveButtonBackground(R.drawable.dialog_button_red);
+                dialog.setPositiveButtonText("로그아웃");
+                dialog.setTitleVisibility(View.GONE);
+                dialog.show();
             }
         });
 
@@ -130,6 +138,8 @@ public class MyPageFragment extends Fragment {
                 MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
                 dialog.setTvInfo(getString(R.string.version));
                 dialog.setTvTitle("앱 버전");
+                dialog.setDialogHeight(0.3);
+                dialog.setTvInfoAlignment(View.TEXT_ALIGNMENT_CENTER);
                 dialog.show();
 
             }
@@ -141,6 +151,8 @@ public class MyPageFragment extends Fragment {
                 MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
                 dialog.setTvInfo(getString(R.string.inquiry));
                 dialog.setTvTitle("문의하기");
+                dialog.setDialogHeight(0.3);
+                dialog.setTvInfoAlignment(View.TEXT_ALIGNMENT_CENTER);
                 dialog.show();
             }
         });
@@ -170,7 +182,7 @@ public class MyPageFragment extends Fragment {
             public void onClick(View v) {
                 MyPageFragment.InfoDialog dialog = new MyPageFragment.InfoDialog(getActivity());
                 dialog.setTvInfo(getString(R.string.opensource_license));
-                dialog.setTvTitle("오픈소스 라이선스");
+                dialog.setTvTitle("오픈소스 라이센스");
                 dialog.show();
             }
         });
@@ -212,6 +224,72 @@ public class MyPageFragment extends Fragment {
             super.onProgressUpdate(values);
         }
     }
+    private class LogoutDialog extends Dialog {
+
+        private TextView tvTitle, tvContents;
+        private Button btnPositive, btnNegative;
+        private Context context;
+
+        public LogoutDialog(@NonNull Context context) {
+            super(context);
+            this.context = context;
+            setContentView(R.layout.dialog_default);
+
+            tvTitle = findViewById(R.id.tv_dialog_default_title);
+            tvContents = findViewById(R.id.tv_dialog_default_contents);
+            btnPositive = findViewById(R.id.button_dialog_default_positive);
+            btnNegative = findViewById(R.id.button_dialog_default_negative);
+
+            WindowManager.LayoutParams params = this.getWindow().getAttributes();
+            params.width = (int) (deviceWidth * 0.95);
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            this.onWindowAttributesChanged(params);
+
+            btnPositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    resetSharedPreference();
+                    startActivity(intent);
+                }
+            });
+            btnNegative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+
+
+        }
+
+        @Override
+        public void create() {
+            super.create();
+        }
+        public void setTitle(String s) {
+            tvTitle.setText(s);
+        }
+        public void setContents(String s) {
+            tvContents.setText(s);
+        }
+        public void setPositiveButtonText(String s) {
+            btnPositive.setText(s);
+        }
+        public void setNegativeButtonText(String s) {
+            btnNegative.setText(s);
+        }
+        public void setPositiveButtonBackground(@DrawableRes int resourceId) {
+            btnPositive.setBackgroundResource(resourceId);
+        }
+        public void setNegativeButtonBackground(@DrawableRes int resourceId) {
+            btnNegative.setBackgroundResource(resourceId);
+        }
+        public void setTitleVisibility(int visibility){
+            tvTitle.setVisibility(visibility);
+        }
+    }
 
     private class InfoDialog extends Dialog {
 
@@ -219,6 +297,7 @@ public class MyPageFragment extends Fragment {
         Context context;
 //        TextView btnDialogPositive;
         Button btnDialogPositive;
+        private WindowManager.LayoutParams params = this.getWindow().getAttributes();
 
         public InfoDialog(@NonNull Context context) {
             super(context);
@@ -227,7 +306,7 @@ public class MyPageFragment extends Fragment {
 
             Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-            tvInfo = findViewById(R.id.tvDialogInfo);
+            tvInfo = findViewById(R.id.tv_dialog_info_content);
             tvTitle = findViewById(R.id.tv_dialog_info_title);
 //            btnDialogPositive = findViewById(R.id.tvButtonDialogPositive);
             btnDialogPositive = findViewById(R.id.buttonDialogPositive);
@@ -239,7 +318,6 @@ public class MyPageFragment extends Fragment {
                 }
             });
 
-            WindowManager.LayoutParams params = this.getWindow().getAttributes();
             params.width = (int) (deviceWidth * 0.95);
             params.height = (int)(deviceHeight * 0.7);
             this.onWindowAttributesChanged(params);
@@ -259,6 +337,14 @@ public class MyPageFragment extends Fragment {
 
         public void setTvTitle(String s) {
             this.tvTitle.setText(s);
+        }
+
+        public void setDialogHeight(double d) {
+            params.height = (int)(deviceHeight * d);
+            this.onWindowAttributesChanged(params);
+        }
+        public void setTvInfoAlignment(int text_alignment) {
+            tvInfo.setTextAlignment(text_alignment);
         }
     }
 

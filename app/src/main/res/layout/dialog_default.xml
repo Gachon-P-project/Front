@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rectangle_bgwhite_corner_radius_all"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tv_dialog_default_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_dialog_default_contents"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="title"
+        android:textColor="@color/BLACK"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        />
+
+
+        <TextView
+            android:id="@+id/tv_dialog_default_contents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="내용"
+            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_default_title"
+            app:layout_constraintBottom_toTopOf="@+id/button_dialog_default_positive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAlignment="center"
+            android:textColor="@color/text1"
+            android:textSize="15sp"
+            android:layout_marginVertical="30dp"
+            />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_dialog_default_negative"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/button_dialog_default_positive"
+        app:layout_constraintEnd_toStartOf="@+id/button_dialog_default_positive"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/dialog_button_lightgray"
+        android:text="취소"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:elevation="0dp"
+        android:gravity="center"
+        app:layout_constraintWidth_min="60dp"
+        app:layout_constraintHeight_min="40dp"
+        app:layout_constraintWidth_percent="0.25"
+        />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_dialog_default_positive"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/dialog_button_default"
+        android:text="확인"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:elevation="0dp"
+        android:gravity="center"
+        app:layout_constraintWidth_min="60dp"
+        app:layout_constraintHeight_min="40dp"
+        app:layout_constraintWidth_percent="0.25"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
