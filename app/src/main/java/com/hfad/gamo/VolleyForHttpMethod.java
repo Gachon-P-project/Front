@@ -443,30 +443,6 @@ public class VolleyForHttpMethod {
 
 
 
-    /*public void delete(@NonNull final JSONObject Body, @NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
-        StringRequest request = null;
-
-        if(listener == null || errorListener == null) {
-            Log.e(TAG, "deleteJSONObjectString: Response.Listener is null or Response.ErrorListener is null");
-        } else {
-            Log.d(TAG, "deleteJSONObjectString: volley delete start");
-            request = new StringRequest(Request.Method.DELETE, url, listener, errorListener) {
-                @Override
-                public byte[] getBody() {
-                    return Body.toString().getBytes();
-                }
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/json";
-                }
-            };
-        }
-
-        request.setShouldCache(true);
-        queue.add(request);
-    }*/
-
     public void delete(@Nullable final JSONObject Body,@NonNull String url, @Nullable Response.Listener<String> listener, @Nullable Response.ErrorListener ErrorListener) {
 
         StringRequest request;
@@ -483,6 +459,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 }) {
                     @Override
@@ -502,6 +479,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 }) {
                     @Override
@@ -559,6 +537,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 });
             } else if (listener != null && ErrorListener == null) {
@@ -567,6 +546,7 @@ public class VolleyForHttpMethod {
                     public void onErrorResponse(VolleyError error) {
                         // Toast.makeText(getApplicationContext(), "네트워크 연결 오류.", Toast.LENGTH_SHORT).show();
                         Log.i("VolleyError", "Volley Error in receive");
+                        Log.e(TAG, "Volley: onErrorResponse: ", error);
                     }
                 });
             } else if (listener == null && ErrorListener != null) {

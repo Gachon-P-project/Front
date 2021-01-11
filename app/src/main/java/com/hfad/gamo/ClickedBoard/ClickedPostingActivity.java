@@ -51,6 +51,7 @@ import static com.hfad.gamo.StateKt.BOARD_SUBJECT;
 
 public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String TAG = "ClickedPostingActivity";
     public static int WritingNestedReplyActivityCode = 0;
     public static int WritingUpdateActivityCode = 1;
     public static boolean called_onStart = false;
@@ -238,6 +239,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onDeleteReplyDialog(int depth, int reply_no) {
+        Log.d(TAG, "onDeleteReplyDialog: depth : " + depth + ", reply_no : " + reply_no);
         if(depth == 0) {
             deleteReply(reply_no);
         } else {
@@ -424,24 +426,22 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfSubjectBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfSubjectBoard,post_no));
-                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfSubjectBoard));
-                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfSubjectBoard));
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject_name, professor_name,user_number));
                 break;
             case BOARD_FREE:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfFreeBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfFreeBoard,post_no));
-                urlDeleteReply = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
-                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfFreeBoard));
+//                urlDeleteReply = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
+//                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfFreeBoard));
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard, BOARD_FREE, user_number));
                 break;
             case BOARD_MAJOR:
-                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard));
+//                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfMajorBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard,post_no));
-                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
-                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
+//                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
+//                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
                 urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,BOARD_MAJOR, user_number));
                 break;
         }
@@ -459,13 +459,24 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
 
     private void deleteReply(int reply_no) {
-
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("bundle_id", reply_no);                  // 일단 확인 필요
-        } catch (JSONException e) {
-            e.printStackTrace();
+        switch (boardType) {
+            case BOARD_SUBJECT:
+                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfSubjectBoard, reply_no));
+                break;
+            case BOARD_FREE:
+                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfFreeBoard, reply_no));
+                break;
+            case BOARD_MAJOR:
+                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard, reply_no));
+                break;
         }
+
+//        JSONObject obj = new JSONObject();
+//        try {
+//            obj.put("bundle_id", reply_no);                  // 일단 확인 필요
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
         volley.delete(null, urlDeleteReply, new Response.Listener<String>() {
             @Override
@@ -476,6 +487,17 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void deleteNestedReply(int reply_no) {
+        switch (boardType) {
+            case BOARD_SUBJECT:
+                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfSubjectBoard, reply_no));
+                break;
+            case BOARD_FREE:
+                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfFreeBoard, reply_no));
+                break;
+            case BOARD_MAJOR:
+                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard, reply_no));
+                break;
+        }
         volley.delete(null, urlDeleteNestedReply, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -485,22 +507,34 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
     private void deletePosting() {
-        JSONObject deleteJsonObj = null;
+//        JSONObject deleteJsonObj = null;
+//        switch (boardType) {
+//            case 0:
+//                deleteJsonObj = new JSONObject();
+//                try {
+//                    deleteJsonObj.put("post_no", post_no);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            case 1:
+//                break;
+//            case 2:
+//                break;
+//        }
         switch (boardType) {
-            case 0:
-                deleteJsonObj = new JSONObject();
-                try {
-                    deleteJsonObj.put("post_no", post_no);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            case BOARD_SUBJECT:
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard, post_no));
                 break;
-            case 1:
+            case BOARD_FREE:
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard, post_no));
                 break;
-            case 2:
+            case BOARD_MAJOR:
+                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard, post_no));
                 break;
         }
-        volley.delete(deleteJsonObj, urlForDeletePosting, new Response.Listener<String>() {
+
+        volley.delete(null, urlForDeletePosting, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 finish();

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         } catch(JSONException e) {
             e.printStackTrace();
         }
+        Log.d("replyWriterDialog", "onClick: reply_no:" + reply_no);
     }
 
     /*public ReplyWriterDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity,
@@ -74,6 +76,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         } catch(JSONException e) {
             e.printStackTrace();
         }
+        Log.d("replyWriterDialog", "onClick: reply_no:" + reply_no);
     }
 
     @Override

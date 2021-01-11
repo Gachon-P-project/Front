@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.hfad.gamo.Component;
 import com.hfad.gamo.R;
@@ -122,6 +123,7 @@ public class WritingActivity extends AppCompatActivity {
         classifyBoard();
         setRequestValue();
 
+        Log.d(TAG, "writingBtnClick: writing data: " + requestJSONObject.toString() );
         volley.postJSONObjectString(requestJSONObject, url, new Response.Listener<String>() {
 
             @Override
@@ -130,7 +132,12 @@ public class WritingActivity extends AppCompatActivity {
                 setResult(completeCode);
                 finish();
             }
-        }, null);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
     }
 
     private void classifyBoard() {

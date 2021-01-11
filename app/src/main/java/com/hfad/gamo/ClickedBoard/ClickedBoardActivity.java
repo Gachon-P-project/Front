@@ -244,6 +244,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     }
 
     private void inquirePostingsOfBoard() {
+        Log.d(TAG, "inquirePostingsOfBoard: url : " + urlForInquirePostingsOfBoard);
         volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

@@ -35,6 +35,7 @@ import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
 
+    private static final String TAG = "ReplyAdapter";
     private JSONArray JSONArrayData = null;
     private ClickedPostingActivity clickedPostingActivity = null;
     private HashMap<Integer, JSONArray> toWritingNestedReplyActivity = null;
@@ -213,14 +214,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     }
 
     private void saveDataForWritingNestedReplyActivity(JSONObject reply_data, int depth,int reply_no, int bundle_id) {
-
         if(depth == 0) {
             JSONArray data = new JSONArray();
             data.put(reply_data);
             toWritingNestedReplyActivity.put(reply_no, data);
         } else {
             JSONArray data = toWritingNestedReplyActivity.get(bundle_id);
-             data.put(reply_data);
+            data.put(reply_data);
         }
     }
 
