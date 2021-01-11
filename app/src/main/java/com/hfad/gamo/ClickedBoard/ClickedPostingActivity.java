@@ -263,7 +263,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         } else if (requestCode == WritingUpdateActivityCode) {
             if(resultCode == WritingUpdateActivity.getUpdateResponseCode()) {
                 if(called_onStart) {
-                    setViewText("", "", "", "", "");
+                    setViewText("", "","", "", "", "");
                 }
                 showUpdatedPosting();
                 showAllReplies();
@@ -394,10 +394,10 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         activity_clicked_posting_swipe = findViewById(R.id.activity_clicked_posting_swipe);
     }
 
-    private void setViewText(String titleText, String dateText, String contentsText, String replyCntText,
+    private void setViewText(String titleText, String nickNameText, String dateText, String contentsText, String replyCntText,
                              String postLikeText) {
         title.setText(titleText);
-        nickName.setText("익명");
+        nickName.setText(nickNameText);
         date.setText(dateText);
         contents.setText(contentsText);
         reply_cnt.setText(replyCntText);
@@ -593,6 +593,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         String replyCntText = null;
         String postLikeText = null;
         String wrt_date = null;
+        String nickName = null;
         int like_user = -1;
 
         if(realTimeDataForUpdatePosting != null) {
@@ -604,15 +605,16 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 replyCntText = realTimeDataForUpdatePosting.getString("reply_cnt");
                 postLikeText = realTimeDataForUpdatePosting.getString("like_cnt");
                 like_user = realTimeDataForUpdatePosting.getInt("like_user");
+                nickName = realTimeDataForUpdatePosting.getString("nickname");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             wrt_date = processServerDateToAndroidDate(wrt_date);
-            setViewText(titleText, wrt_date, contentsText, replyCntText, postLikeText );
+            setViewText(titleText,nickName, wrt_date, contentsText, replyCntText, postLikeText );
             initPostLikeUsingUserValue(like_user);
             menu_toolbar_clicked_posting_three_dots.setEnabled(true);
         } else {
-            setViewText("존재하지 않는 게시물 입니다.", "방금","","0", "0" );
+            setViewText("존재하지 않는 게시물 입니다.","익명" , "방금","","0", "0" );
             post_like_img.setEnabled(false);
             postReply_et.setEnabled(false);
             postReply_iv.setEnabled(false);

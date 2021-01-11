@@ -47,6 +47,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
         TextView board_date;
         TextView board_post_like;
         TextView board_reply_cnt;
+        TextView nickname;
         View view;
         toClickedPosting toClickedPosting;
         JSONObject forUpdatePosting;
@@ -61,6 +62,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             board_date = itemView.findViewById(R.id.board_date);
             board_post_like = itemView.findViewById(R.id.clicked_board_recycler_item_post_like_text);
             board_reply_cnt = itemView.findViewById(R.id.clicked_board_recycler_item_reply_cnt);
+            nickname = itemView.findViewById(R.id.clicked_board_recycler_item_nickname);
             view = itemView;
         }
     }
@@ -93,6 +95,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
             wrt_date = data.getString("wrt_date");
             holder.board_reply_cnt.setText(data.getString("reply_cnt"));
             holder.board_post_like.setText(data.getString("like_cnt"));
+            holder.nickname.setText(data.getString("nickname"));
         } catch(JSONException e) {
             e.printStackTrace();
             Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
