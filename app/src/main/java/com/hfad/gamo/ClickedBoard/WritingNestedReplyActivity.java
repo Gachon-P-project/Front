@@ -53,11 +53,12 @@ public class WritingNestedReplyActivity extends AppCompatActivity implements Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nested_reply);
 
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         initDefaultUrlOfComponent();
         doAllFindViewById();
         initVolley();
         initSharedPreference();
-        
+
         user_number = pref.getString("number", null);
 
         Intent receivedIntent = getIntent();

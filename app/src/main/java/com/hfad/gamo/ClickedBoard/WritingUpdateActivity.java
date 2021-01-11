@@ -19,6 +19,9 @@ import com.hfad.gamo.VolleyForHttpMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.hfad.gamo.Component.sharedPreferences;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+
 public class WritingUpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final static int update = 10;
@@ -55,7 +58,7 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing_update);
-
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         initDefaultUrlOfComponent();
 
         Intent intent = getIntent();

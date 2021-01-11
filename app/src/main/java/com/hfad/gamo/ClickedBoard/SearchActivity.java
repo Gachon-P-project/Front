@@ -60,6 +60,7 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
 
         Component.default_url = getString(R.string.defaultUrl);
 
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         initSharedPreferencesOfComponent();
         initVolley();
 
@@ -170,11 +171,8 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
                     recyclerView.removeAllViews();
                     llSearchDescription.setVisibility(View.GONE);
                     llSearchNoResult.setVisibility(View.VISIBLE);
-
-
                 } else {
                     try {
-
                         requestJSONArray = response;
                         llSearchDescription.setVisibility(View.GONE);
                         llSearchNoResult.setVisibility(View.GONE);
@@ -183,7 +181,6 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
                 callback.onSuccess();
                 loadingDialog.finish();

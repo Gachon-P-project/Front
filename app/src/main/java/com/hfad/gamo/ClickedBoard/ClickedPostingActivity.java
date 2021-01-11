@@ -49,6 +49,7 @@ import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 import static com.hfad.gamo.StateKt.BOARD_FREE;
 import static com.hfad.gamo.StateKt.BOARD_MAJOR;
 import static com.hfad.gamo.StateKt.BOARD_SUBJECT;
+import static com.hfad.gamo.Component.sharedPreferences;
 
 public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
 
@@ -118,6 +119,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         writer_number = toClickedPosting.getUser_no();
 
         prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+
 //        user_number = prefs.getString("number", null);
         user_number = DataIOKt.getUserNo();
         major = DataIOKt.getDepartment();
@@ -174,7 +177,6 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home :
                 finish();
@@ -375,7 +377,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
         tvToolbarTitle = findViewById(R.id.tv_clicked_posting_toolbar_title);
         imgBtnToolbarBack = findViewById(R.id.img_btn_clicked_posting_toolbar_back);
-        tvToolbarTitle.setText(toClickedPosting.getBoard_title());
+        tvToolbarTitle.setText(getToolBarTitle());
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
@@ -388,6 +390,25 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private void initView() {
         doAllFindViewById();
         showUpdatedPosting();
+    }
+
+    private String getToolBarTitle() {
+        String toolBarTitle =null;
+        switch (boardType) {
+            case BOARD_SUBJECT:
+                toolBarTitle = toClickedPosting.getBoard_title();
+                break;
+            case BOARD_FREE:
+                toolBarTitle = "자유게시판";
+                break;
+            case BOARD_MAJOR:
+                toolBarTitle = major;
+                break;
+            default:
+                break;
+        }
+
+        return toolBarTitle;
     }
 
     private void doAllFindViewById() {

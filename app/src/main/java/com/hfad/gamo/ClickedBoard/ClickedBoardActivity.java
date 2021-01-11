@@ -61,7 +61,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_board);
 
-
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         initDefaultUrlOfComponent();
         initSharedPreferencesOfComponent();
         doAllFindViewById();

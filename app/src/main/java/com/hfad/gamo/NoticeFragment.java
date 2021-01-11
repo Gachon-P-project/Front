@@ -43,7 +43,10 @@ import org.json.JSONObject;
 
 import java.util.regex.Pattern;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.hfad.gamo.Component.default_url;
+import static com.hfad.gamo.Component.sharedPreferences;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 import static com.hfad.gamo.DataIOKt.getNotificationSetting;
 import static com.hfad.gamo.DataIOKt.setNotificationSetting;
 
@@ -80,7 +83,7 @@ public class NoticeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setHasOptionsMenu(true);
-
+        sharedPreferences = getActivity().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         dept = DataIOKt.getDepartment();
 
 //        키보드 제어 변수

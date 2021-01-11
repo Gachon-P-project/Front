@@ -23,6 +23,9 @@ import com.hfad.gamo.VolleyForHttpMethod;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.hfad.gamo.Component.sharedPreferences;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+
 public class WritingActivity extends AppCompatActivity {
 
     public static final int completeCode = 10;
@@ -48,6 +51,7 @@ public class WritingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
 
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         Component.default_url = getString(R.string.defaultUrl);
         // 제목
         title_edit = findViewById(R.id.board_write_title_edit);

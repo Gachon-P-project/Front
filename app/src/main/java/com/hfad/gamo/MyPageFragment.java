@@ -51,14 +51,12 @@ public class MyPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         prefs = getActivity().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         username = prefs.getString("name", null);
         major = prefs.getString("department", null);
         nickname = prefs.getString("nickname", "-");
         studnetId = prefs.getString("number", null);
         myPhotoUrl = prefs.getString("image", null);
-
     }
 
     @Override
@@ -141,7 +139,6 @@ public class MyPageFragment extends Fragment {
                 dialog.setDialogHeight(0.3);
                 dialog.setTvInfoAlignment(View.TEXT_ALIGNMENT_CENTER);
                 dialog.show();
-
             }
         });
 

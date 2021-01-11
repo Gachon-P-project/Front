@@ -32,6 +32,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 //import org.w3c.dom.Document;
 
+import static com.hfad.gamo.Component.sharedPreferences;
 import static com.hfad.gamo.DataIOKt.appConstantPreferences;
 
 public class NoticeDetailActivity extends AppCompatActivity implements View.OnClickListener{
@@ -57,6 +58,7 @@ public class NoticeDetailActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_notice_detail);
 
         Component.default_url = getString(R.string.defaultUrl);
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
         context = getApplicationContext();
 

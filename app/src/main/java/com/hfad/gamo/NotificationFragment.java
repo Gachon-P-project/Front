@@ -33,6 +33,10 @@ import org.json.JSONException;
 
 import java.util.Objects;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.hfad.gamo.Component.sharedPreferences;
+import static com.hfad.gamo.DataIOKt.appConstantPreferences;
+
 public class NotificationFragment extends Fragment {
 
     private static final String TAG = "NotificationFragment";
@@ -57,7 +61,7 @@ public class NotificationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-
+        sharedPreferences = getActivity().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(this.getContext()));
         Component.shared_notification_data = getActivity().getSharedPreferences("notification_data", Context.MODE_PRIVATE);
         unread = DataIOKt.getUnread();
