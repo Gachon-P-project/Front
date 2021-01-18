@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hfad.gamo">
+    package="com.gachon.moga">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,21 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AgreementTermsActivity" />
-        <activity android:name=".ClickedBoard.WritingUpdateActivity" />
-        <activity android:name=".NoticeDetailActivity" />
-        <activity android:name=".ClickedBoard.WritingNestedReplyActivity" />
-        <activity android:name=".StartGuideActivity" />
-        <activity android:name=".ClickedBoard.ClickedPostingActivity" />
-        <activity android:name=".ClickedBoard.SearchActivity" />
+        <activity android:name="com.gachon.moga.AgreementTermsActivity" />
+        <activity android:name="com.gachon.moga.ClickedBoard.WritingUpdateActivity" />
+        <activity android:name="com.gachon.moga.NoticeDetailActivity" />
+        <activity android:name="com.gachon.moga.ClickedBoard.WritingNestedReplyActivity" />
+        <activity android:name="com.gachon.moga.StartGuideActivity" />
+        <activity android:name="com.gachon.moga.ClickedBoard.ClickedPostingActivity" />
+        <activity android:name="com.gachon.moga.ClickedBoard.SearchActivity" />
         <activity
-            android:name=".ClickedBoard.WritingActivity"
+            android:name="com.gachon.moga.ClickedBoard.WritingActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".ClickedBoard.ClickedBoardActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name="com.gachon.moga.ClickedBoard.ClickedBoardActivity" />
+        <activity android:name="com.gachon.moga.MainActivity" />
+        <activity android:name="com.gachon.moga.LoginActivity" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.gachon.moga.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -41,7 +41,7 @@
             android:required="false" />
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name="com.gachon.moga.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

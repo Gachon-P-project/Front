@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".NotificationFragment">
+    tools:context="com.gachon.moga.NotificationFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_notification"
