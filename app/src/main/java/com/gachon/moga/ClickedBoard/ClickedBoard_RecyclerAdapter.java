@@ -31,12 +31,20 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
     private JSONArray JSONArrayData = null;
     private final String board_title;
     private final int boardType;
+    private Integer pageNum;
 
 
     ClickedBoard_RecyclerAdapter(JSONArray list, String board_title, int boardType) {
         this.JSONArrayData = list;
         this.board_title = board_title;
         this.boardType = boardType;
+    }
+
+    ClickedBoard_RecyclerAdapter(JSONArray list, String board_title, int boardType, Integer pageNum) {
+        this.JSONArrayData = list;
+        this.board_title = board_title;
+        this.boardType = boardType;
+        this.pageNum = pageNum;
     }
 
 
@@ -123,6 +131,7 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
                 intent.putExtra("toClickedPosting", holder.toClickedPosting);
                 intent.putExtra("forUpdatePosting", holder.forUpdatePosting.toString());
                 intent.putExtra("boardType", boardType);
+                intent.putExtra("page_number", pageNum);
                 v.getContext().startActivity(intent);
             }
         });
@@ -197,4 +206,6 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
     public int getItemCount() {
         return JSONArrayData.length();
     }
+
+
 }

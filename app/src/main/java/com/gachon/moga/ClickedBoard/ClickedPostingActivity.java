@@ -46,6 +46,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
+import static com.gachon.moga.DataIOKt.amountPerOnePage;
 import static com.gachon.moga.StateKt.BOARD_FREE;
 import static com.gachon.moga.StateKt.BOARD_MAJOR;
 import static com.gachon.moga.StateKt.BOARD_SUBJECT;
@@ -90,11 +91,12 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     private String professor_name;
     private String post_no;
     private String writer_number;
-    private String user_number;
+    private int user_number;
+    private int page_number;
     private boolean isLiked;
     private String forUpdatePosting = null;
     private JSONObject dataForUpdatePosting = null;
-    private JSONObject realTimeDataForUpdatePosting = null;
+    private JSONObject realTimeDataForPosting = null;
     private String major;
     private int boardType;
     private boolean checkInitThreeDots = false;
@@ -113,6 +115,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         toClickedPosting = intent.getParcelableExtra("toClickedPosting");
         forUpdatePosting = intent.getExtras().getString("forUpdatePosting");
         boardType = intent.getIntExtra("boardType", -1);
+        page_number = intent.getIntExtra("page_number", -1);
+
         initDataForInquirePostingsOfBoard();
 
         post_no = toClickedPosting.getPost_no();
@@ -122,7 +126,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         sharedPreferences = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
 //        user_number = prefs.getString("number", null);
-        user_number = DataIOKt.getUserNo();
+        user_number = Integer.parseInt(DataIOKt.getUserNo());
         major = DataIOKt.getDepartment();
 
         initVolley();
@@ -137,7 +141,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         postReply_iv.setOnClickListener(this);
         post_like_img.setOnClickListener(this);
 
-        inquireReplies();
+        /*inquireReplies();*/
     }
 
     @Override
@@ -165,7 +169,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         menu_toolbar_clicked_posting_three_dots = menu.findItem(R.id.menu_toolbar_clicked_posting_three_dots);
         checkInitThreeDots = true;
 
-        if (!writer_number.equals(user_number)) {
+        if (!writer_number.equals(String.valueOf(user_number))) {
             menu_toolbar_clicked_posting_three_dots.setVisible(false);
         } else {
             if(!checkCallInquirePostingsOfBoard)
@@ -183,7 +187,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 return true;
             case R.id.menu_toolbar_clicked_posting_three_dots :
                 displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
-                ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this, toClickedPosting, forUpdatePosting, realTimeDataForUpdatePosting);
+                ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this, toClickedPosting, forUpdatePosting, realTimeDataForPosting);
                 clickedPostingDialog.setBoardType(boardType);
                 clickedPostingDialog.show();
                 WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();
@@ -278,7 +282,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 if(called_onStart) {
                     setViewText("", "","", "", "", "");
                 }
-                showUpdatedPosting();
+                inquirePostingsOfBoard();
+                /*showPostingContent();*/
                 showAllReplies();
             }
         }
@@ -287,7 +292,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     @Override
     public void onRefresh() {
         activity_clicked_posting_swipe.setEnabled(false);
-        showUpdatedPosting();
+        /*showPostingContent();*/
+        inquirePostingsOfBoard();
         showAllReplies();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -389,8 +395,12 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
 
     private void initView() {
         doAllFindViewById();
-        showUpdatedPosting();
+        inquirePostingsOfBoard();
+        /*showPostingContent();*/
+        inquireReplies();
     }
+
+
 
     private String getToolBarTitle() {
         String toolBarTitle =null;
@@ -456,7 +466,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfSubjectBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfSubjectBoard,post_no));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject_name, professor_name,user_number));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject_name, professor_name, user_number, page_number));
                 break;
             case BOARD_FREE:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
@@ -464,7 +474,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfFreeBoard,post_no));
 //                urlDeleteReply = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
 //                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfFreeBoard));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard, BOARD_FREE, user_number));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard, BOARD_FREE, user_number, page_number));
                 break;
             case BOARD_MAJOR:
 //                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard));
@@ -472,7 +482,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard, post_no));
 //                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
 //                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard, BOARD_MAJOR, user_number, major));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard, BOARD_MAJOR, user_number, major, page_number));
                 break;
         }
     }
@@ -578,11 +588,11 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
     }
 
 
-    private void showUpdatedPosting() {
+    /*private void showPostingContent() {
         inquirePostingsOfBoard();
     }
-
-    private JSONObject findUpdatedPosting(JSONArray ReceivedJsonArray) {
+*/
+    private JSONObject findCurrentPosting(JSONArray ReceivedJsonArray) {
         JSONObject jsonObject;
         int comparisonPostNo;
         for(int i = 0 ; i < ReceivedJsonArray.length(); i++) {
@@ -604,11 +614,46 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                onResponseInquirePostingsOfBoard(response);
+                int firstPostNum = findFirstPostNum(response);
+                int lastPostNum = findLastPostNum(response);
+                int currentPostNum = Integer.parseInt(post_no);
+
+                // 삭제된 게시물로 보여주기
+                // 삭제된 현재 게시물의 postNum 가 현재 page 뿐만 아니라 앞의 page 안에도 없는 경우
+                if(currentPostNum > lastPostNum) {
+                    showPostingContent(response);
+                }
+
+                if(firstPostNum <= currentPostNum && currentPostNum <= lastPostNum) {
+                    showPostingContent(response);
+                } else if(currentPostNum < firstPostNum) {
+                    page_number--;
+                    initUrl();
+                    inquirePostingsOfBoard();
+                }
             }
         });
     }
 
+    private int findFirstPostNum(JSONArray response) {
+        int firstPostNum = -1;
+        try {
+            firstPostNum = response.getJSONObject(0).getInt("post_no");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return firstPostNum;
+    }
+
+    private int findLastPostNum(JSONArray response) {
+        int LastPostNum = -1;
+        try {
+            LastPostNum = response.getJSONObject(amountPerOnePage - 1).getInt("post_no");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return LastPostNum;
+    }
 
 
     private void updateToClickedPosting(String title, String board) {
@@ -616,8 +661,8 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         toClickedPosting.setPost_contents(board);
     }
 
-    private void onResponseInquirePostingsOfBoard(JSONArray response) {
-        realTimeDataForUpdatePosting = findUpdatedPosting(response);
+    private void showPostingContent(JSONArray response) {
+        realTimeDataForPosting = findCurrentPosting(response);
         String titleText = null;
         String contentsText = null;
         String replyCntText = null;
@@ -626,16 +671,16 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
         String nickName = null;
         int like_user = -1;
 
-        if(realTimeDataForUpdatePosting != null) {
+        if(realTimeDataForPosting != null) {
 
             try {
-                titleText = realTimeDataForUpdatePosting.getString("post_title");
-                wrt_date = realTimeDataForUpdatePosting.getString("wrt_date");
-                contentsText = realTimeDataForUpdatePosting.getString("post_contents");
-                replyCntText = realTimeDataForUpdatePosting.getString("reply_cnt");
-                postLikeText = realTimeDataForUpdatePosting.getString("like_cnt");
-                like_user = realTimeDataForUpdatePosting.getInt("like_user");
-                nickName = realTimeDataForUpdatePosting.getString("nickname");
+                titleText = realTimeDataForPosting.getString("post_title");
+                wrt_date = realTimeDataForPosting.getString("wrt_date");
+                contentsText = realTimeDataForPosting.getString("post_contents");
+                replyCntText = realTimeDataForPosting.getString("reply_cnt");
+                postLikeText = realTimeDataForPosting.getString("like_cnt");
+                like_user = realTimeDataForPosting.getInt("like_user");
+                nickName = realTimeDataForPosting.getString("nickname");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

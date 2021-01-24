@@ -27,7 +27,7 @@ import com.gachon.moga.R;
 
 import static com.gachon.moga.Component.default_url;
 import static com.gachon.moga.Component.sharedPreferences;
-
+import static com.gachon.moga.Component.shared_notification_data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         loadingDialog = new LoadingDialog();
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE);
+        shared_notification_data = getSharedPreferences("notification_data", Context.MODE_PRIVATE);
 
         pref_token = getSharedPreferences("token", Context.MODE_PRIVATE);
 

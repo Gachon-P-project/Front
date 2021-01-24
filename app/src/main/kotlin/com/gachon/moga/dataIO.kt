@@ -10,7 +10,7 @@ import kotlin.collections.HashSet
 
 private const val TAG = "DataIOkt"
 const val appConstantPreferences = "Moga"
-
+const val amountPerOnePage = 10
 
 inline fun <reified T> setSharedItem(key: String, data: T) = sharedPreferences.edit().apply {
     when (T::class) {

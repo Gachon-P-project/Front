@@ -1,5 +1,6 @@
 package com.gachon.moga.ClickedBoard;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
 import static com.gachon.moga.DataIOKt.getDepartment;
+import static com.gachon.moga.DataIOKt.amountPerOnePage;
 import static com.gachon.moga.Component.sharedPreferences;
 import static com.gachon.moga.DataIOKt.getUserNo;
 import static com.gachon.moga.StateKt.BOARD_FREE;
@@ -43,15 +45,21 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     private static final int requestCodeToWritingActivity = 0;
     private static final String TAG = "ClickedBoardActivity";
     private static int boardType;
+    private boolean inOnRefresh = false;
+    private boolean isFinalPage = false;
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
     private ClickedBoard_RecyclerAdapter adapter;
-    private JSONArray responseJSONArray = new JSONArray();
+    private final JSONArray responseJSONArray = new JSONArray();
+    private RecyclerView recyclerView;
     private SwipeRefreshLayout swipe_clicked_board;
     private ArrayList<String> a = new ArrayList<>();
     private String urlForInquirePostingsOfBoard;
     private String board_title, subject;
-    private String professor, user_no, department;
+    private String professor, department;
+    private int user_no;
+    private Integer page_num = 0;
+    private final int startIndex = 0;
     private ConstraintLayout activity_clicked_board_sleep_layout;
     private TextView activity_clicked_board_sleep_tv, textViewToolbarTitle;
     private ImageButton imageButtonToolbarBack, imageButtonSearch, imageButtonNewWriting;
@@ -128,10 +136,12 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
 
     @Override
     public void onRefresh() {
+        inOnRefresh = true;
         swipe_clicked_board.setEnabled(false);
         clearRecyclerData();
+        inquirePostingsOfBoard();
 
-        volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
+        /*volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
@@ -152,7 +162,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
                     }
                 }, 1000);
             }
-        });
+        });*/
     }
 
     private void doAllFindViewById() {
@@ -163,6 +173,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         imageButtonSearch = findViewById(R.id.imageButton_clickedBoard_search);
         imageButtonNewWriting = findViewById(R.id.imageButton_clickedBoard_newWriting);
         swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
+        recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
     }
 
     private void initBoardType() {
@@ -184,13 +195,13 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     private void initUrl() {
         switch(boardType) {
             case BOARD_SUBJECT:
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject, professor, user_no));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject, professor, user_no, page_num));
                 break;
             case BOARD_FREE:
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no, page_num));
                 break;
             case BOARD_MAJOR:
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no, department));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no, department, page_num));
                 break;
         }
     }
@@ -206,9 +217,8 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     }
 
     private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title, boardType);
+        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title, boardType, page_num);
         recyclerView.setAdapter(adapter);
     }
 
@@ -218,7 +228,7 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         boardType = intent.getIntExtra("boardType", -1);
         board_title = intent.getExtras().getString("title");
         professor = intent.getExtras().getString("professor", "");
-        user_no = getUserNo();
+        user_no = Integer.parseInt(getUserNo());
         department = getDepartment();
     }
 
@@ -245,7 +255,6 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
     }
 
     private void inquirePostingsOfBoard() {
-        Log.d(TAG, "inquirePostingsOfBoard: url : " + urlForInquirePostingsOfBoard);
         volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -257,8 +266,28 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
                         e.printStackTrace();
                     }
                 }
+
                 changeViewIfDoNotHaveData();
-                adapter.notifyDataSetChanged();
+                /*adapter.notifyDataSetChanged();*/
+
+                if(response.length() == amountPerOnePage) {
+                    adapter.notifyItemRangeChanged(startIndex, amountPerOnePage);
+                    page_num++;
+                } else {
+                    adapter.notifyItemRangeChanged(startIndex, response.length());
+                    isFinalPage = true;
+                }
+
+                if(inOnRefresh) {
+                    swipe_clicked_board.setRefreshing(false);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipe_clicked_board.setEnabled(true);
+                        }
+                    }, 1000);
+                    inOnRefresh = false;
+                }
             }
         });
     }
@@ -268,15 +297,48 @@ public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefr
         imageButtonSearch.setOnClickListener(this);
         imageButtonNewWriting.setOnClickListener(this);
         swipe_clicked_board.setOnRefreshListener(this);
+        recyclerView.addOnScrollListener(getOnScrollListener());
     }
+
+    private RecyclerView.OnScrollListener getOnScrollListener() {
+        RecyclerView.OnScrollListener result = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+                if (lastVisibleItemPosition == itemTotalCount && !isFinalPage) {
+                    inquirePostingsOfBoard();
+                }
+            }
+        };
+        return result;
+    }
+
 
 
     private void clearRecyclerData() {
         int original_length = responseJSONArray.length();
         int current_length = original_length;
-        for(int i = 0; i < original_length; i++) {
+        for (int i = 0; i < original_length; i++) {
             responseJSONArray.remove(--current_length);
         }
+
+        page_num = 0;
+        isFinalPage = false;
+        /* if(!isReLoadOfPostings) {
+            int original_length = responseJSONArray.length();
+            int current_length = original_length;
+            for (int i = 0; i < original_length; i++) {
+                responseJSONArray.remove(--current_length);
+            }
+        } else {
+            startIndexForEndlessScroll = page_num * 10;
+            int current_length = responseJSONArray.length();
+            do {
+                responseJSONArray.remove(--current_length);
+            } while (startIndexForEndlessScroll != current_length);
+        }*/
     }
 
     @Override
