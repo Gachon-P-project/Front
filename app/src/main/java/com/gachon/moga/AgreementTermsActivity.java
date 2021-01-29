@@ -8,12 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class AgreementTermsActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class AgreementTermsActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     Button btnAgree;
     CheckBox chkAgreeService, chkAgreePersonal, chkAgreeAll;
+    TextView tvAgreeService, tvAgreePersonal, tvAgreeAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,9 @@ public class AgreementTermsActivity extends AppCompatActivity implements Compoun
         chkAgreeService = findViewById(R.id.chk_agreement_terms_service);
         chkAgreePersonal = findViewById(R.id.chk_agreement_terms_personal);
         chkAgreeAll = findViewById(R.id.chk_agreement_terms_all);
+        tvAgreeService = findViewById(R.id.tv_agreement_terms_service);
+        tvAgreePersonal = findViewById(R.id.tv_agreement_terms_personal);
+        tvAgreeAll = findViewById(R.id.tv_agreement_terms_all);
 
 //        chkAgree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
@@ -38,19 +43,10 @@ public class AgreementTermsActivity extends AppCompatActivity implements Compoun
         chkAgreePersonal.setOnCheckedChangeListener(this);
         chkAgreeAll.setOnCheckedChangeListener(this);
 
-        btnAgree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (chkAgreeAll.isChecked()) {
-                    Intent intent = new Intent(AgreementTermsActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(AgreementTermsActivity.this, "모든 약관에 동의해야만 이용이 가능합니다.", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
-
+        btnAgree.setOnClickListener(this);
+        tvAgreeService.setOnClickListener(this);
+        tvAgreePersonal.setOnClickListener(this);
+        tvAgreeAll.setOnClickListener(this);
     }
 
     @Override
@@ -76,7 +72,30 @@ public class AgreementTermsActivity extends AppCompatActivity implements Compoun
                     chkAgreePersonal.setChecked(false);
                     btnAgree.setBackgroundResource(R.drawable.btn_lightgray);
                 }
+                break;
+        }
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_agreement_terms_service:
+                chkAgreeService.setChecked(!chkAgreeService.isChecked());
+                break;
+            case R.id.tv_agreement_terms_personal:
+                chkAgreePersonal.setChecked(!chkAgreePersonal.isChecked());
+                break;
+            case R.id.chk_agreement_terms_all:
+                chkAgreeAll.setChecked(!chkAgreeAll.isChecked());
+                break;
+            case R.id.btn_agreement_terms_next:
+                if (chkAgreeAll.isChecked()) {
+                    Intent intent = new Intent(AgreementTermsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(AgreementTermsActivity.this, "모든 약관에 동의해야만 이용이 가능합니다.", Toast.LENGTH_LONG).show();
+                }
+                break;
         }
     }
 }

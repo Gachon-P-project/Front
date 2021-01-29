@@ -23,7 +23,7 @@
     />
 
     <TextView
-        android:id="@+id/tv_agreement_terms_service"
+        android:id="@+id/tv_agreement_terms_service_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="서비스이용약관"
@@ -40,10 +40,10 @@
         android:id="@+id/scrollview_agreement_terms_service"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_agreement_terms_service"
+        app:layout_constraintStart_toStartOf="@+id/tv_agreement_terms_service_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/tv_agreement_terms_service"
+        app:layout_constraintTop_toBottomOf="@+id/tv_agreement_terms_service_title"
         app:layout_constraintBottom_toTopOf="@+id/ll_agreement_terms_service"
         android:layout_marginEnd="20dp"
         android:layout_marginVertical="10dp"
@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="@+id/btn_agreement_terms_next"
         app:layout_constraintEnd_toEndOf="@+id/btn_agreement_terms_next"
         app:layout_constraintTop_toBottomOf="@+id/scrollview_agreement_terms_service"
-        app:layout_constraintBottom_toTopOf="@+id/tv_agreement_terms_personal"
+        app:layout_constraintBottom_toTopOf="@+id/tv_agreement_terms_personal_title"
         android:layout_marginVertical="0dp"
         android:gravity="center_vertical"
         >
@@ -80,17 +80,18 @@
             android:gravity="center"
             />
         <TextView
+            android:id="@+id/tv_agreement_terms_service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="서비스 이용약관 동의"
             android:textSize="15sp"
-            android:layout_marginStart="10dp"
+            android:paddingStart="10dp"
             android:textColor="@color/BLACK"
             />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_agreement_terms_personal"
+        android:id="@+id/tv_agreement_terms_personal_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="개인정보처리방침"
@@ -108,10 +109,10 @@
         android:id="@+id/scrollview_agreement_terms_personal"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_agreement_terms_personal"
+        app:layout_constraintStart_toStartOf="@+id/tv_agreement_terms_personal_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/tv_agreement_terms_personal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_agreement_terms_personal_title"
         app:layout_constraintBottom_toTopOf="@+id/ll_agreement_terms_personal"
         app:layout_constraintVertical_bias="0.0"
         android:layout_marginEnd="20dp"
@@ -148,11 +149,12 @@
             android:layout_height="20dp"
             />
         <TextView
+            android:id="@+id/tv_agreement_terms_personal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="개인정보처리방 동의"
             android:textSize="15sp"
-            android:layout_marginStart="20dp"
+            android:paddingStart="10dp"
             android:textColor="@color/BLACK"
             />
     </LinearLayout>
@@ -175,11 +177,12 @@
             android:layout_height="20dp"
             />
         <TextView
+            android:id="@+id/tv_agreement_terms_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="전체 동의"
             android:textSize="15sp"
-            android:layout_marginStart="20dp"
+            android:paddingStart="10dp"
             android:textColor="@color/BLACK"
             />
     </LinearLayout>
