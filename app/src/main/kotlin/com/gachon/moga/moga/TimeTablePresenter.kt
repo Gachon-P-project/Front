@@ -1,4 +1,4 @@
-package com.gachon.moga.timeTable
+package com.gachon.moga.moga
 
 import com.github.eunsiljo.timetablelib.data.TimeData
 import com.github.eunsiljo.timetablelib.data.TimeTableData

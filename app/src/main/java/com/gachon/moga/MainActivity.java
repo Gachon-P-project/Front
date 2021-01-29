@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     // TEST GIT
     private FragmentManager fm = getSupportFragmentManager();
-    private com.gachon.moga.timeTable.TimeTableFragment f_TimeTable2 = new com.gachon.moga.timeTable.TimeTableFragment();
+    private com.gachon.moga.moga.TimeTableFragment f_TimeTable2 = new com.gachon.moga.moga.TimeTableFragment();
     private NoticeFragment f_Notice = new NoticeFragment();
     private BoardFragment f_Board = new BoardFragment();
     private MyPageFragment f_MyPage = new MyPageFragment();
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         switch (itemId) {
             case R.id.bottomNavigationTimeTable: {
                 Fragment fragment = fm.findFragmentById(R.id.fragment);
-                if(!(fragment instanceof com.gachon.moga.timeTable.TimeTableFragment)) {
+                if(!(fragment instanceof com.gachon.moga.moga.TimeTableFragment)) {
                     loadingDialog.start(this);
                     fragmentTransaction.replace(R.id.fragment, f_TimeTable2).commitAllowingStateLoss();
                 }

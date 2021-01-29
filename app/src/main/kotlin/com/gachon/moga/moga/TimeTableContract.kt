@@ -1,4 +1,4 @@
-package com.gachon.moga.timeTable
+package com.gachon.moga.moga
 
 import android.content.Context
 import com.github.eunsiljo.timetablelib.data.TimeTableData

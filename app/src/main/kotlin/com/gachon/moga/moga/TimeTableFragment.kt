@@ -1,4 +1,4 @@
-package com.gachon.moga.timeTable
+package com.gachon.moga.moga
 
 import android.annotation.SuppressLint
 import android.content.Context
