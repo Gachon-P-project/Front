@@ -43,7 +43,6 @@ import static com.gachon.moga.StateKt.BOARD_SUBJECT;
 public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
 
     private static final int requestCodeToWritingActivity = 0;
-    private static final String TAG = "ClickedBoardActivity";
     private static int boardType;
     private boolean inOnRefresh = false;
     private boolean isFinalPage = false;
