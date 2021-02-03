@@ -187,7 +187,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 return true;
             case R.id.menu_toolbar_clicked_posting_three_dots :
                 displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
-                ClickedPostingDialog clickedPostingDialog = new ClickedPostingDialog(this, toClickedPosting, forUpdatePosting, realTimeDataForPosting);
+                PostingDialog clickedPostingDialog = new PostingDialog(this, toClickedPosting, forUpdatePosting, realTimeDataForPosting);
                 clickedPostingDialog.setBoardType(boardType);
                 clickedPostingDialog.show();
                 WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();

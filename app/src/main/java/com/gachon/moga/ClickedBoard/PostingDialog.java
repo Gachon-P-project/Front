@@ -11,7 +11,7 @@ import com.gachon.moga.R;
 
 import org.json.JSONObject;
 
-public class ClickedPostingDialog extends Dialog implements View.OnClickListener {
+public class PostingDialog extends Dialog implements View.OnClickListener {
 
 
     private PostingActivity clickedPostingActivity;
@@ -23,8 +23,8 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
     private JSONObject realTimeDataForUpdatePosting;
     private int boardType = -1;
 
-    public ClickedPostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
-//    public ClickedPostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
+    public PostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
+//    public PostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
         super(clickedPostingActivity);
 
         this.clickedPostingActivity = clickedPostingActivity;
