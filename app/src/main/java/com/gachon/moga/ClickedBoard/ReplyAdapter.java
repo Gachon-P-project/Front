@@ -37,7 +37,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
     private static final String TAG = "ReplyAdapter";
     private JSONArray JSONArrayData = null;
-    private ClickedPostingActivity clickedPostingActivity = null;
+    private PostingActivity clickedPostingActivity = null;
     private HashMap<Integer, JSONArray> toWritingNestedReplyActivity = null;
     private float density;
     private DisplayMetrics displayMetrics = null;
@@ -66,9 +66,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
         displayMetrics = activity.getApplicationContext().getResources().getDisplayMetrics();
 
-        if(usingLocation.equals("ClickedPostingActivity")) {
+        if(usingLocation.equals("PostingActivity")) {
             this.toWritingNestedReplyActivity = new HashMap<>();
-            this.clickedPostingActivity = (ClickedPostingActivity) activity;
+            this.clickedPostingActivity = (PostingActivity) activity;
             this.writer_number = clickedPostingActivity.getWriter_number();
         } else {
             this.writer_number = ((WritingNestedReplyActivity) activity).getWriter_number();
@@ -131,7 +131,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
-        if(usingLocation.equals("ClickedPostingActivity")) {
+        if(usingLocation.equals("PostingActivity")) {
             saveDataForWritingNestedReplyActivity(holder.replyForData, depth, reply_no, bundle_id);
         }
 
@@ -276,7 +276,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         final int bundle_id = holder.replyForData.getInt("bundle_id");
         final int reply_no = holder.replyForData.getInt("reply_no");
 
-        if(usingLocation.equals("ClickedPostingActivity")) {
+        if(usingLocation.equals("PostingActivity")) {
             if(depth == 1) {
                 holder.item_replies_reply_layout.setPadding(getPixel(35), getPixel(10),getPixel(5), getPixel(10));
 

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
 
     private Context context;
-    private ClickedPostingActivity clickedPostingActivity = null;
+    private PostingActivity clickedPostingActivity = null;
     private TextView postRereply;
     private TextView deleteReply;
     private int depth;
@@ -30,7 +30,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     private ArrayList<String> dataUsedInWritingNestedReplyActivity = null;
     private ReplyDialogInterface replyDialogInterface = null;
 
-    /*public ReplyWriterDialog(@NonNull Context context, int depth, ClickedPostingActivity clickedPostingActivity) {
+    /*public ReplyWriterDialog(@NonNull Context context, int depth, PostingActivity clickedPostingActivity) {
         super(context);
         this.context = context;
         this.depth = depth;
@@ -38,7 +38,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         this.replyDialogInterface = clickedPostingActivity;
     }*/
 
-    public ReplyWriterDialog(@NonNull Context context, ClickedPostingActivity clickedPostingActivity, JSONObject DataForReply, String writer_number) {
+    public ReplyWriterDialog(@NonNull Context context, PostingActivity clickedPostingActivity, JSONObject DataForReply, String writer_number) {
         super(context);
         this.context = context;
         this.clickedPostingActivity = clickedPostingActivity;
@@ -54,7 +54,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
     }
 
     /*public ReplyWriterDialog(@NonNull Context context, int depth, ArrayList<String> dataUsedInWritingNestedReplyActivity,
-                             ClickedPostingActivity clickedPostingActivity) {
+                             PostingActivity clickedPostingActivity) {
         super(context);
         this.context = context;
         this.depth = depth;
@@ -62,7 +62,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
         this.clickedPostingActivity = clickedPostingActivity;
     }*/
 
-    public ReplyWriterDialog(@NonNull Context context, ClickedPostingActivity clickedPostingActivity,
+    public ReplyWriterDialog(@NonNull Context context, PostingActivity clickedPostingActivity,
                              ArrayList<String> dataUsedInWritingNestedReplyActivity, JSONObject DataForReply, String writer_number) {
         super(context);
         this.context = context;
@@ -109,7 +109,7 @@ public class ReplyWriterDialog extends Dialog implements View.OnClickListener {
             WritingNestedReplyIntent.putStringArrayListExtra("replyData", dataUsedInWritingNestedReplyActivity);
             WritingNestedReplyIntent.putExtra("writerNumber", writer_number);
             WritingNestedReplyIntent.putExtra("boardType",clickedPostingActivity.getBoardType());
-            clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, ClickedPostingActivity.WritingNestedReplyActivityCode);
+            clickedPostingActivity.startActivityForResult(WritingNestedReplyIntent, PostingActivity.WritingNestedReplyActivityCode);
         } else if (v.getId() == R.id.dialogReplyWriter_deleteReply) {
                 replyDialogInterface.onDeleteReplyDialog(depth, reply_no);
         }

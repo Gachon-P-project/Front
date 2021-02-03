@@ -52,9 +52,9 @@ import static com.gachon.moga.StateKt.BOARD_MAJOR;
 import static com.gachon.moga.StateKt.BOARD_SUBJECT;
 import static com.gachon.moga.Component.sharedPreferences;
 
-public class ClickedPostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
+public class PostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "ClickedPostingActivity";
+    private static final String TAG = "PostingActivity";
     public static int WritingNestedReplyActivityCode = 0;
     public static int WritingUpdateActivityCode = 1;
     public static boolean called_onStart = false;
@@ -374,7 +374,7 @@ public class ClickedPostingActivity extends AppCompatActivity implements View.On
                 R.drawable.line_divider);
         recyclerViewForReply.addItemDecoration(dividerItemDecoration);
 
-        replyAdapter = new ReplyAdapter(jsonArrayForReplyAdapter, this, "ClickedPostingActivity");
+        replyAdapter = new ReplyAdapter(jsonArrayForReplyAdapter, this, "PostingActivity");
         recyclerViewForReply.setAdapter(replyAdapter);
         Log.i("recycler!!!" , "initRecyclerViewForReply");
     }

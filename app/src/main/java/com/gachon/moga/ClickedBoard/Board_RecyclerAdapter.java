@@ -127,7 +127,7 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ClickedPostingActivity.class);
+                Intent intent = new Intent(v.getContext(), PostingActivity.class);
                 intent.putExtra("toClickedPosting", holder.toClickedPosting);
                 intent.putExtra("forUpdatePosting", holder.forUpdatePosting.toString());
                 intent.putExtra("boardType", boardType);

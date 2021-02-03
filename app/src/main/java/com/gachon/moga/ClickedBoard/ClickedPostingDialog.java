@@ -14,7 +14,7 @@ import org.json.JSONObject;
 public class ClickedPostingDialog extends Dialog implements View.OnClickListener {
 
 
-    private ClickedPostingActivity clickedPostingActivity;
+    private PostingActivity clickedPostingActivity;
     private ClickedPostingDialogInterface clickedPostingDialogInterface;
     private TextView updatePosting;
     private TextView deletePosting;
@@ -23,8 +23,8 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
     private JSONObject realTimeDataForUpdatePosting;
     private int boardType = -1;
 
-    public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
-//    public ClickedPostingDialog(ClickedPostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
+    public ClickedPostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
+//    public ClickedPostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
         super(clickedPostingActivity);
 
         this.clickedPostingActivity = clickedPostingActivity;
@@ -59,7 +59,7 @@ public class ClickedPostingDialog extends Dialog implements View.OnClickListener
                 intentToWritingUpdateActivity.putExtra("forUpdatePosting", forUpdatePosting);
                 intentToWritingUpdateActivity.putExtra("realTimeDataForUpdatePosting", realTimeDataForUpdatePosting.toString());
                 intentToWritingUpdateActivity.putExtra("boardType", boardType);
-                clickedPostingActivity.startActivityForResult(intentToWritingUpdateActivity, ClickedPostingActivity.WritingUpdateActivityCode);
+                clickedPostingActivity.startActivityForResult(intentToWritingUpdateActivity, PostingActivity.WritingUpdateActivityCode);
                 break;
             case R.id.dialog_clicked_posting_delete:
                 clickedPostingDialogInterface.onDeleteClickedPostingDialog();
