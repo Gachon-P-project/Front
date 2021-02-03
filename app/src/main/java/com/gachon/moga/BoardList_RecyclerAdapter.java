@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gachon.moga.ClickedBoard.ClickedBoardActivity;
+import com.gachon.moga.ClickedBoard.BoardActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +75,7 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
 
     private void postIntent(Context context, String title) {
 
-        final Intent intent = new Intent(context, ClickedBoardActivity.class);
+        final Intent intent = new Intent(context, BoardActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("boardType", boardType);
         if(subject_professorJSONObject != null) {

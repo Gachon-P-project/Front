@@ -15,7 +15,7 @@ import android.widget.TextView
 import com.android.volley.toolbox.Volley
 import com.github.eunsiljo.timetablelib.view.TimeTableView
 import com.gachon.moga.*
-import com.gachon.moga.ClickedBoard.ClickedBoardActivity
+import com.gachon.moga.ClickedBoard.BoardActivity
 import com.gachon.moga.MainActivity
 import com.gachon.moga.VolleyForHttpMethod
 import kotlinx.android.synthetic.main.fragment_timetable.view.*
@@ -176,7 +176,7 @@ class TimeTableFragment : TimeTableContract.View() {
             myView?.mTable?.let {
                 it.setOnTimeItemClickListener { _, _, data ->
                     val professor = jsonObjectForTitle!!.get(data.time.title.split("\n")[0])
-                    val intent = Intent(context, ClickedBoardActivity::class.java)
+                    val intent = Intent(context, BoardActivity::class.java)
                     intent.putExtra("title", data.time.title.split("\n")[0])
                     intent.putExtra("professor", professor.toString())
                     intent.putExtra("boardType", 0)

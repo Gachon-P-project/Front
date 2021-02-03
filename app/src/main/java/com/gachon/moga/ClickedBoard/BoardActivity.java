@@ -40,7 +40,7 @@ import static com.gachon.moga.StateKt.BOARD_MAJOR;
 import static com.gachon.moga.StateKt.BOARD_SUBJECT;
 
 
-public class ClickedBoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
+public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
 
     private static final int requestCodeToWritingActivity = 0;
     private static int boardType;

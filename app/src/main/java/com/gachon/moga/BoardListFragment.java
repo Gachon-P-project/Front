@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.gachon.moga.ClickedBoard.ClickedBoardActivity;
+import com.gachon.moga.ClickedBoard.BoardActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -198,7 +198,7 @@ public class BoardListFragment extends Fragment {
     }*/
 
     private void postIntent(Context context, String title) {
-        final Intent intent = new Intent(context, ClickedBoardActivity.class);
+        final Intent intent = new Intent(context, BoardActivity.class);
         intent.putExtra("title", title);
         try {
             intent.putExtra("professor", subject_professorJSONObject.get(title).toString());
