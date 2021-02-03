@@ -12,7 +12,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -48,7 +47,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     private boolean isFinalPage = false;
     private JSONObject responseJSONObject = new JSONObject();
     private VolleyForHttpMethod volley;
-    private ClickedBoard_RecyclerAdapter adapter;
+    private Board_RecyclerAdapter adapter;
     private final JSONArray responseJSONArray = new JSONArray();
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipe_clicked_board;
@@ -217,7 +216,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
 
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ClickedBoard_RecyclerAdapter(responseJSONArray, board_title, boardType, page_num);
+        adapter = new Board_RecyclerAdapter(responseJSONArray, board_title, boardType, page_num);
         recyclerView.setAdapter(adapter);
     }
 

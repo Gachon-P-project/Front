@@ -40,7 +40,7 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
     private static JSONObject requestJSONObject = new JSONObject();
     private static VolleyForHttpMethod volley;
     private static JSONArray requestJSONArray = new JSONArray();
-    private static ClickedBoard_RecyclerAdapter adapter;
+    private static Board_RecyclerAdapter adapter;
     private String description = null;
     private int boardType;
     private String user_no, professor, subject, department;
@@ -104,7 +104,7 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
     private void initRecyclerView() {
 
         Log.d(TAG, "initRecyclerView: ");
-        adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, subject, boardType);
+        adapter = new Board_RecyclerAdapter(requestJSONArray, subject, boardType);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -200,7 +200,7 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
                     initRecyclerView();
                 }
             });
-            adapter = new ClickedBoard_RecyclerAdapter(requestJSONArray, subject, boardType);
+            adapter = new Board_RecyclerAdapter(requestJSONArray, subject, boardType);
             recyclerView.setAdapter(adapter);
         }
         return true;

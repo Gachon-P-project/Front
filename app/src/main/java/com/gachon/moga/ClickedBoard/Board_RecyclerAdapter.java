@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBoard_RecyclerAdapter.ViewHolder> {
+public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAdapter.ViewHolder> {
 
     private JSONArray JSONArrayData = null;
     private final String board_title;
@@ -34,13 +34,13 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
     private Integer pageNum;
 
 
-    ClickedBoard_RecyclerAdapter(JSONArray list, String board_title, int boardType) {
+    Board_RecyclerAdapter(JSONArray list, String board_title, int boardType) {
         this.JSONArrayData = list;
         this.board_title = board_title;
         this.boardType = boardType;
     }
 
-    ClickedBoard_RecyclerAdapter(JSONArray list, String board_title, int boardType, Integer pageNum) {
+    Board_RecyclerAdapter(JSONArray list, String board_title, int boardType, Integer pageNum) {
         this.JSONArrayData = list;
         this.board_title = board_title;
         this.boardType = boardType;
@@ -78,19 +78,19 @@ public class ClickedBoard_RecyclerAdapter extends RecyclerView.Adapter<ClickedBo
 
     @NonNull
     @Override
-    public ClickedBoard_RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Board_RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.clicked_board_recycler_item, parent, false);
-        ClickedBoard_RecyclerAdapter.ViewHolder vh = new ViewHolder(view);
+        Board_RecyclerAdapter.ViewHolder vh = new ViewHolder(view);
 
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ClickedBoard_RecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final Board_RecyclerAdapter.ViewHolder holder, int position) {
 
         JSONObject data = null;
         String wrt_date = null;
