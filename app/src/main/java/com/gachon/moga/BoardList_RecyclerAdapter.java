@@ -11,24 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gachon.moga.ClickedBoard.ClickedBoardActivity;
-import com.gachon.moga.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAdapter.ViewHolder> {
+public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_RecyclerAdapter.ViewHolder> {
 
     private ArrayList<String> data;
     private JSONObject subject_professorJSONObject;
     private int boardType;
 
-    Board_RecyclerAdapter(ArrayList<String> data, JSONObject jsonObject) {
+    BoardList_RecyclerAdapter(ArrayList<String> data, JSONObject jsonObject) {
         this.data = data;
         this.subject_professorJSONObject = jsonObject;
     }
-    Board_RecyclerAdapter(ArrayList<String> data) {
+    BoardList_RecyclerAdapter(ArrayList<String> data) {
         this.data = data;
     }
 
@@ -46,19 +45,19 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
 
     @NonNull
     @Override
-    public Board_RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BoardList_RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.item_board_list, parent, false);
-        Board_RecyclerAdapter.ViewHolder vh = new Board_RecyclerAdapter.ViewHolder(view);
+        BoardList_RecyclerAdapter.ViewHolder vh = new BoardList_RecyclerAdapter.ViewHolder(view);
 
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final Board_RecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final BoardList_RecyclerAdapter.ViewHolder holder, int position) {
 
         holder.title.setText(data.get(position));
         holder.view.setOnClickListener(new View.OnClickListener() {

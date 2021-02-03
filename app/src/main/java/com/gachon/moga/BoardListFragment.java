@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.gachon.moga.ClickedBoard.ClickedBoardActivity;
-import com.gachon.moga.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,9 +41,9 @@ public class BoardListFragment extends Fragment {
     private RecyclerView dept_recyclerView;
     private RecyclerView subject_recyclerView;
     private RecyclerView community_recyclerView;
-    private Board_RecyclerAdapter dept_adapter;
-    private Board_RecyclerAdapter subject_adapter;
-    private Board_RecyclerAdapter community_adapter;
+    private BoardList_RecyclerAdapter dept_adapter;
+    private BoardList_RecyclerAdapter subject_adapter;
+    private BoardList_RecyclerAdapter community_adapter;
     private ArrayList<String> dept_data = new ArrayList<>();
     private ArrayList<String> subject_data;
     private ArrayList<String> community_data = new ArrayList<>();
@@ -98,7 +97,7 @@ public class BoardListFragment extends Fragment {
         } else {
             dept_recyclerView = view.findViewById(R.id.dept_recyclerView);
             dept_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            dept_adapter = new Board_RecyclerAdapter(dept_data);
+            dept_adapter = new BoardList_RecyclerAdapter(dept_data);
             dept_adapter.setBoardType(StateKt.BOARD_MAJOR);
             dept_recyclerView.setAdapter(dept_adapter);
         }
@@ -109,14 +108,14 @@ public class BoardListFragment extends Fragment {
         } else {
             subject_recyclerView = view.findViewById(R.id.subject_recyclerView);
             subject_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            subject_adapter = new Board_RecyclerAdapter(subject_data, subject_professorJSONObject);
+            subject_adapter = new BoardList_RecyclerAdapter(subject_data, subject_professorJSONObject);
             subject_adapter.setBoardType(StateKt.BOARD_SUBJECT);
             subject_recyclerView.setAdapter(subject_adapter);
         }
 
         community_recyclerView = view.findViewById(R.id.community_recyclerView);
         community_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        community_adapter = new Board_RecyclerAdapter(community_data);
+        community_adapter = new BoardList_RecyclerAdapter(community_data);
         community_adapter.setBoardType(StateKt.BOARD_FREE);
         community_recyclerView.setAdapter(community_adapter);
 
