@@ -1,4 +1,4 @@
-package com.gachon.moga.ClickedBoard;
+package com.gachon.moga.Board;
 
 import android.os.Parcel;
 import android.os.Parcelable;

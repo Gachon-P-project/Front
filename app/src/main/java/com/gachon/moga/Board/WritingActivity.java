@@ -1,4 +1,4 @@
-package com.gachon.moga.ClickedBoard;
+package com.gachon.moga.Board;
 
 import androidx.appcompat.app.AppCompatActivity;
 

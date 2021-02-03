@@ -13,16 +13,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name="com.gachon.moga.AgreementTermsActivity" />
-        <activity android:name="com.gachon.moga.ClickedBoard.WritingUpdateActivity" />
+        <activity android:name="com.gachon.moga.Board.WritingUpdateActivity" />
         <activity android:name="com.gachon.moga.NoticeDetailActivity" />
-        <activity android:name="com.gachon.moga.ClickedBoard.WritingNestedReplyActivity" />
+        <activity android:name="com.gachon.moga.Board.WritingNestedReplyActivity" />
         <activity android:name="com.gachon.moga.StartGuideActivity" />
-        <activity android:name="com.gachon.moga.ClickedBoard.PostingActivity" />
-        <activity android:name="com.gachon.moga.ClickedBoard.SearchActivity" />
+        <activity android:name="com.gachon.moga.Board.PostingActivity" />
+        <activity android:name="com.gachon.moga.Board.SearchActivity" />
         <activity
-            android:name="com.gachon.moga.ClickedBoard.WritingActivity"
+            android:name="com.gachon.moga.Board.WritingActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.gachon.moga.ClickedBoard.BoardActivity" />
+        <activity android:name="com.gachon.moga.Board.BoardActivity" />
         <activity android:name="com.gachon.moga.MainActivity" />
         <activity android:name="com.gachon.moga.LoginActivity" />
         <activity

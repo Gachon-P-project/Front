@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gachon.moga.ClickedBoard.WritingNestedReplyActivity"
+    tools:context="com.gachon.moga.Board.WritingNestedReplyActivity"
     android:orientation="vertical"
     >
     <androidx.appcompat.widget.Toolbar

@@ -15,7 +15,7 @@ import android.widget.TextView
 import com.android.volley.toolbox.Volley
 import com.github.eunsiljo.timetablelib.view.TimeTableView
 import com.gachon.moga.*
-import com.gachon.moga.ClickedBoard.BoardActivity
+import com.gachon.moga.Board.BoardActivity
 import com.gachon.moga.MainActivity
 import com.gachon.moga.VolleyForHttpMethod
 import kotlinx.android.synthetic.main.fragment_timetable.view.*

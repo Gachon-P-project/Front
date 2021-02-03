@@ -1,4 +1,4 @@
-package com.gachon.moga.ClickedBoard;
+package com.gachon.moga.Board;
 
 import android.app.Dialog;
 import android.content.Intent;

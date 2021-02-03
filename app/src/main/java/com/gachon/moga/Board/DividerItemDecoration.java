@@ -1,4 +1,4 @@
-package com.gachon.moga.ClickedBoard;
+package com.gachon.moga.Board;
 
 import android.content.Context;
 import android.content.res.TypedArray;

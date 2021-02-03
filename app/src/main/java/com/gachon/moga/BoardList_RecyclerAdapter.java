@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gachon.moga.ClickedBoard.BoardActivity;
+import com.gachon.moga.Board.BoardActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
