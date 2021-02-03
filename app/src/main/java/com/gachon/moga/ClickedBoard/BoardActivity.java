@@ -66,7 +66,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clicked_board);
+        setContentView(R.layout.activity_board);
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         initDefaultUrlOfComponent();
