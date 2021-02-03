@@ -1,5 +1,5 @@
 package com.gachon.moga.ClickedBoard;
 
-public interface ClickedPostingDialogInterface {
+public interface PostingDialogInterface {
     void onDeleteClickedPostingDialog();
 }

@@ -52,7 +52,7 @@ import static com.gachon.moga.StateKt.BOARD_MAJOR;
 import static com.gachon.moga.StateKt.BOARD_SUBJECT;
 import static com.gachon.moga.Component.sharedPreferences;
 
-public class PostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, ClickedPostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
+public class PostingActivity extends AppCompatActivity implements View.OnClickListener, ReplyDialogInterface, PostingDialogInterface, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "PostingActivity";
     public static int WritingNestedReplyActivityCode = 0;

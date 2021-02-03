@@ -15,7 +15,7 @@ public class PostingDialog extends Dialog implements View.OnClickListener {
 
 
     private PostingActivity clickedPostingActivity;
-    private ClickedPostingDialogInterface clickedPostingDialogInterface;
+    private PostingDialogInterface postingDialogInterface;
     private TextView updatePosting;
     private TextView deletePosting;
     private toClickedPosting PostingData;
@@ -28,7 +28,7 @@ public class PostingDialog extends Dialog implements View.OnClickListener {
         super(clickedPostingActivity);
 
         this.clickedPostingActivity = clickedPostingActivity;
-        this.clickedPostingDialogInterface = clickedPostingActivity;
+        this.postingDialogInterface = clickedPostingActivity;
         this.PostingData = PostingData;
         this.forUpdatePosting = forUpdatePosting;
         this.realTimeDataForUpdatePosting = realTimeDataForUpdatePosting;
@@ -62,7 +62,7 @@ public class PostingDialog extends Dialog implements View.OnClickListener {
                 clickedPostingActivity.startActivityForResult(intentToWritingUpdateActivity, PostingActivity.WritingUpdateActivityCode);
                 break;
             case R.id.dialog_clicked_posting_delete:
-                clickedPostingDialogInterface.onDeleteClickedPostingDialog();
+                postingDialogInterface.onDeleteClickedPostingDialog();
                 break;
             default:
                 break;
