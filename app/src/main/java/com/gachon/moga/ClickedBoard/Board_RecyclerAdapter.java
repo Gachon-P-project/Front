@@ -83,7 +83,7 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.clicked_board_recycler_item, parent, false);
+        View view = inflater.inflate(R.layout.item_board, parent, false);
         Board_RecyclerAdapter.ViewHolder vh = new ViewHolder(view);
 
         return vh;
