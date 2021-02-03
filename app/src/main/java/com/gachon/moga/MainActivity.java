@@ -23,7 +23,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.gachon.moga.R;
 
 import static com.gachon.moga.Component.default_url;
 import static com.gachon.moga.Component.sharedPreferences;
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fm = getSupportFragmentManager();
     private com.gachon.moga.moga.TimeTableFragment f_TimeTable2 = new com.gachon.moga.moga.TimeTableFragment();
     private NoticeFragment f_Notice = new NoticeFragment();
-    private BoardFragment f_Board = new BoardFragment();
+    private BoardListFragment f_Board = new BoardListFragment();
     private MyPageFragment f_MyPage = new MyPageFragment();
     private NotificationFragment f_Notification = new NotificationFragment();
     private BottomNavigationView bottomNavigationView;

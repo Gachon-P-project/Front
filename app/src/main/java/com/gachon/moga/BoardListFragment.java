@@ -33,7 +33,7 @@ import static com.gachon.moga.DataIOKt.getDepartment;
 import static com.gachon.moga.Component.sharedPreferences;
 
 
-public class BoardFragment extends Fragment {
+public class BoardListFragment extends Fragment {
 
     private JSONObject subject_professorJSONObject;
     private SharedPreferences prefs;
@@ -50,7 +50,7 @@ public class BoardFragment extends Fragment {
     private ArrayList<String> community_data = new ArrayList<>();
     private Set<String> noneSubject = new HashSet<>();
 
-    public BoardFragment() {
+    public BoardListFragment() {
         // Required empty public constructor
     }
 
