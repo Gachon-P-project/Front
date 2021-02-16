@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context="com.gachon.moga.Board.PostingActivity">
+    tools:context="com.gachon.moga.board.PostingActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/activity_clicked_posting_toolbar"

@@ -1,4 +1,4 @@
-package com.gachon.moga.Board;
+package com.gachon.moga.board;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;

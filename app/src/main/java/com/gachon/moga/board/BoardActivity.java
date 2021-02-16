@@ -1,4 +1,4 @@
-package com.gachon.moga.Board;
+package com.gachon.moga.board;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,7 +39,8 @@ import static com.gachon.moga.StateKt.BOARD_MAJOR;
 import static com.gachon.moga.StateKt.BOARD_SUBJECT;
 
 
-public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
+public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener,
+        View.OnClickListener {
 
     private static final int requestCodeToWritingActivity = 0;
     private static int boardType;
@@ -68,10 +69,10 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         initDefaultUrlOfComponent();
         initSharedPreferencesOfComponent();
         doAllFindViewById();
+
         initInitialValues();
         initBoardType();
         initUrl();
@@ -312,6 +313,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         };
         return result;
     }
+
 
 
 

@@ -1,4 +1,4 @@
-package com.gachon.moga.Board;
+package com.gachon.moga.board;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

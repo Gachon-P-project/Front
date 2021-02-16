@@ -1,4 +1,4 @@
-package com.gachon.moga.Board;
+package com.gachon.moga.board;
 
 import android.content.Context;
 import android.content.res.TypedArray;

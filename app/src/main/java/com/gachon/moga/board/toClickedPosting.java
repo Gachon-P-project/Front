@@ -1,4 +1,4 @@
-package com.gachon.moga.Board;
+package com.gachon.moga.board;
 
 import android.os.Parcel;
 import android.os.Parcelable;

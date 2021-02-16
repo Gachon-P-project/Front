@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.gachon.moga.Board.BoardActivity;
+import com.gachon.moga.board.BoardActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
