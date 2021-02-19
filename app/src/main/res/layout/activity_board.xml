@@ -1,120 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.gachon.moga.board.BoardActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_clicked_board_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:theme="@style/AppTheme.Toolbar" >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            >
+    <data>
 
-            <ImageButton
-                android:id="@+id/imageButton_clickedBoard_toolbarBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_back"
-                android:background="@android:color/transparent"
-                android:layout_marginRight="10dp"
-                />
-            <TextView
-                android:id="@+id/textView_clickedBoard_toolbarTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="20sp"
-                android:textStyle="bold" />
+        <variable
+            name="vm"
+            type="com.gachon.moga.board.ui.board.BoardViewModel" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                />
-            <ImageButton
-                android:id="@+id/imageButton_clickedBoard_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_search"
-                android:background="@android:color/transparent"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                />
-            <ImageButton
-                android:id="@+id/imageButton_clickedBoard_newWriting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_edit"
-                android:background="@android:color/transparent"
-                android:paddingRight="20dp"
-                android:paddingLeft="10dp"
-                />
-        </LinearLayout>
+        <variable
+            name="adapter"
+            type="com.gachon.moga.board.ui.board.adapter.PostingListAdapter" />
+    </data>
 
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/swipe_clicked_board">
+        android:orientation="vertical"
+        tools:context="com.gachon.moga.board.BoardActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/activity_clicked_board_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:theme="@style/AppTheme.Toolbar" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+
+                <ImageButton
+                    android:id="@+id/imageButton_clickedBoard_toolbarBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_arrow_back"
+                    android:background="@android:color/transparent"
+                    android:layout_marginRight="10dp"
+                    />
+                <TextView
+                    android:id="@+id/textView_clickedBoard_toolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    />
+                <ImageButton
+                    android:id="@+id/imageButton_clickedBoard_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search"
+                    android:background="@android:color/transparent"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
+                    />
+                <ImageButton
+                    android:id="@+id/imageButton_clickedBoard_newWriting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit"
+                    android:background="@android:color/transparent"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="10dp"
+                    />
+            </LinearLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/activity_clicked_board_recycler_view" />
+            android:id="@+id/swipe_clicked_board">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/activity_clicked_board_recycler_view" />
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/activity_clicked_board_sleep_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:visibility="visible">
-
-    <ImageView
-        android:id="@+id/activity_clicked_board_sleep_iv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintVertical_bias="0.4"
-        android:src="@drawable/ic_sad"/>
-
-    <TextView
-        android:id="@+id/activity_clicked_board_sleep_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/activity_clicked_board_sleep_iv"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.05"
-        android:text="작성된 게시물이 없습니다."
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/text2"
-        />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/activity_clicked_board_sleep_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="visible">
 
+        <ImageView
+            android:id="@+id/activity_clicked_board_sleep_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintVertical_bias="0.4"
+            android:src="@drawable/ic_sad"/>
 
+        <TextView
+            android:id="@+id/activity_clicked_board_sleep_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/activity_clicked_board_sleep_iv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.05"
+            android:text="작성된 게시물이 없습니다."
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text2"
+            />
 
-</LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</layout>

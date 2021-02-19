@@ -79,8 +79,8 @@ fun getDepartment(): String? {
     return getSharedItem("department")
 }
 
-fun getUserNo(): String? {
-    return getSharedItem("number")
+fun getUserNo(): Int? {
+    return (getSharedItem("number") as String).toInt()
 }
 
 fun getNickname(): String? {

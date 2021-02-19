@@ -1,4 +1,4 @@
 package com.gachon.moga.board.repository
 
-class BoardRepository {
+class BoardRepository : Repository {
 }

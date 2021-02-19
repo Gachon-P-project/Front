@@ -18,6 +18,7 @@ import com.gachon.moga.*
 import com.gachon.moga.board.BoardActivity
 import com.gachon.moga.MainActivity
 import com.gachon.moga.VolleyForHttpMethod
+import com.gachon.moga.board.models.BoardInfo
 import kotlinx.android.synthetic.main.fragment_timetable.view.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -177,9 +178,16 @@ class TimeTableFragment : TimeTableContract.View() {
                 it.setOnTimeItemClickListener { _, _, data ->
                     val professor = jsonObjectForTitle!!.get(data.time.title.split("\n")[0])
                     val intent = Intent(context, BoardActivity::class.java)
-                    intent.putExtra("title", data.time.title.split("\n")[0])
+                   /* intent.putExtra("title", data.time.title.split("\n")[0])
                     intent.putExtra("professor", professor.toString())
                     intent.putExtra("boardType", 0)
+                    */
+                    val title = data.time.title.split("\n")[0]
+                    val professorString = professor.toString()
+                    val boardType = 0
+
+                    intent.putExtra("BoardInfo", BoardInfo(title, professorString, boardType))
+
                     startActivity(intent)
                 }
                 it.setStartHour(9)

@@ -1,4 +1,4 @@
 package com.gachon.moga.board.repository
 
-class NestedReplyWritingRepository {
+class NestedReplyWritingRepository : Repository {
 }

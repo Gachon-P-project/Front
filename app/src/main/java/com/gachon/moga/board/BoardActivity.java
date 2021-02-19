@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.gachon.moga.VolleyForHttpMethod;
 import com.gachon.moga.Component;
 import com.gachon.moga.R;
+import com.gachon.moga.board.models.BoardInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,8 +70,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        initDefaultUrlOfComponent();
-        initSharedPreferencesOfComponent();
+        initialSetting();
         doAllFindViewById();
 
         initInitialValues();
@@ -224,18 +224,20 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     private void initInitialValues() {
         Intent intent = getIntent();
 
-        boardType = intent.getIntExtra("boardType", -1);
-        board_title = intent.getExtras().getString("title");
-        professor = intent.getExtras().getString("professor", "");
-        user_no = Integer.parseInt(getUserNo());
+        BoardInfo boardInfo = intent.getParcelableExtra("BoardInfo");
+
+        /*boardType = intent.getIntExtra("boardType", -1);
+        board_title = intent.getStringExtra("title");
+        professor = intent.getStringExtra("professor");*/
+        board_title = boardInfo.getTitle();
+        professor = boardInfo.getProfessor();
+        boardType = boardInfo.getBoardType();
+        user_no = getUserNo();
         department = getDepartment();
     }
 
-    private void initSharedPreferencesOfComponent() {
+    private void initialSetting() {
         sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-    }
-
-    private void initDefaultUrlOfComponent() {
         Component.default_url = getString(R.string.defaultUrl);
     }
 

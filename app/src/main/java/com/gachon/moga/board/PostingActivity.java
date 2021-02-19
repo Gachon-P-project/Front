@@ -31,6 +31,8 @@ import com.android.volley.toolbox.Volley;
 import com.gachon.moga.VolleyForHttpMethod;
 import com.gachon.moga.Component;
 import com.gachon.moga.DataIOKt;
+import static com.gachon.moga.DataIOKt.getUserNo;
+import static com.gachon.moga.DataIOKt.getDepartment;
 import com.gachon.moga.R;
 
 import org.json.JSONArray;
@@ -126,8 +128,8 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         sharedPreferences = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
 //        user_number = prefs.getString("number", null);
-        user_number = Integer.parseInt(DataIOKt.getUserNo());
-        major = DataIOKt.getDepartment();
+        user_number = getUserNo();
+        major = getDepartment();
 
         initVolley();
         initToolBar();

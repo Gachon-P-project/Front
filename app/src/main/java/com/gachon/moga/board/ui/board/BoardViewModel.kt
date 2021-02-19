@@ -1,4 +1,6 @@
 package com.gachon.moga.board.ui.board
 
-class BoardViewModel {
+import androidx.lifecycle.ViewModel
+
+class BoardViewModel : ViewModel() {
 }

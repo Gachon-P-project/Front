@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gachon.moga.board.BoardActivity;
+import com.gachon.moga.board.models.BoardInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,8 +76,9 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
 
     private void postIntent(Context context, String title) {
 
-        final Intent intent = new Intent(context, BoardActivity.class);
-        intent.putExtra("title", title);
+        String professor = null;
+
+        /*intent.putExtra("title", title);
         intent.putExtra("boardType", boardType);
         if(subject_professorJSONObject != null) {
             try {
@@ -84,10 +86,24 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } 
+        }*/
 
+        if(subject_professorJSONObject != null) {
+            try {
+                professor = subject_professorJSONObject.get(title).toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        BoardInfo boardInfo = new BoardInfo(title, professor, boardType);
+
+        final Intent intent = new Intent(context, BoardActivity.class);
+        intent.putExtra("BoardInfo", boardInfo);
         context.startActivity(intent);
     }
+
+
 
     public void setSubject_professorJSONObject(JSONObject subject_professorJSONObject) {
         this.subject_professorJSONObject = subject_professorJSONObject;
