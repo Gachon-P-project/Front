@@ -65,12 +65,10 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         toClickedPosting = intent.getExtras().getParcelable("PostingData");
         boardType = intent.getIntExtra("boardType", -1);
         try {
-            forUpdatePosting = new JSONObject(intent.getExtras().getString("forUpdatePosting"));
             realTimeDataForUpdatePosting = new JSONObject(intent.getExtras().getString("realTimeDataForUpdatePosting"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         initPostingUserData();
         initView();

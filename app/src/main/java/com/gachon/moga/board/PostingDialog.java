@@ -19,18 +19,15 @@ public class PostingDialog extends Dialog implements View.OnClickListener {
     private TextView updatePosting;
     private TextView deletePosting;
     private toClickedPosting PostingData;
-    private String forUpdatePosting;
     private JSONObject realTimeDataForUpdatePosting;
     private int boardType = -1;
 
-    public PostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting, JSONObject realTimeDataForUpdatePosting) {
-//    public PostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, String forUpdatePosting) {
+    public PostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, JSONObject realTimeDataForUpdatePosting) {
         super(clickedPostingActivity);
 
         this.clickedPostingActivity = clickedPostingActivity;
         this.postingDialogInterface = clickedPostingActivity;
         this.PostingData = PostingData;
-        this.forUpdatePosting = forUpdatePosting;
         this.realTimeDataForUpdatePosting = realTimeDataForUpdatePosting;
     }
 
@@ -56,7 +53,6 @@ public class PostingDialog extends Dialog implements View.OnClickListener {
             case R.id.dialog_clicked_posting_update:
                 Intent intentToWritingUpdateActivity = new Intent(clickedPostingActivity,WritingUpdateActivity.class);
                 intentToWritingUpdateActivity.putExtra("PostingData", PostingData);
-                intentToWritingUpdateActivity.putExtra("forUpdatePosting", forUpdatePosting);
                 intentToWritingUpdateActivity.putExtra("realTimeDataForUpdatePosting", realTimeDataForUpdatePosting.toString());
                 intentToWritingUpdateActivity.putExtra("boardType", boardType);
                 clickedPostingActivity.startActivityForResult(intentToWritingUpdateActivity, PostingActivity.WritingUpdateActivityCode);

@@ -31,6 +31,7 @@ import static com.gachon.moga.Component.sharedPreferences;
 import static android.view.KeyEvent.KEYCODE_ENTER;
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
 import static com.gachon.moga.DataIOKt.getDepartment;
+import static com.gachon.moga.DataIOKt.getUserNo;
 
 public class SearchActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
     private static final String TAG = "SearchActivity";
@@ -60,13 +61,14 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
         Component.default_url = getString(R.string.defaultUrl);
 
         sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+
         initSharedPreferencesOfComponent();
         initVolley();
 
         Intent intent = getIntent();
         professor = intent.getStringExtra("professor");
         subject = intent.getStringExtra("subject");
-        user_no = intent.getStringExtra("user_no");
+        user_no = String.valueOf(getUserNo());
         boardType = intent.getIntExtra("boardType", -1);
         department = getDepartment();
 

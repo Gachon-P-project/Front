@@ -28,8 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
 import static com.gachon.moga.DataIOKt.getDepartment;
 import static com.gachon.moga.DataIOKt.amountPerOnePage;
@@ -53,7 +51,6 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     private final JSONArray responseJSONArray = new JSONArray();
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipe_clicked_board;
-    private ArrayList<String> a = new ArrayList<>();
     private String urlForInquirePostingsOfBoard;
     private String board_title, subject;
     private String professor, department;
@@ -61,29 +58,16 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     private Integer page_num = 0;
     private final int startIndex = 0;
     private ConstraintLayout activity_clicked_board_sleep_layout;
-    private TextView activity_clicked_board_sleep_tv, textViewToolbarTitle;
+    private TextView textViewToolbarTitle;
     private ImageButton imageButtonToolbarBack, imageButtonSearch, imageButtonNewWriting;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
-        initialSetting();
         doAllFindViewById();
-
-        initInitialValues();
-        initBoardType();
-        initUrl();
-        initToolbar();
-        initVolley();
-        initRecyclerView();
-
-        setEvents();
-
-        swipe_clicked_board.setColorSchemeResources(R.color.indigo500);
-
+        initialSetting();
         inquirePostingsOfBoard();
     }
 
@@ -109,27 +93,21 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
-            case R.id.imageButton_clickedBoard_toolbarBack:
-                onBackPressed();
-                break;
-            case R.id.imageButton_clickedBoard_search:
-                intent = new Intent(getBaseContext(), SearchActivity.class);
-                intent.putExtra("professor", professor);
-                intent.putExtra("subject", subject);
-                intent.putExtra("user_no", user_no);
-                intent.putExtra("boardType", boardType);
-                startActivity(intent);
-                break;
-            case R.id.imageButton_clickedBoard_newWriting:
-                intent = new Intent(getBaseContext(), WritingActivity.class);
-                intent.putExtra("major", department);
-                intent.putExtra("subject", subject);
-                intent.putExtra("professor", professor);
-                intent.putExtra("user_no", user_no);
-                intent.putExtra("boardType", boardType);
-                startActivityForResult(intent,requestCodeToWritingActivity);
-                break;
+
+        if(v.getId() == R.id.imageButton_clickedBoard_toolbarBack) {
+            onBackPressed();
+        } else if (v.getId() == R.id.imageButton_clickedBoard_search) {
+            intent = new Intent(getBaseContext(), SearchActivity.class);
+            intent.putExtra("professor", professor);
+            intent.putExtra("subject", subject);
+            intent.putExtra("boardType", boardType);
+            startActivity(intent);
+        } else if (v.getId() == R.id.imageButton_clickedBoard_newWriting) {
+            intent = new Intent(getBaseContext(), WritingActivity.class);
+            intent.putExtra("subject", subject);
+            intent.putExtra("professor", professor);
+            intent.putExtra("boardType", boardType);
+            startActivityForResult(intent,requestCodeToWritingActivity);
         }
     }
 
@@ -139,34 +117,10 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         swipe_clicked_board.setEnabled(false);
         clearRecyclerData();
         inquirePostingsOfBoard();
-
-        /*volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        responseJSONObject = response.getJSONObject(i);
-                        responseJSONArray.put(responseJSONObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                changeViewIfDoNotHaveData();
-                adapter.notifyDataSetChanged();
-                swipe_clicked_board.setRefreshing(false);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipe_clicked_board.setEnabled(true);
-                    }
-                }, 1000);
-            }
-        });*/
     }
 
     private void doAllFindViewById() {
         activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
-        activity_clicked_board_sleep_tv = findViewById(R.id.activity_clicked_board_sleep_tv);
         textViewToolbarTitle = findViewById(R.id.textView_clickedBoard_toolbarTitle);
         imageButtonToolbarBack = findViewById(R.id.imageButton_clickedBoard_toolbarBack);
         imageButtonSearch = findViewById(R.id.imageButton_clickedBoard_search);
@@ -175,7 +129,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
     }
 
-    private void initBoardType() {
+    private void initByBoardType() {
         switch (boardType) {
             case BOARD_SUBJECT:
                 subject = board_title;
@@ -211,10 +165,6 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         textViewToolbarTitle.setText(board_title);
     }
 
-    private void initVolley() {
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
-    }
-
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new Board_RecyclerAdapter(responseJSONArray, board_title, boardType, page_num);
@@ -223,12 +173,8 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
 
     private void initInitialValues() {
         Intent intent = getIntent();
-
         BoardInfo boardInfo = intent.getParcelableExtra("BoardInfo");
 
-        /*boardType = intent.getIntExtra("boardType", -1);
-        board_title = intent.getStringExtra("title");
-        professor = intent.getStringExtra("professor");*/
         board_title = boardInfo.getTitle();
         professor = boardInfo.getProfessor();
         boardType = boardInfo.getBoardType();
@@ -239,10 +185,21 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     private void initialSetting() {
         sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         Component.default_url = getString(R.string.defaultUrl);
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+
+        initInitialValues();
+        initByBoardType();
+        initUrl();
+        initToolbar();
+        initRecyclerView();
+
+        setEvents();
+
+        swipe_clicked_board.setColorSchemeResources(R.color.indigo500);
     }
 
     private void changeViewIfDoNotHaveData() {
-        if(!doDataExist()) {
+        if(!dataIsExist()) {
             swipe_clicked_board.setVisibility(View.GONE);
             activity_clicked_board_sleep_layout.setVisibility(View.VISIBLE);
         } else {
@@ -251,7 +208,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         }
     }
 
-    private boolean doDataExist() {
+    private boolean dataIsExist() {
         return responseJSONArray.length() != 0;
     }
 
@@ -269,7 +226,6 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
                 }
 
                 changeViewIfDoNotHaveData();
-                /*adapter.notifyDataSetChanged();*/
 
                 if(response.length() == amountPerOnePage) {
                     adapter.notifyItemRangeChanged(startIndex, amountPerOnePage);
@@ -279,7 +235,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
                     isFinalPage = true;
                 }
 
-                if(inOnRefresh) {
+                 if(inOnRefresh) {
                     swipe_clicked_board.setRefreshing(false);
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -302,22 +258,19 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     private RecyclerView.OnScrollListener getOnScrollListener() {
-        RecyclerView.OnScrollListener result = new RecyclerView.OnScrollListener() {
+        return new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+            public void onScrolled(@NonNull RecyclerView recyclerView1, int dx, int dy) {
+                super.onScrolled(recyclerView1, dx, dy);
+                if(dx == 0 && dy == 0) return;
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView1.getLayoutManager()).findLastVisibleItemPosition();
+                int itemTotalCount = recyclerView1.getAdapter().getItemCount() - 1;
                 if (lastVisibleItemPosition == itemTotalCount && !isFinalPage) {
                     inquirePostingsOfBoard();
                 }
             }
         };
-        return result;
     }
-
-
-
 
     private void clearRecyclerData() {
         int original_length = responseJSONArray.length();
@@ -328,24 +281,10 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
 
         page_num = 0;
         isFinalPage = false;
-        /* if(!isReLoadOfPostings) {
-            int original_length = responseJSONArray.length();
-            int current_length = original_length;
-            for (int i = 0; i < original_length; i++) {
-                responseJSONArray.remove(--current_length);
-            }
-        } else {
-            startIndexForEndlessScroll = page_num * 10;
-            int current_length = responseJSONArray.length();
-            do {
-                responseJSONArray.remove(--current_length);
-            } while (startIndexForEndlessScroll != current_length);
-        }*/
     }
 
     @Override
     public void onBackPressed() {
         finish();
     }
-
 }

@@ -19,14 +19,17 @@ import com.android.volley.toolbox.Volley;
 import com.gachon.moga.VolleyForHttpMethod;
 import com.gachon.moga.Component;
 import com.gachon.moga.R;
+import com.gachon.moga.board.models.BoardInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.gachon.moga.Component.sharedPreferences;
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
+import static com.gachon.moga.DataIOKt.getDepartment;
+import static com.gachon.moga.DataIOKt.getUserNo;
 
-public class WritingActivity extends AppCompatActivity {
+public class WritingActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int completeCode = 10;
     private static final String TAG = "WritingActivity";
@@ -43,7 +46,8 @@ public class WritingActivity extends AppCompatActivity {
     private EditText contents_edit;
     private ImageView btn_cancel;
     private Button btn_complete;
-
+    private String subject;
+    private String professor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +55,30 @@ public class WritingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
 
+        /*// initialSetting() //
         sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         Component.default_url = getString(R.string.defaultUrl);
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+
         // 제목
+        // doAllFindViewById() //
         title_edit = findViewById(R.id.board_write_title_edit);
         contents_edit = findViewById(R.id.board_write_contents_edit);
         btn_cancel = findViewById(R.id.btn_cancel);
         btn_complete = findViewById(R.id.btn_complete);
 
-        title_edit.addTextChangedListener(titleWatcher);
-
+        // initInitialValues() //
         intent = getIntent();// major, subject, professor, user_no
         boardType = intent.getIntExtra("boardType", -1);
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
+
+        // setEvents() //
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
         btn_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,13 +89,68 @@ public class WritingActivity extends AppCompatActivity {
                 }
             }
         });
+        title_edit.addTextChangedListener(titleWatcher);*/
 
-        if(boardType == -1) {
-            Toast.makeText(this, "BOARD ERROR!", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        initialSetting();
     }
 
+    private void initialSetting() {
+        doAllFindViewById();
+
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        Component.default_url = getString(R.string.defaultUrl);
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+
+        initInitialValues();
+        setEvents();
+
+
+    }
+
+    private void doAllFindViewById() {
+        title_edit = findViewById(R.id.board_write_title_edit);
+        contents_edit = findViewById(R.id.board_write_contents_edit);
+        btn_cancel = findViewById(R.id.btn_cancel);
+        btn_complete = findViewById(R.id.btn_complete);
+    }
+
+    private void initInitialValues() {
+        intent = getIntent();//subject, professor, boardType
+        boardType = intent.getIntExtra("boardType", -1);
+        subject = intent.getExtras().getString("subject");
+        professor = intent.getExtras().getString("professor");
+    }
+
+    private void setEvents() {
+        btn_cancel.setOnClickListener(this);
+        btn_complete.setOnClickListener(this);
+        title_edit.addTextChangedListener(getTitleWatcher());
+    }
+
+
+
+    private TextWatcher getTitleWatcher() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable ed) {
+                if(ed.length() > 60){
+                    Toast.makeText(WritingActivity.this, "제목은 60자를 넘을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+    }
+
+    //******************** 삭제예정 ******************//
     TextWatcher titleWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -119,8 +181,6 @@ public class WritingActivity extends AppCompatActivity {
     private boolean isContentsNoneText() {
         return contents_edit.getText().toString().trim().length() == 0;
     }
-
-
 
     private void writingBtnClick() {
 
@@ -158,37 +218,6 @@ public class WritingActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStart() {
-        Log.i("WritingActivityLog", "onStart");
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        Log.i("WritingActivityLog", "onResume");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.i("WritingActivityLog", "onPause");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.i("WritingActivityLog", "onStop");
-        super.onStop();
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        Log.i("WritingActivityLog", "onDestroy");
-        super.onDestroy();
-    }
-
     void setRequestValue() {
         if(boardType == subjectBoard) {
             setRequestValueOfSubject();
@@ -201,10 +230,10 @@ public class WritingActivity extends AppCompatActivity {
         try {
             requestJSONObject.put("post_title", title_edit.getText().toString());
             requestJSONObject.put("post_contents", contents_edit.getText().toString());
-            requestJSONObject.put("major_name", intent.getExtras().getString("major"));
-            requestJSONObject.put("subject_name", intent.getExtras().getString("subject"));
-            requestJSONObject.put("professor_name", intent.getExtras().getString("professor"));
-            requestJSONObject.put("user_no", intent.getExtras().getString("user_no"));
+            requestJSONObject.put("major_name", getDepartment());
+            requestJSONObject.put("subject_name", subject);
+            requestJSONObject.put("professor_name", professor);
+            requestJSONObject.put("user_no", getUserNo());
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -214,11 +243,23 @@ public class WritingActivity extends AppCompatActivity {
         try {
             requestJSONObject.put("post_title", title_edit.getText().toString());
             requestJSONObject.put("post_contents", contents_edit.getText().toString());
-            requestJSONObject.put("major_name", intent.getExtras().getString("major"));
-            requestJSONObject.put("user_no", intent.getExtras().getString("user_no"));
+            requestJSONObject.put("major_name", getDepartment());
+            requestJSONObject.put("user_no", getUserNo());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_cancel) {
+            finish();
+        } else if (v.getId() == R.id.btn_complete) {
+            if(isNoneText()) {
+                Toast.makeText(v.getContext(), "제목이나 내용이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
+            } else {
+                writingBtnClick();
+            }
+        }
+    }
 }

@@ -47,6 +47,12 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         this.pageNum = pageNum;
     }
 
+    /*Board_RecyclerAdapter(JSONArray list, String board_title, int boardType, Integer pageNum) {
+        this.JSONArrayData = list;
+        this.board_title = board_title;
+        this.boardType = boardType;
+        this.pageNum = pageNum;
+    }*/
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -84,9 +90,8 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.item_board, parent, false);
-        Board_RecyclerAdapter.ViewHolder vh = new ViewHolder(view);
 
-        return vh;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -189,17 +194,6 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         }
 
         return AndroidDate;
-    }
-
-    private ArrayList<String> transformData(JSONArray jsonArray) throws JSONException {
-
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        for(int i = 0; i < jsonArray.length(); i++) {
-            arrayList.add(jsonArray.getJSONObject(i).toString());
-        }
-
-        return arrayList;
     }
 
     @Override

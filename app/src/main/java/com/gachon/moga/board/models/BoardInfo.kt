@@ -5,4 +5,4 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class BoardInfo(val title: String?, val professor: String?,
-                     val boardType: Int?) : Parcelable
+                     val boardType: Int) : Parcelable

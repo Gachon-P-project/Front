@@ -64,23 +64,19 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     private VolleyForHttpMethod volley = null;
     private toClickedPosting toClickedPosting = null;
     private ReplyAdapter replyAdapter = null;
-    private JSONArray jsonArrayForReplyAdapter = new JSONArray();
-    private JSONObject jsonObjectForPostReply = new JSONObject();
+    private final JSONArray jsonArrayForReplyAdapter = new JSONArray();
+    private final JSONObject jsonObjectForPostReply = new JSONObject();
     private SwipeRefreshLayout activity_clicked_posting_swipe;
     private EditText postReply_et = null;
     private ImageView postReply_iv = null;
     private ImageView post_like_img = null;
     private TextView post_like_text = null;
-    private TextView tvToolbarTitle = null;
-    private ImageButton imgBtnToolbarBack =  null;
     private MenuItem menu_toolbar_clicked_posting_three_dots = null;
     TextView title = null;
     TextView nickName = null;
     TextView date = null;
     TextView contents = null;
     TextView reply_cnt = null;
-    private SharedPreferences prefs = null;
-    private DisplayMetrics displayMetricsForDeviceSize = null;
 
     private String urlForInquireReplies;
     private String urlForPostReply;
@@ -97,53 +93,59 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     private int page_number;
     private boolean isLiked;
     private String forUpdatePosting = null;
-    private JSONObject dataForUpdatePosting = null;
     private JSONObject realTimeDataForPosting = null;
     private String major;
     private int boardType;
     private boolean checkInitThreeDots = false;
     private boolean checkCallInquirePostingsOfBoard = false;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clicked_posting);
 
-        Component.default_url = getString(R.string.defaultUrl);
+        initialSetting();
 
+        initToolBar();
+        initRecyclerViewForReply();
+        initUrl();
+        initView();
+    }
+
+    private void initialSetting() {
+        doAllFindViewById();
+
+        Component.default_url = getString(R.string.defaultUrl);
+        sharedPreferences = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+
+        setEvents();
+        activity_clicked_posting_swipe.setColorSchemeResources(R.color.indigo500);
+
+        initInitialValues();
+    }
+
+    private void setEvents() {
+        activity_clicked_posting_swipe.setOnRefreshListener(this);
+
+        postReply_iv.setOnClickListener(this);
+        post_like_img.setOnClickListener(this);
+    }
+
+    //data class를 받는다면, boardType, forUpdatePosting는 받을필요 X
+    private void initInitialValues() {
         Intent intent = getIntent();
         toClickedPosting = intent.getParcelableExtra("toClickedPosting");
         forUpdatePosting = intent.getExtras().getString("forUpdatePosting");
         boardType = intent.getIntExtra("boardType", -1);
         page_number = intent.getIntExtra("page_number", -1);
 
-        initDataForInquirePostingsOfBoard();
-
         post_no = toClickedPosting.getPost_no();
         writer_number = toClickedPosting.getUser_no();
-
-        prefs = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-        sharedPreferences = this.getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-
-//        user_number = prefs.getString("number", null);
         user_number = getUserNo();
         major = getDepartment();
 
-        initVolley();
-        initToolBar();
-        initRecyclerViewForReply();
-        initUrl();
-        initView();
-
-        activity_clicked_posting_swipe.setColorSchemeResources(R.color.indigo500);
-        activity_clicked_posting_swipe.setOnRefreshListener(this);
-
-        postReply_iv.setOnClickListener(this);
-        post_like_img.setOnClickListener(this);
-
-        /*inquireReplies();*/
+        initDataForInquirePostingsOfBoard();
     }
 
     @Override
@@ -188,8 +190,8 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 return true;
             case R.id.menu_toolbar_clicked_posting_three_dots :
-                displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
-                PostingDialog clickedPostingDialog = new PostingDialog(this, toClickedPosting, forUpdatePosting, realTimeDataForPosting);
+                DisplayMetrics displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
+                PostingDialog clickedPostingDialog = new PostingDialog(this, toClickedPosting, realTimeDataForPosting);
                 clickedPostingDialog.setBoardType(boardType);
                 clickedPostingDialog.show();
                 WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();
@@ -285,7 +287,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                     setViewText("", "","", "", "", "");
                 }
                 inquirePostingsOfBoard();
-                /*showPostingContent();*/
                 showAllReplies();
             }
         }
@@ -294,7 +295,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onRefresh() {
         activity_clicked_posting_swipe.setEnabled(false);
-        /*showPostingContent();*/
         inquirePostingsOfBoard();
         showAllReplies();
         new Handler().postDelayed(new Runnable() {
@@ -353,13 +353,10 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     private void showAllReplies() {
-        //Toast.makeText(getApplicationContext(), "댓글이 작성되었습니다.", Toast.LENGTH_SHORT).show();
         clearReplyJSONArray();
         inquireReplies();
     }
-
 
     private void clearReplyJSONArray() {
         int original_length = jsonArrayForReplyAdapter.length();
@@ -383,26 +380,19 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initToolBar() {
         Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
-        tvToolbarTitle = findViewById(R.id.tv_clicked_posting_toolbar_title);
-        imgBtnToolbarBack = findViewById(R.id.img_btn_clicked_posting_toolbar_back);
+        TextView tvToolbarTitle = findViewById(R.id.tv_clicked_posting_toolbar_title);
+        ImageButton imgBtnToolbarBack = findViewById(R.id.img_btn_clicked_posting_toolbar_back);
         tvToolbarTitle.setText(getToolBarTitle());
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        getSupportActionBar().setTitle(toClickedPosting.getBoard_title());
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back);
 
         imgBtnToolbarBack.setOnClickListener(this);
     }
 
     private void initView() {
-        doAllFindViewById();
         inquirePostingsOfBoard();
-        /*showPostingContent();*/
         inquireReplies();
     }
-
-
 
     private String getToolBarTitle() {
         String toolBarTitle =null;
@@ -419,7 +409,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
             default:
                 break;
         }
-
         return toolBarTitle;
     }
 
@@ -446,7 +435,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         post_like_text.setText(postLikeText);
     }
 
-
     private void initPostLikeUsingUserValue(int like_user) {
         if(like_user == 0) {
             isLiked = false;
@@ -455,10 +443,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
             isLiked = true;
             post_like_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_like_filled, null));
         }
-    }
-
-    private void initVolley() {
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
     }
 
     private void initUrl() {
@@ -489,16 +473,16 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    //data class를 intent로 받으면 이 함수 필요 없어짐.
     private void initDataForInquirePostingsOfBoard() {
         try {
-            dataForUpdatePosting = new JSONObject(forUpdatePosting);
+            JSONObject dataForUpdatePosting = new JSONObject(forUpdatePosting);
             subject_name = dataForUpdatePosting.getString("subject_name");
             professor_name = dataForUpdatePosting.getString("professor_name");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
 
     private void deleteReply(int reply_no) {
         switch (boardType) {
@@ -512,13 +496,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard, reply_no));
                 break;
         }
-
-//        JSONObject obj = new JSONObject();
-//        try {
-//            obj.put("bundle_id", reply_no);                  // 일단 확인 필요
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
 
         volley.delete(null, urlDeleteReply, new Response.Listener<String>() {
             @Override
@@ -549,21 +526,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void deletePosting() {
-//        JSONObject deleteJsonObj = null;
-//        switch (boardType) {
-//            case 0:
-//                deleteJsonObj = new JSONObject();
-//                try {
-//                    deleteJsonObj.put("post_no", post_no);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//            case 1:
-//                break;
-//            case 2:
-//                break;
-//        }
         switch (boardType) {
             case BOARD_SUBJECT:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard, post_no));
@@ -589,11 +551,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-
-    /*private void showPostingContent() {
-        inquirePostingsOfBoard();
-    }
-*/
     private JSONObject findCurrentPosting(JSONArray ReceivedJsonArray) {
         JSONObject jsonObject;
         int comparisonPostNo;
@@ -657,12 +614,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         return LastPostNum;
     }
 
-
-    private void updateToClickedPosting(String title, String board) {
-        toClickedPosting.setPost_title(title);
-        toClickedPosting.setPost_contents(board);
-    }
-
     private void showPostingContent(JSONArray response) {
         realTimeDataForPosting = findCurrentPosting(response);
         String titleText = null;
@@ -686,7 +637,8 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            wrt_date = processServerDateToAndroidDate(wrt_date);
+            wrt_date = DateProcess.processServerDateToAndroidDate(wrt_date);
+
             setViewText(titleText,nickName, wrt_date, contentsText, replyCntText, postLikeText );
             initPostLikeUsingUserValue(like_user);
             checkCallInquirePostingsOfBoard = true;
@@ -714,61 +666,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         return requestValue;
     }
 
-
-    private String processServerDateToAndroidDate(String serverDate) {
-        long time;
-        Date date = null;
-
-        DateFormat dateFormat_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
-        DateFormat dateFormat_2 = new SimpleDateFormat("yyyy.MM.dd. a hh:mm:ss", Locale.KOREA);
-        TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
-        dateFormat_1.setTimeZone(timeZone);
-        dateFormat_2.setTimeZone(timeZone);
-
-        Calendar beforeOneHour = Calendar.getInstance();
-        beforeOneHour.add(Calendar.HOUR, -1);
-
-        Calendar beforeOneDay = Calendar.getInstance();
-        beforeOneDay.add(Calendar.DATE, -1);
-
-        DateFormat dataFormatForFinalDate = new SimpleDateFormat("yy.MM.dd", java.util.Locale.getDefault());
-        try {
-            assert serverDate != null;
-            date = dateFormat_1.parse(serverDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (date == null) {
-                    assert serverDate != null;
-                    date = dateFormat_2.parse(serverDate);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        String AndroidDate;
-        assert date != null;
-        if(date.after(beforeOneHour.getTime())) {
-            time =  date.getTime() - beforeOneHour.getTimeInMillis();
-            if(time > (59 * 60000) && time <= (60 * 600000)) {
-                AndroidDate = "방금 전";
-            } else {
-                long minutesAgo = (60*60*1000 - time) / (60*1000);
-                AndroidDate = String.valueOf((minutesAgo)).concat("분 전");
-            }
-        } else if(date.after(beforeOneDay.getTime())) {
-            time =  date.getTime() - beforeOneDay.getTimeInMillis();
-            long timesAgo = (24*60*60*1000 - time) / (60*60*1000);
-            AndroidDate = String.valueOf(timesAgo).concat("시간 전");
-        } else {
-            AndroidDate = dataFormatForFinalDate.format(date);
-        }
-
-        return AndroidDate;
-    }
-
     private boolean isReplyNoneText() {
         return postReply_et.getText().toString().trim().length() == 0;
     }
@@ -780,7 +677,4 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     public int getBoardType() {
         return boardType;
     }
-
-
 }
-

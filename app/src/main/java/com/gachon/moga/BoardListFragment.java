@@ -40,24 +40,15 @@ public class BoardListFragment extends Fragment {
     private Set<String> subjectSet;
     private RecyclerView dept_recyclerView;
     private RecyclerView subject_recyclerView;
-    private RecyclerView community_recyclerView;
-    private BoardList_RecyclerAdapter dept_adapter;
-    private BoardList_RecyclerAdapter subject_adapter;
-    private BoardList_RecyclerAdapter community_adapter;
-    private ArrayList<String> dept_data = new ArrayList<>();
+    private final ArrayList<String> dept_data = new ArrayList<>();
     private ArrayList<String> subject_data;
-    private ArrayList<String> community_data = new ArrayList<>();
-    private Set<String> noneSubject = new HashSet<>();
-
-    public BoardListFragment() {
-        // Required empty public constructor
-    }
+    private final ArrayList<String> community_data = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPreferences = Objects.requireNonNull(this.getContext()).getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        sharedPreferences = this.requireContext().getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
 
         try {
 //            subject_professorJSONObject = new JSONObject(prefs.getString("subject_professorJSONObject", null));
@@ -86,9 +77,6 @@ public class BoardListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_board_list, container, false);
 
-        //showYourDeptAndSubject(view);
-
-
         LinearLayout dept_linearLayout = view.findViewById(R.id.dept);
         LinearLayout subject_linearLayout = view.findViewById(R.id.subject);
 
@@ -97,25 +85,25 @@ public class BoardListFragment extends Fragment {
         } else {
             dept_recyclerView = view.findViewById(R.id.dept_recyclerView);
             dept_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            dept_adapter = new BoardList_RecyclerAdapter(dept_data);
+            BoardList_RecyclerAdapter dept_adapter = new BoardList_RecyclerAdapter(dept_data);
             dept_adapter.setBoardType(StateKt.BOARD_MAJOR);
             dept_recyclerView.setAdapter(dept_adapter);
         }
 
-//        if(subjectSet == noneSubject) {
+
         if(subjectSet.equals(new HashSet<String>())) {
             subject_linearLayout.setVisibility(View.INVISIBLE);
         } else {
             subject_recyclerView = view.findViewById(R.id.subject_recyclerView);
             subject_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            subject_adapter = new BoardList_RecyclerAdapter(subject_data, subject_professorJSONObject);
+            BoardList_RecyclerAdapter subject_adapter = new BoardList_RecyclerAdapter(subject_data, subject_professorJSONObject);
             subject_adapter.setBoardType(StateKt.BOARD_SUBJECT);
             subject_recyclerView.setAdapter(subject_adapter);
         }
 
-        community_recyclerView = view.findViewById(R.id.community_recyclerView);
+        RecyclerView community_recyclerView = view.findViewById(R.id.community_recyclerView);
         community_recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        community_adapter = new BoardList_RecyclerAdapter(community_data);
+        BoardList_RecyclerAdapter community_adapter = new BoardList_RecyclerAdapter(community_data);
         community_adapter.setBoardType(StateKt.BOARD_FREE);
         community_recyclerView.setAdapter(community_adapter);
 
@@ -141,70 +129,4 @@ public class BoardListFragment extends Fragment {
         return view;
     }
 
-
-/*private void showYourDeptAndSubject(View InflatedView) {
-        showYourDept(InflatedView);
-        showYourSubject(InflatedView);
-    }
-
-    private void showYourDept(View InflatedView) {
-        final String Dept;
-        Dept = prefs.getString("department",null);
-
-        if(Dept == null)
-            return;
-        else {
-            LinearLayout linearLayout = InflatedView.findViewById(R.id.dept);
-
-            ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            final TextView textView = new TextView(this.getContext());
-            textView.setLayoutParams(lparams);
-            textView.setText(Dept);
-            textView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    postIntent(v.getContext(), textView.getText().toString());
-                }
-            });
-            linearLayout.addView(textView);
-        }
-    }
-
-    private void showYourSubject(View InflatedView) {
-        Set<String> noneSubject = new HashSet<>();
-        final Set<String> subjectSet = prefs.getStringSet("subjectSet", noneSubject);
-
-        if(subjectSet == noneSubject)
-            return;
-        else {
-            LinearLayout linearLayout = InflatedView.findViewById(R.id.subject);
-            ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            Iterator<String> iterator = subjectSet.iterator();
-
-            while (iterator.hasNext()) {
-                final TextView textView = new TextView(this.getContext());
-                textView.setLayoutParams(lparams);
-                textView.setText(iterator.next());
-                textView.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        postIntent(v.getContext(), textView.getText().toString());
-                    }
-                });
-                linearLayout.addView(textView);
-            }
-        }
-    }*/
-
-    private void postIntent(Context context, String title) {
-        final Intent intent = new Intent(context, BoardActivity.class);
-        intent.putExtra("title", title);
-        try {
-            intent.putExtra("professor", subject_professorJSONObject.get(title).toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        startActivity(intent);
-    }
 }
