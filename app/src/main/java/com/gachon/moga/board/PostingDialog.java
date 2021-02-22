@@ -14,20 +14,14 @@ import org.json.JSONObject;
 public class PostingDialog extends Dialog implements View.OnClickListener {
 
 
-    private PostingActivity clickedPostingActivity;
-    private PostingDialogInterface postingDialogInterface;
-    private TextView updatePosting;
-    private TextView deletePosting;
-    private toClickedPosting PostingData;
-    private JSONObject realTimeDataForUpdatePosting;
+    private final PostingActivity postingActivity;
+    private final JSONObject realTimeDataForUpdatePosting;
     private int boardType = -1;
 
-    public PostingDialog(PostingActivity clickedPostingActivity, toClickedPosting PostingData, JSONObject realTimeDataForUpdatePosting) {
-        super(clickedPostingActivity);
+    public PostingDialog(PostingActivity postingActivity, JSONObject realTimeDataForUpdatePosting) {
+        super(postingActivity);
 
-        this.clickedPostingActivity = clickedPostingActivity;
-        this.postingDialogInterface = clickedPostingActivity;
-        this.PostingData = PostingData;
+        this.postingActivity = postingActivity;
         this.realTimeDataForUpdatePosting = realTimeDataForUpdatePosting;
     }
 
@@ -40,10 +34,10 @@ public class PostingDialog extends Dialog implements View.OnClickListener {
         setCancelable(true);
         setCanceledOnTouchOutside(true);
 
-        updatePosting = findViewById(R.id.dialog_clicked_posting_update);
+        TextView updatePosting = findViewById(R.id.dialog_clicked_posting_update);
         updatePosting.setOnClickListener(this);
 
-        deletePosting = findViewById(R.id.dialog_clicked_posting_delete);
+        TextView deletePosting = findViewById(R.id.dialog_clicked_posting_delete);
         deletePosting.setOnClickListener(this);
     }
 
@@ -51,14 +45,13 @@ public class PostingDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialog_clicked_posting_update:
-                Intent intentToWritingUpdateActivity = new Intent(clickedPostingActivity,WritingUpdateActivity.class);
-                intentToWritingUpdateActivity.putExtra("PostingData", PostingData);
+                Intent intentToWritingUpdateActivity = new Intent(postingActivity,WritingUpdateActivity.class);
                 intentToWritingUpdateActivity.putExtra("realTimeDataForUpdatePosting", realTimeDataForUpdatePosting.toString());
                 intentToWritingUpdateActivity.putExtra("boardType", boardType);
-                clickedPostingActivity.startActivityForResult(intentToWritingUpdateActivity, PostingActivity.WritingUpdateActivityCode);
+                postingActivity.startActivityForResult(intentToWritingUpdateActivity, PostingActivity.WritingUpdateActivityCode);
                 break;
             case R.id.dialog_clicked_posting_delete:
-                postingDialogInterface.onDeleteClickedPostingDialog();
+                postingActivity.onDeleteClickedPostingDialog();
                 break;
             default:
                 break;

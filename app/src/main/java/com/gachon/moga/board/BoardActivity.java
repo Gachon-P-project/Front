@@ -1,4 +1,4 @@
-package com.gachon.moga.board;
+ package com.gachon.moga.board;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +27,8 @@ import com.gachon.moga.board.models.BoardInfo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
 import static com.gachon.moga.DataIOKt.getDepartment;
@@ -60,6 +62,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     private ConstraintLayout activity_clicked_board_sleep_layout;
     private TextView textViewToolbarTitle;
     private ImageButton imageButtonToolbarBack, imageButtonSearch, imageButtonNewWriting;
+    private BoardInfo boardInfo = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,15 +101,11 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
             onBackPressed();
         } else if (v.getId() == R.id.imageButton_clickedBoard_search) {
             intent = new Intent(getBaseContext(), SearchActivity.class);
-            intent.putExtra("professor", professor);
-            intent.putExtra("subject", subject);
-            intent.putExtra("boardType", boardType);
+            intent.putExtra("BoardInfo", boardInfo);
             startActivity(intent);
         } else if (v.getId() == R.id.imageButton_clickedBoard_newWriting) {
             intent = new Intent(getBaseContext(), WritingActivity.class);
-            intent.putExtra("subject", subject);
-            intent.putExtra("professor", professor);
-            intent.putExtra("boardType", boardType);
+            intent.putExtra("BoardInfo", boardInfo);
             startActivityForResult(intent,requestCodeToWritingActivity);
         }
     }
@@ -173,7 +172,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
 
     private void initInitialValues() {
         Intent intent = getIntent();
-        BoardInfo boardInfo = intent.getParcelableExtra("BoardInfo");
+        boardInfo = intent.getParcelableExtra("BoardInfo");
 
         board_title = boardInfo.getTitle();
         professor = boardInfo.getProfessor();
@@ -213,40 +212,46 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     private void inquirePostingsOfBoard() {
-        volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        responseJSONObject = response.getJSONObject(i);
-                        responseJSONArray.put(responseJSONObject);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                changeViewIfDoNotHaveData();
-
-                if(response.length() == amountPerOnePage) {
-                    adapter.notifyItemRangeChanged(startIndex, amountPerOnePage);
-                    page_num++;
-                } else {
-                    adapter.notifyItemRangeChanged(startIndex, response.length());
-                    isFinalPage = true;
-                }
-
-                 if(inOnRefresh) {
-                    swipe_clicked_board.setRefreshing(false);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipe_clicked_board.setEnabled(true);
-                        }
-                    }, 1000);
-                    inOnRefresh = false;
+        volley.getJSONArray(urlForInquirePostingsOfBoard, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    responseJSONObject = response.getJSONObject(i);
+                    responseJSONArray.put(responseJSONObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
+
+            changeViewIfDoNotHaveData();
+            whetherFinalPageOrNot(response);
+            cleaningUpAfterSwipe();
         });
+    }
+
+
+
+    //startIndex 에러 일거임.
+    private void whetherFinalPageOrNot(JSONArray response) {
+        if(response.length() == amountPerOnePage) {
+            adapter.notifyItemRangeChanged(startIndex, amountPerOnePage);
+            page_num++;
+        } else {
+            adapter.notifyItemRangeChanged(startIndex, response.length());
+            isFinalPage = true;
+        }
+    }
+
+    private void cleaningUpAfterSwipe() {
+        if(inOnRefresh) {
+            swipe_clicked_board.setRefreshing(false);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swipe_clicked_board.setEnabled(true);
+                }
+            }, 1000);
+            inOnRefresh = false;
+        }
     }
 
     private void setEvents() {

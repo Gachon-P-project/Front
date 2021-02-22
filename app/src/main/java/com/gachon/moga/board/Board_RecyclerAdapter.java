@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gachon.moga.R;
+import com.gachon.moga.board.models.ToPosting;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,13 +48,6 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         this.pageNum = pageNum;
     }
 
-    /*Board_RecyclerAdapter(JSONArray list, String board_title, int boardType, Integer pageNum) {
-        this.JSONArrayData = list;
-        this.board_title = board_title;
-        this.boardType = boardType;
-        this.pageNum = pageNum;
-    }*/
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView board_title;
@@ -63,9 +57,7 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         TextView board_reply_cnt;
         TextView nickname;
         View view;
-        toClickedPosting toClickedPosting;
-        JSONObject forUpdatePosting;
-
+        ToPosting toPosting;
 
 
         ViewHolder(View itemView) {
@@ -98,102 +90,54 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
     public void onBindViewHolder(@NonNull final Board_RecyclerAdapter.ViewHolder holder, int position) {
 
         JSONObject data = null;
-        String wrt_date = null;
+        String postTitle = null;
+        String postContents = null;
+        String wrtDate = null;
+        String replyCnt = null;
+        String likeCnt = null;
+        String nickname = null;
+        int postNo = -1;
+        String likeUser = null;
+        int userNo = -1;
+        String professorName = null;
+        String subjectName = null;
+        int boardType = -1;
+
 
         try {
             data = JSONArrayData.getJSONObject(position);
-            holder.forUpdatePosting = JSONArrayData.getJSONObject(position);
-            holder.board_title.setText(data.getString("post_title"));
-            holder.board_contents.setText(data.getString("post_contents"));
-            wrt_date = data.getString("wrt_date");
-            holder.board_reply_cnt.setText(data.getString("reply_cnt"));
-            holder.board_post_like.setText(data.getString("like_cnt"));
-            holder.nickname.setText(data.getString("nickname"));
+            postTitle = data.getString("post_title");
+            postContents = data.getString("post_contents");
+            wrtDate = data.getString("wrt_date");
+            replyCnt = data.getString("reply_cnt");
+            likeCnt = data.getString("like_cnt");
+            nickname = data.getString("nickname");
+            postNo = data.getInt("post_no");
+            likeUser = data.getString("like_user");
+            userNo = data.getInt("user_no");
+            boardType = data.getInt("board_flag");
+            professorName = data.getString("professor_name");
+            subjectName = data.getString("subject_name");
         } catch(JSONException e) {
             e.printStackTrace();
-            Toast.makeText(holder.view.getContext(), "json Error", Toast.LENGTH_SHORT).show();
         }
 
-        String androidDate = processServerDateToAndroidDate(wrt_date);
+        String androidDate = DateProcess.processServerDateToAndroidDate(wrtDate);
 
+        holder.board_title.setText(postTitle);
+        holder.board_contents.setText(postContents);
         holder.board_date.setText(androidDate);
+        holder.board_reply_cnt.setText(replyCnt);
+        holder.board_post_like.setText(likeCnt);
+        holder.nickname.setText(nickname);
 
+        holder.toPosting = new ToPosting(boardType, postNo, userNo, pageNum, subjectName, professorName);
 
-        try {
-            assert data != null;
-            holder.toClickedPosting = new toClickedPosting(board_title, data.getString("post_no"),
-                    data.getString("post_title"), data.getString("post_contents"), androidDate,
-                    data.getString("reply_cnt"), data.getString("reply_yn"), data.getString("user_no"),
-                    data.getString("like_cnt"), data.getString("like_user"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PostingActivity.class);
-                intent.putExtra("toClickedPosting", holder.toClickedPosting);
-                intent.putExtra("forUpdatePosting", holder.forUpdatePosting.toString());
-                intent.putExtra("boardType", boardType);
-                intent.putExtra("page_number", pageNum);
-                v.getContext().startActivity(intent);
-            }
+        holder.view.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), PostingActivity.class);
+            intent.putExtra("toPosting", holder.toPosting);
+            view.getContext().startActivity(intent);
         });
-    }
-
-    private String processServerDateToAndroidDate(String serverDate) {
-        long time;
-        Date date = null;
-
-        DateFormat dateFormat_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
-        DateFormat dateFormat_2 = new SimpleDateFormat("yyyy.MM.dd. a hh:mm:ss", Locale.KOREA);
-        TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
-        dateFormat_1.setTimeZone(timeZone);
-        dateFormat_2.setTimeZone(timeZone);
-
-        Calendar beforeOneHour = Calendar.getInstance();
-        beforeOneHour.add(Calendar.HOUR, -1);
-
-        Calendar beforeOneDay = Calendar.getInstance();
-        beforeOneDay.add(Calendar.DATE, -1);
-
-        DateFormat dataFormatForFinalDate = new SimpleDateFormat("yy.MM.dd", java.util.Locale.getDefault());
-        try {
-            assert serverDate != null;
-            date = dateFormat_1.parse(serverDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (date == null) {
-                    assert serverDate != null;
-                    date = dateFormat_2.parse(serverDate);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        String AndroidDate;
-        assert date != null;
-        if(date.after(beforeOneHour.getTime())) {
-            time =  date.getTime() - beforeOneHour.getTimeInMillis();
-            if(time > (59 * 60000) && time <= (60 * 600000)) {
-                AndroidDate = "방금 전";
-            } else {
-                long minutesAgo = (60*60*1000 - time) / (60*1000);
-                AndroidDate = String.valueOf((minutesAgo)).concat("분 전");
-            }
-        } else if(date.after(beforeOneDay.getTime())) {
-            time =  date.getTime() - beforeOneDay.getTimeInMillis();
-            long timesAgo = (24*60*60*1000 - time) / (60*60*1000);
-            AndroidDate = String.valueOf(timesAgo).concat("시간 전");
-        } else {
-            AndroidDate = dataFormatForFinalDate.format(date);
-        }
-
-        return AndroidDate;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.gachon.moga;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,12 +62,9 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
     public void onBindViewHolder(@NonNull final BoardList_RecyclerAdapter.ViewHolder holder, int position) {
 
         holder.title.setText(data.get(position));
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                        postIntent(v.getContext(), holder.title.getText().toString());
-            }
-        });
+        holder.view.setOnClickListener(v ->
+                postIntent(v.getContext(), holder.title.getText().toString())
+        );
     }
 
     @Override
@@ -77,16 +75,6 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
     private void postIntent(Context context, String title) {
 
         String professor = null;
-
-        /*intent.putExtra("title", title);
-        intent.putExtra("boardType", boardType);
-        if(subject_professorJSONObject != null) {
-            try {
-                intent.putExtra("professor", subject_professorJSONObject.get(title).toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }*/
 
         if(subject_professorJSONObject != null) {
             try {
@@ -101,12 +89,6 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
         final Intent intent = new Intent(context, BoardActivity.class);
         intent.putExtra("BoardInfo", boardInfo);
         context.startActivity(intent);
-    }
-
-
-
-    public void setSubject_professorJSONObject(JSONObject subject_professorJSONObject) {
-        this.subject_professorJSONObject = subject_professorJSONObject;
     }
 
     public void setBoardType(int boardType) {

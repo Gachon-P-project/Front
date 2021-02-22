@@ -38,16 +38,7 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
     private String post_no = null;
     private String post_title;
     private String post_contents;
-    private String reply_yn;
-    private String major_name;
-    private String subject_name;
-    private String professor_name;
-    private String user_no;
     private int boardType;
-    private toClickedPosting toClickedPosting;
-
-    //private toClickedPosting PostingData;
-    private JSONObject forUpdatePosting;
     private JSONObject realTimeDataForUpdatePosting;
 
     static public int getUpdateResponseCode() {
@@ -58,11 +49,25 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing_update);
-        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-        initDefaultUrlOfComponent();
 
+        initialSetting();
+    }
+
+    private void initialSetting() {
+        doAllFindViewById();
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        Component.default_url = getString(R.string.defaultUrl);
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+
+        initInitialValues();
+        setEvents();
+        initUrl();
+
+        setPreviousText();
+    }
+
+    private void initInitialValues() {
         Intent intent = getIntent();
-        toClickedPosting = intent.getExtras().getParcelable("PostingData");
         boardType = intent.getIntExtra("boardType", -1);
         try {
             realTimeDataForUpdatePosting = new JSONObject(intent.getExtras().getString("realTimeDataForUpdatePosting"));
@@ -70,22 +75,15 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
             e.printStackTrace();
         }
 
-        initPostingUserData();
-        initView();
-        setViewEvent();
-        initVolley();
-        initUrl();
+        initPostingData();
     }
-
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.activity_writing_update_cancel_iv) {
             finish();
         } else if (v.getId() == R.id.activity_writing_update_complete_bt) {
-            int titleTextLength = activity_writing_update_title_et.getText().toString().trim().length();
-            int contentTextLength = activity_writing_update_content_et.getText().toString().trim().length();
-            if(titleTextLength == 0 || contentTextLength == 0) {
+            if(lengthIsZero()) {
                 Toast.makeText(this, "제목이나 내용이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
             } else {
                 updatePosting();
@@ -93,18 +91,22 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void initDefaultUrlOfComponent() {
-        Component.default_url = getString(R.string.defaultUrl);
+    private boolean lengthIsZero() {
+        int titleTextLength = activity_writing_update_title_et.getText().toString().trim().length();
+        int contentTextLength = activity_writing_update_content_et.getText().toString().trim().length();
+        return titleTextLength == 0 || contentTextLength == 0;
     }
 
-    private void initView() {
+    private void setPreviousText() {
+        activity_writing_update_title_et.setText(post_title);
+        activity_writing_update_content_et.setText(post_contents);
+    }
+
+    private void doAllFindViewById() {
         activity_writing_update_cancel_iv = findViewById(R.id.activity_writing_update_cancel_iv);
         activity_writing_update_complete_bt = findViewById(R.id.activity_writing_update_complete_bt);
         activity_writing_update_title_et = findViewById(R.id.activity_writing_update_title_et);
         activity_writing_update_content_et = findViewById(R.id.activity_writing_update_content_et);
-
-        activity_writing_update_title_et.setText(post_title);
-        activity_writing_update_content_et.setText(post_contents);
     }
 
     private void initUrl() {
@@ -123,27 +125,18 @@ public class WritingUpdateActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void initVolley() {
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
-    }
-
-    private void initPostingUserData() {
+    private void initPostingData() {
         try {
             post_no = realTimeDataForUpdatePosting.getString("post_no");
             post_title = realTimeDataForUpdatePosting.getString("post_title");
             post_contents = realTimeDataForUpdatePosting.getString("post_contents");
-            reply_yn = realTimeDataForUpdatePosting.getString("reply_yn");
-            major_name = realTimeDataForUpdatePosting.getString("major_name");
-            subject_name = realTimeDataForUpdatePosting.getString("subject_name");
-            professor_name = realTimeDataForUpdatePosting.getString("professor_name");
-            user_no = realTimeDataForUpdatePosting.getString("user_no");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void setViewEvent() {
+    private void setEvents() {
         activity_writing_update_cancel_iv.setOnClickListener(this);
         activity_writing_update_complete_bt.setOnClickListener(this);
     }

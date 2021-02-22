@@ -76,7 +76,7 @@ class TimeTableFragment : TimeTableContract.View() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         volley = VolleyForHttpMethod(Volley.newRequestQueue(this.context))
-        sharedPreferences = this.context?.getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)!!
+        sharedPreferences = requireContext().getSharedPreferences(appConstantPreferences, Context.MODE_PRIVATE)
         lastDaySaved = getSharedItem("lastDaySavingTimeTable", "")
         userNo = getSharedItem<String>("number")
         yearOfAdmission= userNo.substring(0, 4);

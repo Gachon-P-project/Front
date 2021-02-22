@@ -34,6 +34,7 @@ import com.gachon.moga.DataIOKt;
 import static com.gachon.moga.DataIOKt.getUserNo;
 import static com.gachon.moga.DataIOKt.getDepartment;
 import com.gachon.moga.R;
+import com.gachon.moga.board.models.ToPosting;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,7 +63,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     public static boolean called_onStart = false;
 
     private VolleyForHttpMethod volley = null;
-    private toClickedPosting toClickedPosting = null;
     private ReplyAdapter replyAdapter = null;
     private final JSONArray jsonArrayForReplyAdapter = new JSONArray();
     private final JSONObject jsonObjectForPostReply = new JSONObject();
@@ -85,19 +85,17 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     private String urlForDeletePosting;
     private String urlDeleteReply;
     private String urlDeleteNestedReply;
-    private String subject_name;
-    private String professor_name;
     private String post_no;
     private String writer_number;
     private int user_number;
     private int page_number;
     private boolean isLiked;
-    private String forUpdatePosting = null;
     private JSONObject realTimeDataForPosting = null;
     private String major;
     private int boardType;
     private boolean checkInitThreeDots = false;
     private boolean checkCallInquirePostingsOfBoard = false;
+    private ToPosting toPosting = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,20 +130,16 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         post_like_img.setOnClickListener(this);
     }
 
-    //data class를 받는다면, boardType, forUpdatePosting는 받을필요 X
-    private void initInitialValues() {
+   private void initInitialValues() {
         Intent intent = getIntent();
-        toClickedPosting = intent.getParcelableExtra("toClickedPosting");
-        forUpdatePosting = intent.getExtras().getString("forUpdatePosting");
-        boardType = intent.getIntExtra("boardType", -1);
-        page_number = intent.getIntExtra("page_number", -1);
+        toPosting = intent.getParcelableExtra("toPosting");
 
-        post_no = toClickedPosting.getPost_no();
-        writer_number = toClickedPosting.getUser_no();
+        boardType = toPosting.getBoardType();
+        page_number = toPosting.getPageNo();
+        post_no = String.valueOf(toPosting.getPostNo());
+        writer_number = String.valueOf(toPosting.getWriterNo());
         user_number = getUserNo();
         major = getDepartment();
-
-        initDataForInquirePostingsOfBoard();
     }
 
     @Override
@@ -191,7 +185,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 return true;
             case R.id.menu_toolbar_clicked_posting_three_dots :
                 DisplayMetrics displayMetricsForDeviceSize = getApplicationContext().getResources().getDisplayMetrics();
-                PostingDialog clickedPostingDialog = new PostingDialog(this, toClickedPosting, realTimeDataForPosting);
+                PostingDialog clickedPostingDialog = new PostingDialog(this, realTimeDataForPosting);
                 clickedPostingDialog.setBoardType(boardType);
                 clickedPostingDialog.show();
                 WindowManager.LayoutParams params = clickedPostingDialog.getWindow().getAttributes();
@@ -257,7 +251,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     @Override
     public void onDeleteReplyDialog(int depth, int reply_no) {
         Log.d(TAG, "onDeleteReplyDialog: depth : " + depth + ", reply_no : " + reply_no);
@@ -297,27 +290,15 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         activity_clicked_posting_swipe.setEnabled(false);
         inquirePostingsOfBoard();
         showAllReplies();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                activity_clicked_posting_swipe.setRefreshing(false);
-            }
-        },500);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                activity_clicked_posting_swipe.setEnabled(true);
-            }
-        },1500);
+        new Handler().postDelayed(() ->
+                activity_clicked_posting_swipe.setRefreshing(false),500);
+        new Handler().postDelayed(() ->
+                activity_clicked_posting_swipe.setEnabled(true),1500);
     }
 
     private void inquireReplies() {
-        volley.getJSONArray(urlForInquireReplies, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                processReceivedReplies(response);
-            }
-        });
+        volley.getJSONArray(urlForInquireReplies, response ->
+                processReceivedReplies(response));
     }
 
     private void processReceivedReplies(JSONArray response) {
@@ -335,12 +316,8 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void postReply() {
-        volley.postJSONObjectString(jsonObjectForPostReply, urlForPostReply, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                showAllReplies();
-            }
-        }, null);
+        volley.postJSONObjectString(jsonObjectForPostReply, urlForPostReply, response ->
+                showAllReplies(), null);
     }
 
     private void setRequestDataOfPostReply() {
@@ -379,7 +356,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initToolBar() {
-        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_posting_toolbar);
+        Toolbar tb = findViewById(R.id.activity_clicked_posting_toolbar);
         TextView tvToolbarTitle = findViewById(R.id.tv_clicked_posting_toolbar_title);
         ImageButton imgBtnToolbarBack = findViewById(R.id.img_btn_clicked_posting_toolbar_back);
         tvToolbarTitle.setText(getToolBarTitle());
@@ -398,7 +375,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         String toolBarTitle =null;
         switch (boardType) {
             case BOARD_SUBJECT:
-                toolBarTitle = toClickedPosting.getBoard_title();
+                toolBarTitle = toPosting.getSubjectName();
                 break;
             case BOARD_FREE:
                 toolBarTitle = "자유게시판";
@@ -452,7 +429,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfSubjectBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfSubjectBoard,post_no));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject_name, professor_name, user_number, page_number));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,toPosting.getSubjectName(), toPosting.getProfessorName(), user_number, page_number));
                 break;
             case BOARD_FREE:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
@@ -473,17 +450,6 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    //data class를 intent로 받으면 이 함수 필요 없어짐.
-    private void initDataForInquirePostingsOfBoard() {
-        try {
-            JSONObject dataForUpdatePosting = new JSONObject(forUpdatePosting);
-            subject_name = dataForUpdatePosting.getString("subject_name");
-            professor_name = dataForUpdatePosting.getString("professor_name");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void deleteReply(int reply_no) {
         switch (boardType) {
             case BOARD_SUBJECT:
@@ -497,12 +463,8 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
 
-        volley.delete(null, urlDeleteReply, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                showAllReplies();
-            }
-        }, null);
+        volley.delete(null, urlDeleteReply, response ->
+                showAllReplies(), null);
     }
 
     private void deleteNestedReply(int reply_no) {
@@ -517,12 +479,8 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard, reply_no));
                 break;
         }
-        volley.delete(null, urlDeleteNestedReply, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                showAllReplies();
-            }
-        }, null);
+        volley.delete(null, urlDeleteNestedReply, response ->
+                showAllReplies(), null);
     }
 
     private void deletePosting() {
@@ -538,17 +496,8 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
 
-        volley.delete(null, urlForDeletePosting, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                finish();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+        volley.delete(null, urlForDeletePosting, response -> finish(), error ->
+                error.printStackTrace());
     }
 
     private JSONObject findCurrentPosting(JSONArray ReceivedJsonArray) {
@@ -570,26 +519,23 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void inquirePostingsOfBoard() {
-        volley.getJSONArray(urlForInquirePostingsOfBoard, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                int firstPostNum = findFirstPostNum(response);
-                int lastPostNum = findLastPostNum(response);
-                int currentPostNum = Integer.parseInt(post_no);
+        volley.getJSONArray(urlForInquirePostingsOfBoard, response -> {
+            int firstPostNum = findFirstPostNum(response);
+            int lastPostNum = findLastPostNum(response);
+            int currentPostNum = Integer.parseInt(post_no);
 
-                // 삭제된 게시물로 보여주기
-                // 삭제된 현재 게시물의 postNum 가 현재 page 뿐만 아니라 앞의 page 안에도 없는 경우
-                if(currentPostNum > lastPostNum) {
-                    showPostingContent(response);
-                }
+            // 삭제된 게시물로 보여주기
+            // 삭제된 현재 게시물의 postNum 가 현재 page 뿐만 아니라 앞의 page 안에도 없는 경우
+            if(currentPostNum > lastPostNum) {
+                showPostingContent(response);
+            }
 
-                if(firstPostNum <= currentPostNum && currentPostNum <= lastPostNum) {
-                    showPostingContent(response);
-                } else if(currentPostNum < firstPostNum) {
-                    page_number--;
-                    initUrl();
-                    inquirePostingsOfBoard();
-                }
+            if(firstPostNum <= currentPostNum && currentPostNum <= lastPostNum) {
+                showPostingContent(response);
+            } else if(currentPostNum < firstPostNum) {
+                page_number--;
+                initUrl();
+                inquirePostingsOfBoard();
             }
         });
     }

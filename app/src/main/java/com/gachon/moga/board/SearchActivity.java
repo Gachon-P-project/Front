@@ -22,6 +22,7 @@ import com.gachon.moga.VolleyForHttpMethod;
 import com.gachon.moga.Component;
 import com.gachon.moga.LoadingDialog;
 import com.gachon.moga.R;
+import com.gachon.moga.board.models.BoardInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,7 +39,6 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
     private static final int subjectBoard = 0;
     private static final int freeBoard = 1;
     private static final int majorBoard = 2;
-    private static JSONObject requestJSONObject = new JSONObject();
     private static VolleyForHttpMethod volley;
     private static JSONArray requestJSONArray = new JSONArray();
     private static Board_RecyclerAdapter adapter;
@@ -58,25 +58,10 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Component.default_url = getString(R.string.defaultUrl);
-
-        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-
-        initSharedPreferencesOfComponent();
-        initVolley();
-
-        Intent intent = getIntent();
-        professor = intent.getStringExtra("professor");
-        subject = intent.getStringExtra("subject");
-        user_no = String.valueOf(getUserNo());
-        boardType = intent.getIntExtra("boardType", -1);
-        department = getDepartment();
+        doAllFindViewById();
+        initialSetting();
 
         loadingDialog = new LoadingDialog();
-
-        doAllFindViewById();
-        setBoardDescription();
-        tvSearchBoardDescription.setText(description);
 
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +81,26 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
         search_edit.setOnEditorActionListener(this);
     }
 
+    private void initialSetting() {
+        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        Component.default_url = getString(R.string.defaultUrl);
+        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
+
+        initInitialValues();
+        setBoardDescription();
+    }
+
+    private void initInitialValues() {
+        Intent intent = getIntent();
+        BoardInfo boardInfo = intent.getParcelableExtra("BoardInfo");
+
+        professor = boardInfo.getProfessor();
+        subject = boardInfo.getTitle();
+        boardType = boardInfo.getBoardType();
+        user_no = String.valueOf(getUserNo());
+        department = getDepartment();
+    }
+
     @Override
     public void onBackPressed() {
         requestJSONArray = new JSONArray();
@@ -111,6 +116,7 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
         recyclerView.setAdapter(adapter);
     }
 
+    //URL에 PageNum추가 해야함.
     private void initUrl(String word) {
         switch (boardType) {
             case subjectBoard:
@@ -127,9 +133,6 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
         }
     }
 
-    private void initVolley() {
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
-    }
 
     private void setBoardDescription() {
         switch (boardType) {
@@ -145,6 +148,7 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
             default:
                 break;
         }
+        tvSearchBoardDescription.setText(description);
     }
 
     private void doAllFindViewById() {
@@ -153,39 +157,29 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
         tvSearchBoardDescription = findViewById(R.id.tvSearchBoardDescription);
         back_btn = findViewById(R.id.btn_back);
         recyclerView = findViewById(R.id.recycler_clicked_board);
-        search_edit = (EditText) findViewById(R.id.edtSearch);
-    }
-
-    private void initSharedPreferencesOfComponent() {
-        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
+        search_edit = findViewById(R.id.edtSearch);
     }
 
 
     private void search(final NoticeFragment.VolleyCallback callback) {
-        volley.getJSONArray(urlSearchPostings, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d(TAG, "onResponse: results : " + requestJSONArray);
-                if(response.length() <= 0) {
-                    requestJSONArray = new JSONArray();
-                    adapter.notifyDataSetChanged();
-                    recyclerView.removeAllViews();
+        volley.getJSONArray(urlSearchPostings, response -> {
+            if(response.length() <= 0) {
+                requestJSONArray = new JSONArray();
+                adapter.notifyDataSetChanged();
+                recyclerView.removeAllViews();
+                llSearchDescription.setVisibility(View.GONE);
+                llSearchNoResult.setVisibility(View.VISIBLE);
+            } else {
+                try {
+                    requestJSONArray = response;
                     llSearchDescription.setVisibility(View.GONE);
-                    llSearchNoResult.setVisibility(View.VISIBLE);
-                } else {
-                    try {
-                        requestJSONArray = response;
-                        llSearchDescription.setVisibility(View.GONE);
-                        llSearchNoResult.setVisibility(View.GONE);
-                        Log.d(TAG, "onResponse: results : " + requestJSONArray);
-//                        adapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    llSearchNoResult.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                callback.onSuccess();
-                loadingDialog.finish();
             }
+            callback.onSuccess();
+            loadingDialog.finish();
         });
     }
 
@@ -195,12 +189,9 @@ public class SearchActivity extends AppCompatActivity implements TextView.OnEdit
             loadingDialog.start(SearchActivity.this);
             String word = search_edit.getText().toString();
             initUrl(word);
-            search(new NoticeFragment.VolleyCallback() {
-                @Override
-                public void onSuccess() {
-                    adapter.notifyDataSetChanged();
-                    initRecyclerView();
-                }
+            search(() -> {
+                adapter.notifyDataSetChanged();
+                initRecyclerView();
             });
             adapter = new Board_RecyclerAdapter(requestJSONArray, subject, boardType);
             recyclerView.setAdapter(adapter);

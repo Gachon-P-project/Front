@@ -41,7 +41,6 @@ public class WritingActivity extends AppCompatActivity implements View.OnClickLi
     private static int boardType;
 
     private String url;
-    private Intent intent;
     private EditText title_edit;
     private EditText contents_edit;
     private ImageView btn_cancel;
@@ -54,42 +53,6 @@ public class WritingActivity extends AppCompatActivity implements View.OnClickLi
         Log.i("WritingActivityLog", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
-
-        /*// initialSetting() //
-        sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
-        Component.default_url = getString(R.string.defaultUrl);
-        volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
-
-        // 제목
-        // doAllFindViewById() //
-        title_edit = findViewById(R.id.board_write_title_edit);
-        contents_edit = findViewById(R.id.board_write_contents_edit);
-        btn_cancel = findViewById(R.id.btn_cancel);
-        btn_complete = findViewById(R.id.btn_complete);
-
-        // initInitialValues() //
-        intent = getIntent();// major, subject, professor, user_no
-        boardType = intent.getIntExtra("boardType", -1);
-
-
-        // setEvents() //
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        btn_complete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isNoneText()) {
-                    Toast.makeText(view.getContext(), "제목이나 내용이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
-                } else {
-                    writingBtnClick();
-                }
-            }
-        });
-        title_edit.addTextChangedListener(titleWatcher);*/
 
         initialSetting();
     }
@@ -115,10 +78,12 @@ public class WritingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initInitialValues() {
-        intent = getIntent();//subject, professor, boardType
-        boardType = intent.getIntExtra("boardType", -1);
-        subject = intent.getExtras().getString("subject");
-        professor = intent.getExtras().getString("professor");
+        Intent intent = getIntent();
+        BoardInfo boardInfo = intent.getParcelableExtra("BoardInfo");
+
+        boardType = boardInfo.getBoardType();
+        subject = boardInfo.getTitle();
+        professor = boardInfo.getProfessor();
     }
 
     private void setEvents() {
@@ -150,25 +115,6 @@ public class WritingActivity extends AppCompatActivity implements View.OnClickLi
         };
     }
 
-    //******************** 삭제예정 ******************//
-    TextWatcher titleWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable ed) {
-            if(ed.length() > 60){
-                Toast.makeText(WritingActivity.this, "제목은 60자를 넘을 수 없습니다.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
 
     private boolean isNoneText() {
         return isTitleNoneText() || isContentsNoneText();
