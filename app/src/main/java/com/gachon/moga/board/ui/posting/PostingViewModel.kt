@@ -1,4 +1,6 @@
 package com.gachon.moga.board.ui.posting
 
-class PostingViewModel {
+import androidx.lifecycle.ViewModel
+
+class PostingViewModel : ViewModel() {
 }

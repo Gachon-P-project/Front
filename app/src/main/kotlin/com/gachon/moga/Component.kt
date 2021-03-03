@@ -12,6 +12,10 @@ object Component {
 
     lateinit var sharedPreferences: SharedPreferences
 
+    val sharedPreferencesVal: SharedPreferences by lazy {
+        sharedPreferences
+    }
+
     lateinit var default_url: String
 
     lateinit var shared_notification_data: SharedPreferences

@@ -21,5 +21,5 @@ data class MajorAllPostingResponse(
         @field:Json(name = "nickname") val nickName: String,
         @field:Json(name = "reply_cnt") val replyCnt: Int,
         @field:Json(name = "like_cnt") val likeCnt: Int,
-        @field:Json(name = "like_user") val likeUser: Int,
+        @field:Json(name = "like_user") val likeUser: Int
 ) : Parcelable

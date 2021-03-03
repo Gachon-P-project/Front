@@ -1,4 +1,4 @@
 package com.gachon.moga.board.ui.posting.adapter
 
-class ReplyAdapter {
+class ReplyListAdapter {
 }

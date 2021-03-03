@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 /*import androidx.recyclerview.widget.DividerItemDecoration;*/
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -26,11 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.gachon.moga.VolleyForHttpMethod;
 import com.gachon.moga.Component;
-import com.gachon.moga.DataIOKt;
+
 import static com.gachon.moga.DataIOKt.getUserNo;
 import static com.gachon.moga.DataIOKt.getDepartment;
 import com.gachon.moga.R;
@@ -39,14 +37,6 @@ import com.gachon.moga.board.models.ToPosting;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
 import static com.gachon.moga.DataIOKt.amountPerOnePage;
@@ -100,7 +90,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clicked_posting);
+        setContentView(R.layout.activity_posting);
 
         initialSetting();
 
@@ -206,7 +196,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.activity_clicked_posting_post_reply_iv:
+            case R.id.activity_posting_post_reply_iv:
                 if(isReplyNoneText()) {
                     Toast.makeText(this, "댓글이 입력되지 않았습니다.", Toast.LENGTH_LONG).show();
                 } else {
@@ -225,7 +215,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                     }, 1000);
                 }
                 break;
-            case R.id.activity_clicked_posting_post_like_iv:
+            case R.id.activity_posting_post_like_iv:
                 post_like_img.setEnabled(false);
                 Log.i("postLike", "postLike");
                 volley.postJSONObjectString(getRequestValuePostLike(),urlForPostLike, new Response.Listener<String>() {
@@ -245,7 +235,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 }, null);
                 post_like_img.setEnabled(true);
                 break;
-            case R.id.img_btn_clicked_posting_toolbar_back:
+            case R.id.img_btn_posting_toolbar_back:
                 onBackPressed();
                 break;
         }
@@ -356,9 +346,9 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initToolBar() {
-        Toolbar tb = findViewById(R.id.activity_clicked_posting_toolbar);
-        TextView tvToolbarTitle = findViewById(R.id.tv_clicked_posting_toolbar_title);
-        ImageButton imgBtnToolbarBack = findViewById(R.id.img_btn_clicked_posting_toolbar_back);
+        Toolbar tb = findViewById(R.id.activity_posting_toolbar);
+        TextView tvToolbarTitle = findViewById(R.id.tv_posting_toolbar_title);
+        ImageButton imgBtnToolbarBack = findViewById(R.id.img_btn_posting_toolbar_back);
         tvToolbarTitle.setText(getToolBarTitle());
         setSupportActionBar(tb);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -390,16 +380,16 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void doAllFindViewById() {
-        title = findViewById(R.id.activity_clicked_posting_title);
-        nickName = findViewById(R.id.activity_clicked_posting_nickname);
-        date = findViewById(R.id.activity_clicked_posting_wrt_date);
-        contents = findViewById(R.id.activity_clicked_posting_contents);
-        reply_cnt = findViewById(R.id.activity_clicked_posting_reply_cnt);
-        post_like_text = findViewById(R.id.activity_clicked_posting_post_like_text);
-        post_like_img = findViewById(R.id.activity_clicked_posting_post_like_iv);
-        postReply_et = findViewById(R.id.activity_clicked_posting_post_reply_et);
-        postReply_iv = findViewById(R.id.activity_clicked_posting_post_reply_iv);
-        activity_clicked_posting_swipe = findViewById(R.id.activity_clicked_posting_swipe);
+        title = findViewById(R.id.activity_posting_title);
+        nickName = findViewById(R.id.activity_posting_nickname);
+        date = findViewById(R.id.activity_posting_wrt_date);
+        contents = findViewById(R.id.activity_posting_contents);
+        reply_cnt = findViewById(R.id.activity_posting_reply_cnt);
+        post_like_text = findViewById(R.id.activity_posting_post_like_text);
+        post_like_img = findViewById(R.id.activity_posting_post_like_iv);
+        postReply_et = findViewById(R.id.activity_posting_post_reply_et);
+        postReply_iv = findViewById(R.id.activity_posting_post_reply_iv);
+        activity_clicked_posting_swipe = findViewById(R.id.activity_posting_swipe);
     }
 
     private void setViewText(String titleText, String nickNameText, String dateText, String contentsText, String replyCntText,
@@ -429,7 +419,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfSubjectBoard));
                 urlForPostReply = Component.default_url.concat(getString(R.string.postReplyOfSubjectBoard));
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfSubjectBoard,post_no));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,toPosting.getSubjectName(), toPosting.getProfessorName(), user_number, page_number));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,toPosting.getSubjectName(), toPosting.getProfessorName(), user_number));
                 break;
             case BOARD_FREE:
                 urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
@@ -437,7 +427,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfFreeBoard,post_no));
 //                urlDeleteReply = Component.default_url.concat(getString(R.string.deletePostingOfFreeBoard));
 //                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfFreeBoard));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard, BOARD_FREE, user_number, page_number));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard, BOARD_FREE, user_number));
                 break;
             case BOARD_MAJOR:
 //                urlForDeletePosting = Component.default_url.concat(getString(R.string.deletePostingOfMajorBoard));
@@ -445,7 +435,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 urlForInquireReplies = Component.default_url.concat(getString(R.string.inquireRepliesOfMajorBoard, post_no));
 //                urlDeleteReply = Component.default_url.concat(getString(R.string.deleteReplyOfMajorBoard));
 //                urlDeleteNestedReply = Component.default_url.concat(getString(R.string.deleteNestedReplyOfMajorBoard));
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard, BOARD_MAJOR, user_number, major, page_number));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard, BOARD_MAJOR, user_number, major));
                 break;
         }
     }
@@ -520,7 +510,10 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void inquirePostingsOfBoard() {
         volley.getJSONArray(urlForInquirePostingsOfBoard, response -> {
-            int firstPostNum = findFirstPostNum(response);
+
+            showPostingContent(response);
+
+            /*int firstPostNum = findFirstPostNum(response);
             int lastPostNum = findLastPostNum(response);
             int currentPostNum = Integer.parseInt(post_no);
 
@@ -536,7 +529,7 @@ public class PostingActivity extends AppCompatActivity implements View.OnClickLi
                 page_number--;
                 initUrl();
                 inquirePostingsOfBoard();
-            }
+            }*/
         });
     }
 

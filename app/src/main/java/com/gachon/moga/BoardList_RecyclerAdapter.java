@@ -11,8 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gachon.moga.board.BoardActivity;
 import com.gachon.moga.board.models.BoardInfo;
+import com.gachon.moga.board.ui.board.BoardActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +29,7 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
         this.data = data;
         this.subject_professorJSONObject = jsonObject;
     }
+
     BoardList_RecyclerAdapter(ArrayList<String> data) {
         this.data = data;
     }
@@ -86,9 +87,10 @@ public class BoardList_RecyclerAdapter extends RecyclerView.Adapter<BoardList_Re
 
         BoardInfo boardInfo = new BoardInfo(title, professor, boardType);
 
-        final Intent intent = new Intent(context, BoardActivity.class);
+        /*final Intent intent = new Intent(context, BoardActivity.class);
         intent.putExtra("BoardInfo", boardInfo);
-        context.startActivity(intent);
+        context.startActivity(intent);*/
+        BoardActivity.Companion.startActivity(context,boardInfo);
     }
 
     public void setBoardType(int boardType) {

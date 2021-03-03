@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class DateProcess {
-    static String processServerDateToAndroidDate(String serverDate) {
+    public static String processServerDateToAndroidDate(String serverDate) {
         long time;
         Date date = null;
 

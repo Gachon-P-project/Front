@@ -6,19 +6,19 @@
 
     <!--Board-->
     <string name="postSubjectWriting">/boards/subject?reply_yn=%d</string>
-    <string name="inquirePostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$d/%4$d</string>
+    <string name="inquirePostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$d</string>
     <string name="searchPostingsOfSubjectBoard">/boards/subject/%1$s/%2$s/%3$s/%4$s</string>
     <string name="updatePostingOfSubjectBoard">/boards/subject</string>
     <string name="deletePostingOfSubjectBoard">/boards/subject/%s</string>
 
     <string name="postFreeWriting">/boards/free?reply_yn=%d</string>
-    <string name="inquirePostingsOfFreeBoard">/boards/free/%1$d/%2$d/%3$d</string>
+    <string name="inquirePostingsOfFreeBoard">/boards/free/%1$d/%2$d</string>
     <string name="searchPostingsOfFreeBoard">/boards/free/%1$d/%2$s/%3$s</string>
     <string name="updatePostingOfFreeBoard">/boards/free</string>
     <string name="deletePostingOfFreeBoard">/boards/free/%s</string>
 
     <string name="postMajorWriting">/boards/major?reply_yn=%d</string>
-    <string name="inquirePostingsOfMajorBoard">/boards/major/%1$d/%2$d/%3$s/%4$d</string>
+    <string name="inquirePostingsOfMajorBoard">/boards/major/%1$d/%2$d/%3$s</string>
     <string name="searchPostingsOfMajorBoard">/boards/major/%1$d/%2$s/%3$s/%4$s</string>
     <string name="updatePostingOfMajorBoard">/boards/major</string>
     <string name="deletePostingOfMajorBoard">/boards/major/%s</string>

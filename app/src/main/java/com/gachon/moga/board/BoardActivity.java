@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.gachon.moga.VolleyForHttpMethod;
 import com.gachon.moga.Component;
@@ -27,8 +26,6 @@ import com.gachon.moga.board.models.BoardInfo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import static com.gachon.moga.DataIOKt.appConstantPreferences;
 import static com.gachon.moga.DataIOKt.getDepartment;
@@ -97,13 +94,13 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     public void onClick(View v) {
         Intent intent;
 
-        if(v.getId() == R.id.imageButton_clickedBoard_toolbarBack) {
+        if(v.getId() == R.id.activity_board_toolbarBack) {
             onBackPressed();
-        } else if (v.getId() == R.id.imageButton_clickedBoard_search) {
+        } else if (v.getId() == R.id.activity_board_search) {
             intent = new Intent(getBaseContext(), SearchActivity.class);
             intent.putExtra("BoardInfo", boardInfo);
             startActivity(intent);
-        } else if (v.getId() == R.id.imageButton_clickedBoard_newWriting) {
+        } else if (v.getId() == R.id.activity_board_writing) {
             intent = new Intent(getBaseContext(), WritingActivity.class);
             intent.putExtra("BoardInfo", boardInfo);
             startActivityForResult(intent,requestCodeToWritingActivity);
@@ -119,16 +116,16 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
     }
 
     private void doAllFindViewById() {
-        activity_clicked_board_sleep_layout = findViewById(R.id.activity_clicked_board_sleep_layout);
-        textViewToolbarTitle = findViewById(R.id.textView_clickedBoard_toolbarTitle);
-        imageButtonToolbarBack = findViewById(R.id.imageButton_clickedBoard_toolbarBack);
-        imageButtonSearch = findViewById(R.id.imageButton_clickedBoard_search);
-        imageButtonNewWriting = findViewById(R.id.imageButton_clickedBoard_newWriting);
+        activity_clicked_board_sleep_layout = findViewById(R.id.activity_board_sleep_layout);
+        textViewToolbarTitle = findViewById(R.id.activity_board_toolbarTitle);
+        imageButtonToolbarBack = findViewById(R.id.activity_board_toolbarBack);
+        imageButtonSearch = findViewById(R.id.activity_board_search);
+        imageButtonNewWriting = findViewById(R.id.activity_board_writing);
         swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
-        recyclerView = findViewById(R.id.activity_clicked_board_recycler_view);
+        recyclerView = findViewById(R.id.activity_board_recycler_view);
     }
 
-    private void initByBoardType() {
+    /*private void initByBoardType() {
         switch (boardType) {
             case BOARD_SUBJECT:
                 subject = board_title;
@@ -142,24 +139,24 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
                 onBackPressed();
                 break;
         }
-    }
+    }*/
 
     private void initUrl() {
         switch(boardType) {
             case BOARD_SUBJECT:
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,subject, professor, user_no, page_num));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfSubjectBoard,board_title, professor, user_no));
                 break;
             case BOARD_FREE:
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no, page_num));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfFreeBoard,boardType, user_no));
                 break;
             case BOARD_MAJOR:
-                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no, department, page_num));
+                urlForInquirePostingsOfBoard = Component.default_url.concat(getString(R.string.inquirePostingsOfMajorBoard,boardType, user_no, department));
                 break;
         }
     }
 
     private void initToolbar() {
-        Toolbar tb = (Toolbar) findViewById(R.id.activity_clicked_board_toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.id.activity_board_toolbar);
         setSupportActionBar(tb);
         textViewToolbarTitle.setText(board_title);
     }
@@ -181,13 +178,14 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         department = getDepartment();
     }
 
+
     private void initialSetting() {
         sharedPreferences = getSharedPreferences(appConstantPreferences, MODE_PRIVATE);
         Component.default_url = getString(R.string.defaultUrl);
         volley = new VolleyForHttpMethod(Volley.newRequestQueue(getApplicationContext()));
 
         initInitialValues();
-        initByBoardType();
+        //initByBoardType();
         initUrl();
         initToolbar();
         initRecyclerView();
@@ -222,9 +220,11 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
                 }
             }
 
+
             changeViewIfDoNotHaveData();
-            whetherFinalPageOrNot(response);
-            cleaningUpAfterSwipe();
+            adapter.notifyDataSetChanged();
+            //whetherFinalPageOrNot(response);
+            inOnRefresh();
         });
     }
 
@@ -241,7 +241,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         }
     }
 
-    private void cleaningUpAfterSwipe() {
+    private void inOnRefresh() {
         if(inOnRefresh) {
             swipe_clicked_board.setRefreshing(false);
             new Handler().postDelayed(new Runnable() {
@@ -259,7 +259,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         imageButtonSearch.setOnClickListener(this);
         imageButtonNewWriting.setOnClickListener(this);
         swipe_clicked_board.setOnRefreshListener(this);
-        recyclerView.addOnScrollListener(getOnScrollListener());
+        //recyclerView.addOnScrollListener(getOnScrollListener());
     }
 
     private RecyclerView.OnScrollListener getOnScrollListener() {
