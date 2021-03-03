@@ -10,11 +10,19 @@ import com.gachon.moga.board.models.BoardInfo
 import com.gachon.moga.board.ui.board.adapter.PostingListAdapter
 import com.gachon.moga.databinding.ActivityBoardBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BoardActivity : BindingActivity<ActivityBoardBinding>(R.layout.activity_board) {
 
-    private val viewModel: BoardViewModel by viewModels()
+    @Inject
+    lateinit var boardViewModelFactory: BoardViewModel.AssistedFactory
+
+    private val viewModel: BoardViewModel by viewModels() {
+        BoardViewModel.provideFactory(boardViewModelFactory, boardInfo)
+    }
+
+    private val boardInfo = BoardInfo(null, null, 1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +31,7 @@ class BoardActivity : BindingActivity<ActivityBoardBinding>(R.layout.activity_bo
             adapter = PostingListAdapter()
             vm = viewModel
         }
-        val boardInfo = BoardInfo(null,null, 1)
-        viewModel.fetchPostings(boardInfo)
+        //viewModel.fetchPostings(boardInfo)
     }
 
     fun initToolbar() {
