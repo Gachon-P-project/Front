@@ -43,7 +43,7 @@
                     android:id="@+id/activity_board_toolbarTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="@{vm.toolbarTitleLiveData}"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

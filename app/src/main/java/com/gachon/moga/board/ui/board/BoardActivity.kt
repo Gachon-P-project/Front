@@ -22,7 +22,7 @@ class BoardActivity : BindingActivity<ActivityBoardBinding>(R.layout.activity_bo
         BoardViewModel.provideFactory(boardViewModelFactory, boardInfo)
     }
 
-    private val boardInfo = BoardInfo(null, null, 1)
+    private val boardInfo = BoardInfo("자유게시판", null, 1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +31,6 @@ class BoardActivity : BindingActivity<ActivityBoardBinding>(R.layout.activity_bo
             adapter = PostingListAdapter()
             vm = viewModel
         }
-        //viewModel.fetchPostings(boardInfo)
-    }
-
-    fun initToolbar() {
-        setSupportActionBar(binding.activityBoardToolbar)
-        binding.activityBoardToolbarTitle.text = "board_title"
     }
 
     companion object {

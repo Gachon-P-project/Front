@@ -25,7 +25,9 @@ class BoardViewModel @AssistedInject constructor(
     private val postingListLiveDataPrivate = MutableLiveData<List<Posting>>()
     val postingListLiveData: LiveData<List<Posting>> get() = postingListLiveDataPrivate
 
-    // val toolbarTitleLiveData: LiveData<String>
+    private val toolbarTitleLiveDataPrivate = MutableLiveData<String>()
+    val toolbarTitleLiveData: LiveData<String> get() = toolbarTitleLiveDataPrivate
+
 
     @get:Bindable
     var isLoading: Boolean by bindingProperty(false)
@@ -34,6 +36,7 @@ class BoardViewModel @AssistedInject constructor(
 
     init {
         fetchPostings(boardInfo)
+        toolbarTitleLiveDataPrivate.value = boardInfo.title!!
     }
 
 
