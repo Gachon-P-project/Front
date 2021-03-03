@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,15 +16,6 @@ import com.gachon.moga.board.models.ToPosting;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAdapter.ViewHolder> {
 
@@ -63,12 +53,12 @@ public class Board_RecyclerAdapter extends RecyclerView.Adapter<Board_RecyclerAd
         ViewHolder(View itemView) {
             super(itemView);
 
-            board_title = itemView.findViewById(R.id.board_title);
-            board_contents = itemView.findViewById(R.id.board_contents);
-            board_date = itemView.findViewById(R.id.board_date);
-            board_post_like = itemView.findViewById(R.id.clicked_board_recycler_item_post_like_text);
-            board_reply_cnt = itemView.findViewById(R.id.clicked_board_recycler_item_reply_cnt);
-            nickname = itemView.findViewById(R.id.clicked_board_recycler_item_nickname);
+            board_title = itemView.findViewById(R.id.item_board_board_title);
+            board_contents = itemView.findViewById(R.id.item_board_board_contents);
+            board_date = itemView.findViewById(R.id.item_board_board_date);
+            board_post_like = itemView.findViewById(R.id.item_board_like_cnt);
+            board_reply_cnt = itemView.findViewById(R.id.item_board_reply_cnt);
+            nickname = itemView.findViewById(R.id.item_board_nickname);
             view = itemView;
         }
     }
