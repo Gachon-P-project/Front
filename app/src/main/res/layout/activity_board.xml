@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.gachon.moga.board.BoardActivity">
+        tools:context="com.gachon.moga.board.BoardActivity" >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/activity_board_toolbar"
@@ -28,8 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
+                android:gravity="center_vertical" >
 
                 <ImageButton
                     android:id="@+id/activity_board_toolbarBack"
@@ -37,8 +36,9 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_arrow_back"
                     android:background="@android:color/transparent"
-                    android:layout_marginRight="10dp"
-                    />
+                    android:layout_marginEnd="10dp"
+                    app:onBackPressed="@{true}" />
+
                 <TextView
                     android:id="@+id/activity_board_toolbarTitle"
                     android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                     android:textStyle="bold" />
 
                 <Space
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     />
@@ -59,17 +59,15 @@
                     android:src="@drawable/ic_search"
                     android:background="@android:color/transparent"
                     android:paddingRight="10dp"
-                    android:paddingLeft="10dp"
-                    />
+                    android:paddingLeft="10dp" />
                 <ImageButton
                     android:id="@+id/activity_board_writing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_edit"
                     android:background="@android:color/transparent"
-                    android:paddingRight="20dp"
-                    android:paddingLeft="10dp"
-                    />
+                    android:paddingEnd="20dp"
+                    android:paddingStart="10dp" />
             </LinearLayout>
 
 
@@ -82,7 +80,7 @@
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/swipe_clicked_board">
+                android:id="@+id/swipe_clicked_board" >
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/activity_board_recycler_view"
@@ -90,8 +88,7 @@
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:adapter="@{adapter}"
-                    app:adapterPostingList="@{vm.postingListLiveData}"
-                    />
+                    app:adapterPostingList="@{vm.postingListLiveData}" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -100,8 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:gone="@{!vm.loading}"
-                />
+                app:gone="@{!vm.loading}" />
 
         </FrameLayout>
 
@@ -111,9 +107,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activity_board_sleep_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:visibility="visible">
+            android:visibility="visible" >
 
         <ImageView
             android:id="@+id/activity_board_sleep_iv"
@@ -126,7 +122,7 @@
             app:layout_constraintWidth_percent="0.2"
             app:layout_constraintHeight_percent="0.1"
             app:layout_constraintVertical_bias="0.4"
-            android:src="@drawable/ic_sad"/>
+            android:src="@drawable/ic_sad" />
 
         <TextView
             android:id="@+id/activity_board_sleep_tv"
@@ -140,8 +136,7 @@
             android:text="작성된 게시물이 없습니다."
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/text2"
-            />
+            android:textColor="@color/text2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

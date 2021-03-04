@@ -1,5 +1,6 @@
 package com.gachon.moga.board.ui.board
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -19,7 +20,7 @@ class BoardActivity : BindingActivity<ActivityBoardBinding>(R.layout.activity_bo
     @Inject
     lateinit var boardViewModelFactory: BoardViewModel.AssistedFactory
 
-    private val viewModel: BoardViewModel by viewModels() {
+    private val viewModel: BoardViewModel by viewModels {
         BoardViewModel.provideFactory(boardViewModelFactory, boardInfo)
     }
 
