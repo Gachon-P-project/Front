@@ -25,10 +25,11 @@ class PostingActivity : BindingActivity<ActivityPostingBinding>(R.layout.activit
 
 
     companion object {
+        private const val toPostingId = "ToPosting"
 
         fun startActivity(context: Context, toPosting: ToPosting) {
             val intent = Intent(context, PostingActivity::class.java)
-            intent.putExtra("ToPosting", toPosting)
+            intent.putExtra(toPostingId, toPosting)
             context.startActivity(intent)
         }
     }

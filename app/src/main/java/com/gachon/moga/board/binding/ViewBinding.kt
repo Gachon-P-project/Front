@@ -23,10 +23,4 @@ object ViewBinding {
             View.VISIBLE
         }
     }
-
-    @JvmStatic
-    @BindingAdapter("text")
-    fun bindGone(view: TextView, text: String?) {
-        view.text = text ?: ""
-    }
 }

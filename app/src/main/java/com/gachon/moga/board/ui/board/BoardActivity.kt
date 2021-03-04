@@ -1,5 +1,6 @@
 package com.gachon.moga.board.ui.board
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -34,10 +35,14 @@ class BoardActivity : BindingActivity<ActivityBoardBinding>(R.layout.activity_bo
     }
 
     companion object {
+        private const val boardInfoId = "BoardInfo"
+
         fun startActivity(context: Context, boardInfo: BoardInfo) {
-            val intent = Intent(context, BoardActivity::class.java)
-            intent.putExtra("BoardInfo", boardInfo)
-            context.startActivity(intent)
+            if(context is Activity) {
+                val intent = Intent(context, BoardActivity::class.java)
+                intent.putExtra(boardInfoId, boardInfo)
+                context.startActivity(intent)
+            }
         }
     }
 
