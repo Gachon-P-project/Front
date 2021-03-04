@@ -59,7 +59,10 @@
                     android:src="@drawable/ic_search"
                     android:background="@android:color/transparent"
                     android:paddingRight="10dp"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    app:onClick="@{true}"
+                    app:intent="@{vm.boardInfo}"
+                    />
                 <ImageButton
                     android:id="@+id/activity_board_writing"
                     android:layout_width="wrap_content"
@@ -67,7 +70,9 @@
                     android:src="@drawable/ic_edit"
                     android:background="@android:color/transparent"
                     android:paddingEnd="20dp"
-                    android:paddingStart="10dp" />
+                    android:paddingStart="10dp"
+                    app:onClick="@{true}"
+                    app:intent="@{vm.boardInfo}"/>
             </LinearLayout>
 
 
@@ -97,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:indeterminateTint="@color/toolbarTitle"
                 app:gone="@{!vm.loading}" />
 
         </FrameLayout>

@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class BoardViewModel @AssistedInject constructor(
     private val boardRepository: BoardRepository,
-    @Assisted private val boardInfo: BoardInfo
+    @Assisted val boardInfo: BoardInfo
 ) : LiveCoroutinesViewModel() {
 
     private val postingListLiveDataPrivate = MutableLiveData<List<Posting>>()
@@ -29,10 +29,10 @@ class BoardViewModel @AssistedInject constructor(
     val toolbarTitleLiveData: LiveData<String> get() = toolbarTitleLiveDataPrivate
 
 
+
     @get:Bindable
     var isLoading: Boolean by bindingProperty(false)
         private set
-
 
     init {
         fetchPostings(boardInfo)

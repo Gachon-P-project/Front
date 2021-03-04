@@ -1,6 +1,5 @@
 package com.gachon.moga.board.ui.board
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent

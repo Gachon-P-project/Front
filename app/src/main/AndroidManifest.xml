@@ -20,7 +20,12 @@
         <activity android:name="com.gachon.moga.StartGuideActivity" />
         <activity android:name="com.gachon.moga.board.PostingActivity" />
         <activity android:name="com.gachon.moga.board.SearchActivity" />
+
         <activity android:name=".board.ui.board.BoardActivity"/>
+        <activity android:name=".board.ui.search.SearchActivity"/>
+        <activity android:name=".board.ui.writing.posting.PostingWritingActivity"/>
+        <activity android:name=".board.ui.posting.PostingActivity"/>
+
         <activity
             android:name="com.gachon.moga.board.WritingActivity"
             android:windowSoftInputMode="adjustResize" />

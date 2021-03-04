@@ -1,123 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.gachon.moga.board.SearchActivity">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.gachon.moga.board.ui.search.SearchViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:gravity="center_vertical" >
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.gachon.moga.board.SearchActivity">
 
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-
-            android:layout_marginStart="10dp"
-            android:src="@drawable/btn_cancel"/>
-
-        <EditText
-            android:id="@+id/edtSearch"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/bg_round_border_search"
-            android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="10dp"
-            android:padding="9dp"
-            android:hint="글 제목, 내용을 검색해보세요 "
-            android:imeOptions="actionSearch"
-            android:inputType="text" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/llSearchBoardDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible"
-        >
+            android:padding="5dp"
+            android:gravity="center_vertical" >
 
-        <ImageView
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+
+                android:layout_marginStart="10dp"
+                android:src="@drawable/btn_cancel" />
+
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_round_border_search"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="10dp"
+                android:padding="9dp"
+                android:hint="글 제목, 내용을 검색해보세요 "
+                android:imeOptions="actionSearch"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSearchBoardDescription"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_search_grey" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="visible" >
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="horizontal">-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_search_grey" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/search_board_name"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="학과"-->
-<!--                android:textColor="@color/grey"-->
-<!--                android:textSize="18sp"-->
-<!--                android:textStyle="bold" />-->
+                <TextView
+                    android:id="@+id/tvSearchBoardDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="학과 게시판의 글을\n검색해보세요"
+                    android:textColor="@color/grey"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSearchBoardNoResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:src="@drawable/emoji_thinking"
+                android:layout_marginBottom="20dp" />
 
             <TextView
-                android:id="@+id/tvSearchBoardDescription"
+                android:id="@+id/tvSearchBoardNoResult"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="학과 게시판의 글을\n검색해보세요"
+                android:text="게시물을 찾을 수 없습니다.\n다시 검색해 주세요."
                 android:textColor="@color/grey"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center" />
+        </LinearLayout>
 
-<!--        </LinearLayout>-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="검색해보세요"-->
-<!--            android:textColor="@color/grey"-->
-<!--            android:textSize="18sp"-->
-<!--            android:textStyle="bold" />-->
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/llSearchBoardNoResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
-
-        <ImageView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_clicked_board"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:src="@drawable/emoji_thinking"
-            android:layout_marginBottom="20dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/tvSearchBoardNoResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="게시물을 찾을 수 없습니다.\n다시 검색해 주세요."
-            android:textColor="@color/grey"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_clicked_board"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-</LinearLayout>
+</layout>

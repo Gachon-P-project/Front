@@ -1,114 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    tools:context="com.gachon.moga.board.WritingActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="vm"
+            type="com.gachon.moga.board.ui.writing.posting.PostingWritingViewModel" />
+    </data>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center_vertical"
-        android:padding="5dp">
-        <ImageView
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/btn_cancel"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:text="글 쓰기"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_complete"
-            android:layout_width="55dp"
-            android:layout_height="30dp"
-            android:background="@drawable/btn_blue"
-            android:text="완료"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
+        android:background="@color/white"
+        tools:context="com.gachon.moga.board.WritingActivity">
 
-        <EditText
-            android:id="@+id/board_write_title_edit"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:inputType="text"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:hint="@string/title"
-            android:layout_marginTop="10dp" />
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:padding="5dp" >
 
-        <View
+            <ImageView
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/btn_cancel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:text="글 쓰기"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_complete"
+                android:layout_width="55dp"
+                android:layout_height="30dp"
+                android:background="@drawable/btn_blue"
+                android:text="완료"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="11dp"
-            android:background="@color/line" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp" >
 
-        <EditText
-            android:id="@+id/board_write_contents_edit"
-            android:background="@android:color/transparent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:hint="@string/contents"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:textSize="15sp"
-            />
-
-
-            <!--<LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <EditText
+                android:id="@+id/board_write_title_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:background="#00ffffff"
-                    android:src="@drawable/ic_camera" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                android:background="@android:color/transparent"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:hint="@string/title"
+                android:layout_marginTop="10dp" />
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:checked="true"
-                    android:text="댓글 사용"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="11dp"
+                android:background="@color/line" />
 
-            </LinearLayout>-->
+            <EditText
+                android:id="@+id/board_write_contents_edit"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:hint="@string/contents"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:textSize="15sp" />
 
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
-
-
-
-
+</layout>
