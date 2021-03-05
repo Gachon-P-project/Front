@@ -40,9 +40,10 @@
                 android:id="@+id/tv_posting_toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="@{vm.toolbarTitleLiveData}"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                tools:text="자유게시판"
                 />
 
         </androidx.appcompat.widget.Toolbar>
