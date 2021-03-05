@@ -1,24 +1,17 @@
 package com.gachon.moga.board.binding
 
 import android.app.Activity
-import android.app.Application
-import android.app.Service
-import android.app.backup.BackupAgent
-import android.content.Context
 import android.content.ContextWrapper
-import android.content.MutableContextWrapper
-import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.TextView
-import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.gachon.moga.R
 import com.gachon.moga.board.DateProcess
 import com.gachon.moga.board.models.BoardInfo
+import com.gachon.moga.board.ui.board.BoardViewModel
 import com.gachon.moga.board.ui.search.SearchActivity
 import com.gachon.moga.board.ui.writing.posting.PostingWritingActivity
-import com.google.android.material.internal.ContextUtils.getActivity
 
 object ViewBinding {
 
@@ -68,5 +61,22 @@ object ViewBinding {
             }
         }
     }
+
+    @JvmStatic
+    @BindingAdapter("onRefresh")
+    fun bindOnRefresh(view: SwipeRefreshLayout, viewModel: BoardViewModel) {
+        view.setOnRefreshListener {
+            viewModel.fetchPostings()
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("isRefreshing")
+    fun bindIsRefreshing(view: SwipeRefreshLayout, isLoading: Boolean) {
+        if(!isLoading)
+        view.isRefreshing = isLoading
+    }
+
+
 
 }

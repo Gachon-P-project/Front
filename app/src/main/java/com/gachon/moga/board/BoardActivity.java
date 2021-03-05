@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 import com.gachon.moga.VolleyForHttpMethod;
@@ -121,7 +120,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         imageButtonToolbarBack = findViewById(R.id.activity_board_toolbarBack);
         imageButtonSearch = findViewById(R.id.activity_board_search);
         imageButtonNewWriting = findViewById(R.id.activity_board_writing);
-        swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.swipe_clicked_board);
+        swipe_clicked_board = (SwipeRefreshLayout) findViewById(R.id.activity_board_swipe_layout);
         recyclerView = findViewById(R.id.activity_board_recycler_view);
     }
 

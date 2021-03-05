@@ -1,5 +1,6 @@
 package com.gachon.moga.board.ui.board.adapter
 
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gachon.moga.R
@@ -9,6 +10,10 @@ import com.gachon.moga.board.ui.posting.PostingActivity
 import com.gachon.moga.databinding.ItemBoardBinding
 import com.skydoves.bindables.binding
 import kotlinx.android.synthetic.main.item_board_list.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class PostingListAdapter : RecyclerView.Adapter<PostingListAdapter.PostingViewHolder>() {

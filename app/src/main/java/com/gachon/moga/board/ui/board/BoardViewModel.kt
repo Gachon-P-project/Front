@@ -1,5 +1,6 @@
 package com.gachon.moga.board.ui.board
 
+import android.util.Log
 import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -35,12 +36,12 @@ class BoardViewModel @AssistedInject constructor(
         private set
 
     init {
-        fetchPostings(boardInfo)
+        fetchPostings()
         toolbarTitleLiveDataPrivate.value = boardInfo.title!!
     }
 
 
-    private fun fetchPostings(boardInfo: BoardInfo) {
+    fun fetchPostings() {
         isLoading = true
         GlobalScope.launch {
             postingListLiveDataPrivate.postValue(boardRepository.fetchPostings(

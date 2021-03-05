@@ -37,7 +37,7 @@
                     android:src="@drawable/ic_baseline_arrow_back"
                     android:background="@android:color/transparent"
                     android:layout_marginEnd="10dp"
-                    app:onBackPressed="@{true}" />
+                    app:onBackPressed="@{true}"/>
 
                 <TextView
                     android:id="@+id/activity_board_toolbarTitle"
@@ -83,9 +83,12 @@
             android:layout_height="match_parent" >
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/activity_board_swipe_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/swipe_clicked_board" >
+                app:onRefresh="@{vm}"
+                app:isRefreshing="@{vm.loading}"
+                >
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/activity_board_recycler_view"
@@ -97,13 +100,13 @@
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <ProgressBar
+            <!--<ProgressBar
                 android:id="@+id/progressbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:indeterminateTint="@color/toolbarTitle"
-                app:gone="@{!vm.loading}" />
+                app:gone="@{!vm.loading}" />-->
 
         </FrameLayout>
 
