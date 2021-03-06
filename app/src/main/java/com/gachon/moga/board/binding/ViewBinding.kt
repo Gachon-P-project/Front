@@ -2,7 +2,9 @@ package com.gachon.moga.board.binding
 
 import android.app.Activity
 import android.content.ContextWrapper
+import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,8 +20,14 @@ object ViewBinding {
     @JvmStatic
     @BindingAdapter("wrtDate")
     fun bindWrtDate(view: TextView, wrtDate: String?) {
-        val androidDate = DateProcess.processServerDateToAndroidDate(wrtDate)
-        view.text = androidDate
+        if(wrtDate == null) return
+
+        if(wrtDate == "isDeleted")
+            view.text = "방금"
+        else {
+            val androidDate = DateProcess.processServerDateToAndroidDate(wrtDate)
+            view.text = androidDate
+        }
     }
 
     @JvmStatic
@@ -74,9 +82,14 @@ object ViewBinding {
     @BindingAdapter("isRefreshing")
     fun bindIsRefreshing(view: SwipeRefreshLayout, isLoading: Boolean) {
         if(!isLoading)
-        view.isRefreshing = isLoading
+            view.isRefreshing = isLoading
     }
 
-
+    @JvmStatic
+    @BindingAdapter("whenDeleted")
+    fun bindWhenDeleted(view: View, isDeleted: Boolean) {
+        if(!isDeleted) return
+        view.isEnabled = false
+    }
 
 }

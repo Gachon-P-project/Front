@@ -68,6 +68,7 @@ public class BoardActivity extends AppCompatActivity implements SwipeRefreshLayo
         doAllFindViewById();
         initialSetting();
         inquirePostingsOfBoard();
+
     }
 
     @Override

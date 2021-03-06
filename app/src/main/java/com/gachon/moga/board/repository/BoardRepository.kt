@@ -31,12 +31,12 @@ class BoardRepository @Inject constructor(
         boardInfo: BoardInfo,
         onSuccess: () -> Unit,
         onError: (String?) -> Unit
-    ): List<Posting>? {
-        return when(boardInfo.boardType) {
+    ): List<Posting> {
+        return when (boardInfo.boardType) {
             BOARD_SUBJECT -> fetchSubjectPostings(boardInfo, onSuccess, onError)
             BOARD_MAJOR -> fetchMajorPostings(onSuccess, onError)
             BOARD_FREE -> fetchFreePostings(onSuccess, onError)
-            else -> null
+            else -> listOf()
         }
     }
 

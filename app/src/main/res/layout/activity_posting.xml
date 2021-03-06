@@ -106,6 +106,8 @@
                                     android:textColor="@color/black"
                                     android:textSize="17sp"
                                     android:textStyle="bold"
+                                    android:text="@{vm.postingLiveData.nickName}"
+                                    tools:text="손흥민"
                                     />
 
                                 <TextView
@@ -114,6 +116,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="5dp"
                                     android:textColor="@color/text2"
+                                    app:wrtDate="@{vm.postingLiveData.wrtDate}"
+                                    tools:text="21.02.11"
                                     />
                             </LinearLayout>
 
@@ -142,6 +146,8 @@
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
+                            android:text="@{vm.postingLiveData.postTitle}"
+                            tools:text="posting title"
                             />
 
                         <TextView
@@ -151,6 +157,8 @@
                             android:layout_marginTop="15dp"
                             android:textColor="@color/text1"
                             android:textSize="15sp"
+                            android:text="@{vm.postingLiveData.postContents}"
+                            tools:text="posting contents"
                             />
 
                         <LinearLayout
@@ -171,6 +179,7 @@
                                 android:paddingTop="2dp"
                                 android:paddingBottom="10dp"
                                 android:src="@drawable/ic_like"
+                                app:whenDeleted="@{vm.isDeleted()}"
                                 />
 
                             <TextView
@@ -183,6 +192,8 @@
                                 android:paddingBottom="0dp"
                                 android:paddingEnd="5dp"
                                 android:textSize="12sp"
+                                android:text="@{String.valueOf(vm.postingLiveData.likeCnt)}"
+                                tools:text="3"
                                 />
 
                             <ImageView
@@ -199,9 +210,10 @@
                                 android:layout_height="32dp"
                                 android:layout_marginStart="4dp"
                                 android:paddingTop="4dp"
+                                android:text="@{String.valueOf(vm.postingLiveData.replyCnt)}"
                                 android:textColor="@color/reply"
                                 android:textSize="12sp"
-                                />
+                                tools:text="5" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -250,14 +262,16 @@
                 android:background="@android:color/transparent"
                 android:hint="댓글을 입력하세요."
                 android:textColor="@color/black"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                app:whenDeleted="@{vm.isDeleted()}"/>
 
             <ImageView
                 android:id="@+id/activity_posting_post_reply_iv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="16dp"
-                android:src="@drawable/ic_send" />
+                android:src="@drawable/ic_send"
+                app:whenDeleted="@{vm.isDeleted()}"/>
         </LinearLayout>
 
     </LinearLayout>

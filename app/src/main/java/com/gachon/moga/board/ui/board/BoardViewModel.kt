@@ -28,8 +28,6 @@ class BoardViewModel @AssistedInject constructor(
     private val toolbarTitleLiveDataPrivate = MutableLiveData<String>()
     val toolbarTitleLiveData: LiveData<String> get() = toolbarTitleLiveDataPrivate
 
-
-
     @get:Bindable
     var isLoading: Boolean by bindingProperty(false)
         private set
@@ -39,7 +37,7 @@ class BoardViewModel @AssistedInject constructor(
         toolbarTitleLiveDataPrivate.value = boardInfo.title!!
     }
 
-
+    // 데이터 없으면 사이즈가 0인 List<Posting> 리턴
     fun fetchPostings() {
         isLoading = true
         GlobalScope.launch {
