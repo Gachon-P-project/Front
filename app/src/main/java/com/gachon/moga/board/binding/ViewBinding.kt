@@ -90,6 +90,21 @@ object ViewBinding {
     fun bindWhenDeleted(view: View, isDeleted: Boolean) {
         if(!isDeleted) return
         view.isEnabled = false
+
+        if(view.id == R.id.img_btn_posting_toolbar_three_dots) {
+            bindGone(view, true)
+        }
     }
+
+    /*@JvmStatic
+    @BindingAdapter("setMenu")
+    fun bindSetMenu(view: View, shouldBeSetMenu: Boolean) {
+        val context = view.context
+        if(shouldBeSetMenu && context is ContextWrapper) {
+            val activity = context.baseContext as Activity
+            activity.menuInflater.inflate()
+        }
+
+    }*/
 
 }
