@@ -36,5 +36,5 @@
 ## [ System Architecture ]
 mvvm으로 refactoring중
 
-## [ Develop Environment ]
+## [ Develop Language ]
 - Android : Java, Kotlin
