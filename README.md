@@ -30,8 +30,5 @@
 <img src='https://user-images.githubusercontent.com/53803882/104344871-06c8f300-5541-11eb-8975-74a21c763af9.png' width='200px'/>
 <img src='https://user-images.githubusercontent.com/53803882/104344874-07fa2000-5541-11eb-9f49-2654c533aa93.png' width='200px'/>
 
-## [ System Architecture ]
-mvvm으로 refactoring중
-
 ## [ Develop Language ]
 - Android : Java, Kotlin
