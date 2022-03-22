@@ -11,6 +11,9 @@
 **✔︎ 시간표와 수업 게시판 연결**
 - 시간표에서 수업을 선택하면 같은 수업을 듣는 학생들과 정보 공유를 할 수 있는 게시판으로 연결됩니다.
 
+**✔︎ 수업 시작 알림기능**
+- 시간표에 등록된 수업이 시작되기 전 수업 장소, 화상 강의 주소를 알림을 받아볼 수 있습니다.
+
 **✔︎ 학과 공지사항, 알림기능**
 - 학생의 학과를 자동으로 등록하여 손쉽게 학과 공지사항을 볼 수 있으며 새 글이 등록되면 알림을 받아볼 수 있습니다.
 
@@ -30,5 +33,18 @@
 <img src='https://user-images.githubusercontent.com/53803882/104344871-06c8f300-5541-11eb-8975-74a21c763af9.png' width='200px'/>
 <img src='https://user-images.githubusercontent.com/53803882/104344874-07fa2000-5541-11eb-9f49-2654c533aa93.png' width='200px'/>
 
-## [ Develop Language ]
+## [ System Architecture ]
+<img width="1956" alt="iShot2021-02-22 00 33 03" src="https://user-images.githubusercontent.com/53803882/108629953-b03ac700-74a5-11eb-9fc1-bd2b524627b1.png">
+
+## [ Develop Environment ]
+#### FrontEnd
+- Web : React.js
 - Android : Java, Kotlin
+
+#### Server
+- API Server : Node.js(express)
+- Hosting : AWS EC2
+- Database : AWS RDS(Maria)
+- Container : Docker
+- CI/CD : Jenkins
+- Reverse Proxy : NginX
